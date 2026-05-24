@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Arobe Group — Distribuidor de SusPan e Insulglass en México{% endblock %}</title>
+<meta name="description" content="{% block description %}Distribuidor mexicano de paneles SusPan (Board, Ceilings, Decor) y aislamiento Insulglass (Glasswool, MBI). Precios mayoreo, factura CFDI, envíos a toda la República.{% endblock %}">
+<meta name="theme-color" content="#0a1a2e">
+
+<!-- Open Graph -->
+<meta property="og:title" content="{{ self.title() }}">
+<meta property="og:description" content="{{ self.description() }}">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_MX">
+<meta property="og:url" content="https://arobegroup.com{{ request.path }}">
+
+<link rel="icon" href="{{ url_for('static', filename='img/favicon.svg') }}" type="image/svg+xml">
+
+<!-- Fuentes -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<!-- Tailwind (CDN para Fase 1; en Fase 6 lo compilamos) -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        // Arobe Group — corporativo
+        arobe:   { 50:'#f3f6fb', 100:'#e3ebf5', 500:'#2e5687', 600:'#1f4373', 700:'#163459', 800:'#0f2641', 900:'#0a1a2e' },
+        // SusPan — amarillo + negro
+        suspan:  { 50:'#fffbe6', 100:'#fff4b8', 400:'#f6d24b', 500:'#f2c84a', 600:'#dab226', 700:'#b8920f', ink:'#0a0a0a' },
+        // Insulglass — azul + naranja
+        insul:   { 50:'#eef3fb', 100:'#d6e1f2', 500:'#2354b0', 600:'#1e4fa8', 700:'#173e83', 800:'#0f2a5c', accent:'#f4a623' },
+      },
+      fontFamily: { sans: ['Inter','system-ui','sans-serif'] }
+    }
+  }
+}
+</script>
+<style>
+  body { font-family: 'Inter', system-ui, sans-serif; }
+  .grid-bg { background-image: linear-gradient(rgba(15,38,65,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(15,38,65,0.04) 1px, transparent 1px); background-size: 32px 32px; }
+
+  /* SusPan brand badge (placeholder mientras subes tu PNG) */
+  .suspan-badge {
+    display:inline-flex; align-items:center; gap:.5rem;
+    background:#f2c84a; color:#0a0a0a;
+    padding:.4rem .9rem; font-weight:800; letter-spacing:.01em;
+    border-radius:.25rem; font-size:.95rem;
+  }
+  .suspan-badge .mark {
+    width:18px; height:18px;
+    background: linear-gradient(135deg, #fff 0 45%, #0a0a0a 45% 55%, #fff 55% 100%);
+    transform: skewX(-12deg);
+    border-radius:2px;
+  }
+  /* Insulglass brand badge (placeholder) */
+  .insul-badge {
+    display:inline-flex; align-items:center; gap:.5rem;
+    background:#1e4fa8; color:#fff;
+    padding:.4rem .9rem; font-weight:800; letter-spacing:.01em;
+    border-radius:9999px; font-size:.85rem;
+    border:2px solid #f4a623;
+  }
+  .insul-badge .accent { color:#f4a623; }
+
+  /* Texturas decorativas */
+  .panel-tex { background-image: repeating-linear-gradient(90deg, transparent 0 18px, rgba(0,0,0,0.06) 18px 19px); }
+  .stamp-tex { background-image: radial-gradient(circle at 20% 30%, rgba(255,255,255,.15) 1px, transparent 2px), radial-gradient(circle at 70% 60%, rgba(255,255,255,.1) 1px, transparent 2px); background-size: 40px 40px, 30px 30px; }
+</style>
+{% block head_extra %}{% endblock %}
+</head>
+<body class="bg-white text-slate-800">
+
+<!-- ============ TOP NOTICE BAR ============ -->
+<div class="bg-arobe-900 text-arobe-50 text-xs">
+  <div class="max-w-7xl mx-auto px-4 py-2 flex flex-wrap items-center justify-between gap-2">
+    <div class="flex items-center gap-4">
+      <span>📞 +52 {{ config.WA_PHONE[2:4] }} {{ config.WA_PHONE[4:8] }} {{ config.WA_PHONE[8:] }}</span>
+      <span class="hidden sm:inline">✉ {{ config.EMAIL_VENTAS }}</span>
+      <span class="hidden md:inline">🚚 Envíos a toda la República · Factura CFDI 4.0</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="{{ url_for('web.distribuidores') }}" class="hover:text-white">Soy distribuidor →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ============ HEADER ============ -->
+<header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo Arobe Group -->
+      <a href="{{ url_for('web.index') }}" class="flex items-center gap-2.5">
+        <div class="w-10 h-10 bg-arobe-900 text-white grid place-items-center font-black text-lg rounded">A</div>
+        <div class="leading-tight">
+          <div class="font-extrabold text-arobe-900 tracking-tight text-base">AROBE <span class="text-arobe-500">GROUP</span></div>
+          <div class="text-[10px] text-slate-500 uppercase tracking-[0.15em]">Construcción ligera</div>
+        </div>
+      </a>
+
+      <!-- Nav con mega-menús -->
+      <nav class="hidden lg:flex items-center gap-7 text-sm font-semibold text-slate-700">
+        <a href="{{ url_for('web.index') }}" class="hover:text-arobe-700 {% if page == 'home' %}text-arobe-700{% endif %}">Inicio</a>
+
+        <!-- SusPan mega-menu -->
+        <div class="relative group">
+          <button class="hover:text-suspan-600 flex items-center gap-1">
+            <span class="suspan-badge !py-0.5 !px-2 !text-xs"><span class="mark !w-3 !h-3"></span>SusPan</span>
+            <span class="text-xs">▾</span>
+          </button>
+          <div class="absolute top-full left-0 mt-1 w-80 bg-white rounded-xl shadow-2xl border border-slate-100 p-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition">
+            <div class="px-3 py-2 text-[10px] font-bold tracking-widest text-slate-400 uppercase">Sub-líneas SusPan</div>
+            <a href="{{ url_for('web.marca_suspan', sub='board') }}" class="flex items-start gap-3 p-3 rounded-lg hover:bg-suspan-50">
+              <div class="w-10 h-10 bg-suspan-500 rounded grid place-items-center font-black text-suspan-ink shrink-0">B</div>
+              <div>
+                <div class="font-bold text-slate-900">SusPan Board</div>
+                <div class="text-xs text-slate-500">Láminas y tableros · Lámina PVC</div>
+              </div>
+            </a>
+            <a href="{{ url_for('web.marca_suspan', sub='ceilings') }}" class="flex items-start gap-3 p-3 rounded-lg hover:bg-suspan-50">
+              <div class="w-10 h-10 bg-suspan-500 rounded grid place-items-center font-black text-suspan-ink shrink-0">C</div>
+              <div>
+                <div class="font-bold text-slate-900">SusPan Ceilings</div>
+                <div class="text-xs text-slate-500">Plafones · Reticulado, acústico</div>
+              </div>
+            </a>
+            <a href="{{ url_for('web.marca_suspan', sub='decor') }}" class="flex items-start gap-3 p-3 rounded-lg hover:bg-suspan-50">
+              <div class="w-10 h-10 bg-suspan-500 rounded grid place-items-center font-black text-suspan-ink shrink-0">D</div>
+              <div>
+                <div class="font-bold text-slate-900">SusPan Decor</div>
+                <div class="text-xs text-slate-500">Lambrín, mármol PVC, paneles 3D</div>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <!-- Insulglass mega-menu -->
+        <div class="relative group">
+          <button class="hover:text-insul-600 flex items-center gap-1">
+            <span class="insul-badge !py-0.5 !px-2 !text-xs">Insul<span class="accent">glass</span></span>
+            <span class="text-xs">▾</span>
+          </button>
+          <div class="absolute top-full left-0 mt-1 w-80 bg-white rounded-xl shadow-2xl border border-slate-100 p-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition">
+            <div class="px-3 py-2 text-[10px] font-bold tracking-widest text-slate-400 uppercase">Líneas Insulglass</div>
+            <a href="{{ url_for('web.marca_insulglass', sub='glasswool') }}" class="flex items-start gap-3 p-3 rounded-lg hover:bg-insul-50">
+              <div class="w-10 h-10 bg-insul-500 rounded grid place-items-center font-black text-white shrink-0">GW</div>
+              <div>
+                <div class="font-bold text-slate-900">Glasswool</div>
+                <div class="text-xs text-slate-500">Aislante en rollos para tablaroca</div>
+              </div>
+            </a>
+            <a href="{{ url_for('web.marca_insulglass', sub='mbi') }}" class="flex items-start gap-3 p-3 rounded-lg hover:bg-insul-50">
+              <div class="w-10 h-10 bg-insul-500 rounded grid place-items-center font-black text-white shrink-0">MBI</div>
+              <div>
+                <div class="font-bold text-slate-900">MBI Manta</div>
+                <div class="text-xs text-slate-500">Industrial y residencial</div>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <a href="{{ url_for('web.catalogo') }}" class="hover:text-arobe-700">Catálogo</a>
+        <a href="{{ url_for('web.distribuidores') }}" class="hover:text-arobe-700">Distribuidores</a>
+        <a href="{{ url_for('web.contacto') }}" class="hover:text-arobe-700">Contacto</a>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <a href="https://wa.me/{{ config.WA_PHONE }}" target="_blank" rel="noopener" class="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-4 py-2 rounded shadow-sm flex items-center gap-1.5">
+          <span>💬</span> Cotizar
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+{% block content %}{% endblock %}
+
+<!-- ============ FOOTER ============ -->
+<footer class="bg-arobe-900 text-arobe-50 mt-20">
+  <div class="max-w-7xl mx-auto px-4 py-14">
+    <div class="grid lg:grid-cols-5 gap-8">
+      <div class="lg:col-span-2">
+        <div class="flex items-center gap-2 mb-4">
+          <div class="w-10 h-10 bg-white text-arobe-900 grid place-items-center font-black rounded">A</div>
+          <div class="font-extrabold text-white tracking-tight">AROBE GROUP</div>
+        </div>
+        <p class="text-sm text-arobe-50/70 max-w-md">
+          Importador y distribuidor mexicano de materiales para construcción ligera. Casa de las marcas <strong class="text-white">SusPan</strong> (Board · Ceilings · Decor) e <strong class="text-white">Insulglass</strong> (Glasswool · MBI).
+        </p>
+        <div class="flex flex-wrap gap-3 mt-5">
+          <span class="suspan-badge !text-xs"><span class="mark"></span>SusPan</span>
+          <span class="insul-badge !text-xs">Insul<span class="accent">glass</span></span>
+        </div>
+      </div>
+      <div>
+        <div class="font-semibold text-white mb-3">SusPan</div>
+        <ul class="space-y-2 text-sm text-arobe-50/70">
+          <li><a href="{{ url_for('web.marca_suspan', sub='board') }}" class="hover:text-white">Board</a></li>
+          <li><a href="{{ url_for('web.marca_suspan', sub='ceilings') }}" class="hover:text-white">Ceilings</a></li>
+          <li><a href="{{ url_for('web.marca_suspan', sub='decor') }}" class="hover:text-white">Decor</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="font-semibold text-white mb-3">Insulglass</div>
+        <ul class="space-y-2 text-sm text-arobe-50/70">
+          <li><a href="{{ url_for('web.marca_insulglass', sub='glasswool') }}" class="hover:text-white">Glasswool</a></li>
+          <li><a href="{{ url_for('web.marca_insulglass', sub='mbi') }}" class="hover:text-white">MBI Manta</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="font-semibold text-white mb-3">Empresa</div>
+        <ul class="space-y-2 text-sm text-arobe-50/70">
+          <li><a href="{{ url_for('web.catalogo') }}" class="hover:text-white">Catálogo</a></li>
+          <li><a href="{{ url_for('web.distribuidores') }}" class="hover:text-white">Programa B2B</a></li>
+          <li><a href="{{ url_for('web.contacto') }}" class="hover:text-white">Contacto</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-white/10 mt-10 pt-6 flex flex-wrap justify-between items-center gap-3 text-xs text-arobe-50/60">
+      <div>© 2026 Distribuciones Arobe · arobegroup.com</div>
+      <div>SusPan® e Insulglass® son marcas registradas de Arobe Group.</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

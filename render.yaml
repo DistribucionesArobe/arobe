@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: arobegroup-web
+    runtime: python
+    plan: starter            # $7 USD/mes. Para empezar puedes usar "free" pero duerme tras 15 min.
+    region: oregon
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --threads 4 --timeout 60
+    healthCheckPath: /healthz
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WA_PHONE
+        value: "525500000000"      # Reemplazar con tu WhatsApp real
+      - key: EMAIL_VENTAS
+        value: "ventas@arobegroup.com"
+      - key: PYTHON_VERSION
+        value: "3.11.9"

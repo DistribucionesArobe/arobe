@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+
+{% block title %}Arobe Group — SusPan e Insulglass · Distribuidor de construcción ligera en México{% endblock %}
+
+{% block content %}
+
+<!-- ============ HERO ============ -->
+<section class="relative overflow-hidden">
+  <div class="absolute inset-0 grid-bg"></div>
+  <div class="relative max-w-7xl mx-auto px-4 py-16 lg:py-24 grid lg:grid-cols-12 gap-12 items-center">
+    <div class="lg:col-span-7">
+      <div class="inline-flex items-center gap-2 bg-arobe-50 text-arobe-700 text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
+        <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+        Importadores directos · Stock disponible
+      </div>
+      <h1 class="text-4xl lg:text-6xl font-extrabold text-arobe-900 leading-[1.05] tracking-tight">
+        Paneles que <span class="bg-suspan-500 text-suspan-ink px-2">se nota</span><br>
+        donde lo coloques.<br>
+        <span class="text-insul-600">Aislamiento</span> que no se ve.
+      </h1>
+      <p class="text-lg text-slate-600 mt-6 max-w-xl">
+        Arobe Group importa y distribuye en México las marcas <strong class="text-suspan-ink bg-suspan-500 px-1">SusPan</strong> (paneles para techo, muro y decorativo) e <strong class="text-insul-500">Insulglass</strong> (aislamiento térmico-acústico premium).
+      </p>
+      <div class="flex flex-wrap gap-3 mt-7">
+        <a href="{{ url_for('web.catalogo') }}" class="bg-arobe-900 hover:bg-arobe-800 text-white font-semibold px-6 py-3 rounded-lg shadow-sm">Ver catálogo →</a>
+        <a href="{{ url_for('web.distribuidores') }}" class="border-2 border-arobe-900 text-arobe-900 hover:bg-arobe-50 font-semibold px-6 py-3 rounded-lg">Soy distribuidor</a>
+      </div>
+      <div class="flex flex-wrap items-center gap-x-6 gap-y-2 mt-8 text-xs text-slate-500">
+        <span>✓ Importadores directos</span>
+        <span>✓ Factura CFDI 4.0</span>
+        <span>✓ MercadoPago · Transferencia</span>
+        <span>✓ Envíos a toda la República</span>
+      </div>
+    </div>
+
+    <div class="lg:col-span-5 grid grid-cols-2 gap-3">
+      <!-- SusPan tile -->
+      <div class="col-span-2 bg-suspan-500 rounded-2xl p-6 text-suspan-ink relative overflow-hidden shadow-xl">
+        <div class="absolute inset-0 panel-tex opacity-50"></div>
+        <div class="relative">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7" style="background: linear-gradient(135deg, #fff 0 45%, #0a0a0a 45% 55%, #fff 55% 100%); transform: skewX(-12deg); border-radius:3px;"></div>
+            <div class="text-3xl font-black tracking-tight">SusPan</div>
+          </div>
+          <div class="text-[10px] tracking-[0.3em] font-bold opacity-80 mt-1">SUSPENDED PANELS</div>
+          <div class="grid grid-cols-3 gap-2 mt-5 text-xs font-semibold">
+            <div class="bg-suspan-ink text-suspan-500 rounded px-2 py-2 text-center">Board</div>
+            <div class="bg-suspan-ink text-suspan-500 rounded px-2 py-2 text-center">Ceilings</div>
+            <div class="bg-suspan-ink text-suspan-500 rounded px-2 py-2 text-center">Decor</div>
+          </div>
+        </div>
+      </div>
+      <!-- Insulglass tile -->
+      <div class="col-span-2 bg-insul-600 rounded-2xl p-6 text-white relative overflow-hidden shadow-xl">
+        <div class="absolute inset-0 stamp-tex opacity-40"></div>
+        <div class="relative">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-3xl font-black tracking-tight">Insul<span style="color:#f4a623">glass</span></div>
+              <div class="text-[10px] tracking-[0.3em] font-bold opacity-80 mt-1">PREMIUM INSULATION</div>
+            </div>
+            <div class="w-12 h-12 rounded-full border-2" style="border-color:#f4a623; display:grid; place-items:center; font-weight:900; color:#f4a623; font-size:.7rem;">R-19</div>
+          </div>
+          <div class="grid grid-cols-2 gap-2 mt-5 text-xs font-semibold">
+            <div class="bg-white/10 backdrop-blur rounded px-2 py-2 text-center">Glasswool</div>
+            <div class="bg-white/10 backdrop-blur rounded px-2 py-2 text-center">MBI Manta</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VALUE PROPS ============ -->
+<section class="bg-slate-50 border-y border-slate-200">
+  <div class="max-w-7xl mx-auto px-4 py-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="flex gap-3">
+      <div class="text-3xl">🏭</div>
+      <div>
+        <div class="font-bold text-arobe-900">Importadores directos</div>
+        <div class="text-sm text-slate-600 mt-1">Sin intermediarios. Precio competitivo y stock real.</div>
+      </div>
+    </div>
+    <div class="flex gap-3">
+      <div class="text-3xl">💼</div>
+      <div>
+        <div class="font-bold text-arobe-900">Precios mayoreo</div>
+        <div class="text-sm text-slate-600 mt-1">Cuenta de distribuidor con descuentos por volumen.</div>
+      </div>
+    </div>
+    <div class="flex gap-3">
+      <div class="text-3xl">📄</div>
+      <div>
+        <div class="font-bold text-arobe-900">CFDI 4.0</div>
+        <div class="text-sm text-slate-600 mt-1">Facturación electrónica al instante.</div>
+      </div>
+    </div>
+    <div class="flex gap-3">
+      <div class="text-3xl">🚚</div>
+      <div>
+        <div class="font-bold text-arobe-900">Envío nacional</div>
+        <div class="text-sm text-slate-600 mt-1">Paquetería y tarima consolidada.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ARQUITECTURA DE MARCAS ============ -->
+<section class="py-20">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="text-center max-w-2xl mx-auto mb-12">
+      <div class="text-xs font-bold tracking-widest text-arobe-700 uppercase mb-2">Nuestras marcas</div>
+      <h2 class="text-3xl lg:text-4xl font-extrabold text-arobe-900">Dos marcas. Cinco líneas. Un solo proveedor.</h2>
+      <p class="text-slate-600 mt-4">Arobe Group importa directo. SusPan resuelve techos, muros y decorativos. Insulglass resuelve aislamiento. Todo en una sola factura, un solo envío.</p>
+    </div>
+
+    <!-- SusPan card con 3 sub-líneas -->
+    <div class="bg-suspan-500 rounded-3xl p-8 lg:p-10 mb-6 relative overflow-hidden shadow-xl">
+      <div class="absolute inset-0 panel-tex opacity-40"></div>
+      <div class="relative">
+        <div class="flex flex-wrap items-end justify-between gap-4 mb-8">
+          <div>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-suspan-ink rounded grid place-items-center">
+                <div class="w-5 h-5" style="background: linear-gradient(135deg, #fff 0 45%, #f2c84a 45% 55%, #fff 55% 100%); transform: skewX(-12deg); border-radius:2px;"></div>
+              </div>
+              <div>
+                <div class="text-4xl lg:text-5xl font-black text-suspan-ink tracking-tight">SusPan</div>
+                <div class="text-[10px] tracking-[0.3em] font-bold text-suspan-ink/70">SUSPENDED PANELS</div>
+              </div>
+            </div>
+          </div>
+          <a href="{{ url_for('web.marca_suspan') }}" class="bg-suspan-ink hover:bg-slate-800 text-suspan-500 font-bold px-5 py-3 rounded-lg text-sm flex items-center gap-2">Ver línea completa →</a>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-4">
+          <a href="{{ url_for('web.marca_suspan', sub='board') }}" class="group bg-suspan-ink text-white rounded-xl p-6 hover:scale-[1.02] transition">
+            <div class="text-suspan-500 text-xs font-bold tracking-widest">SUB-LÍNEA</div>
+            <div class="text-2xl font-extrabold mt-1">Board</div>
+            <p class="text-sm text-white/70 mt-3 mb-5">Láminas y tableros rígidos. Lámina de PVC, paneles para muro y techo.</p>
+            <div class="text-suspan-500 font-semibold text-sm flex items-center gap-2 group-hover:gap-3 transition-all">Ver Board →</div>
+          </a>
+          <a href="{{ url_for('web.marca_suspan', sub='ceilings') }}" class="group bg-suspan-ink text-white rounded-xl p-6 hover:scale-[1.02] transition">
+            <div class="text-suspan-500 text-xs font-bold tracking-widest">SUB-LÍNEA</div>
+            <div class="text-2xl font-extrabold mt-1">Ceilings</div>
+            <p class="text-sm text-white/70 mt-3 mb-5">Plafones reticulados, minerales y acústicos. Sistemas suspendidos completos.</p>
+            <div class="text-suspan-500 font-semibold text-sm flex items-center gap-2 group-hover:gap-3 transition-all">Ver Ceilings →</div>
+          </a>
+          <a href="{{ url_for('web.marca_suspan', sub='decor') }}" class="group bg-suspan-ink text-white rounded-xl p-6 hover:scale-[1.02] transition relative">
+            <div class="absolute -top-2 -right-2 bg-emerald-500 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">Nuevo</div>
+            <div class="text-suspan-500 text-xs font-bold tracking-widest">SUB-LÍNEA</div>
+            <div class="text-2xl font-extrabold mt-1">Decor</div>
+            <p class="text-sm text-white/70 mt-3 mb-5">Decorativos de muro. Lambrín, mármol PVC, paneles 3D.</p>
+            <div class="text-suspan-500 font-semibold text-sm flex items-center gap-2 group-hover:gap-3 transition-all">Ver Decor →</div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Insulglass card con 2 líneas -->
+    <div class="bg-insul-600 rounded-3xl p-8 lg:p-10 relative overflow-hidden shadow-xl">
+      <div class="absolute inset-0 stamp-tex opacity-30"></div>
+      <div class="relative">
+        <div class="flex flex-wrap items-end justify-between gap-4 mb-8">
+          <div class="flex items-center gap-4">
+            <!-- Insulglass stamp placeholder -->
+            <div class="w-16 h-16 rounded-full border-4 border-insul-accent grid place-items-center bg-insul-700">
+              <div class="text-insul-accent text-xs font-black">IG</div>
+            </div>
+            <div>
+              <div class="text-4xl lg:text-5xl font-black text-white tracking-tight">Insul<span class="text-insul-accent">glass</span></div>
+              <div class="text-[10px] tracking-[0.3em] font-bold text-white/70">PREMIUM INSULATION</div>
+            </div>
+          </div>
+          <a href="{{ url_for('web.marca_insulglass') }}" class="bg-insul-accent hover:bg-orange-500 text-insul-800 font-bold px-5 py-3 rounded-lg text-sm flex items-center gap-2">Ver línea completa →</a>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4">
+          <a href="{{ url_for('web.marca_insulglass', sub='glasswool') }}" class="group bg-white/10 backdrop-blur border border-white/20 text-white rounded-xl p-6 hover:bg-white/20 transition">
+            <div class="text-insul-accent text-xs font-bold tracking-widest">LÍNEA</div>
+            <div class="text-2xl font-extrabold mt-1">Glasswool</div>
+            <p class="text-sm text-white/80 mt-3 mb-5">Aislante en rollos de fibra de vidrio para sistemas de tablaroca. R-11 a R-19.</p>
+            <div class="text-insul-accent font-semibold text-sm flex items-center gap-2 group-hover:gap-3 transition-all">Ver Glasswool →</div>
+          </a>
+          <a href="{{ url_for('web.marca_insulglass', sub='mbi') }}" class="group bg-white/10 backdrop-blur border border-white/20 text-white rounded-xl p-6 hover:bg-white/20 transition">
+            <div class="text-insul-accent text-xs font-bold tracking-widest">LÍNEA</div>
+            <div class="text-2xl font-extrabold mt-1">MBI Manta</div>
+            <p class="text-sm text-white/80 mt-3 mb-5">Manta aislante industrial y residencial. Alto desempeño térmico y acústico.</p>
+            <div class="text-insul-accent font-semibold text-sm flex items-center gap-2 group-hover:gap-3 transition-all">Ver MBI →</div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COTIZA WHATSAPP ============ -->
+<section class="py-20 bg-slate-50 border-y border-slate-200">
+  <div class="max-w-5xl mx-auto px-4">
+    <div class="bg-gradient-to-br from-emerald-500 to-emerald-700 rounded-3xl p-10 lg:p-14 text-white shadow-2xl relative overflow-hidden">
+      <div class="absolute top-0 right-0 text-[200px] opacity-10 leading-none">💬</div>
+      <div class="relative">
+        <div class="text-xs font-bold tracking-widest opacity-80 uppercase mb-2">Cotización rápida</div>
+        <h2 class="text-3xl lg:text-4xl font-extrabold leading-tight max-w-2xl">Manda tu lista por WhatsApp y te regresamos cotización con folio el mismo día.</h2>
+        <p class="opacity-95 mt-4 text-lg max-w-2xl">Ideal para ferreterías que necesitan precio de tarima sin formularios largos.</p>
+        <div class="flex flex-wrap gap-3 mt-7">
+          <a href="https://wa.me/{{ config.WA_PHONE }}" class="bg-white text-emerald-700 font-bold px-6 py-3 rounded-lg hover:bg-emerald-50">💬 Abrir WhatsApp</a>
+          <a href="{{ url_for('web.contacto') }}" class="border-2 border-white/40 text-white font-semibold px-6 py-3 rounded-lg hover:bg-white/10">O escríbenos</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

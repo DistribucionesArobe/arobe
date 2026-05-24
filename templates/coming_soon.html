@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}{{ titulo }} — Arobe Group{% endblock %}
+
+{% block content %}
+<section class="py-20">
+  <div class="max-w-3xl mx-auto px-4 text-center">
+    <div class="inline-flex items-center gap-2 bg-amber-100 text-amber-800 text-xs font-bold tracking-widest uppercase px-3 py-1.5 rounded-full mb-6">
+      🚧 En construcción
+    </div>
+    <h1 class="text-4xl lg:text-5xl font-extrabold text-arobe-900">{{ titulo }}</h1>
+    {% if subtitulo %}
+    <p class="text-lg text-slate-600 mt-4">{{ subtitulo }}</p>
+    {% endif %}
+    {% if paso %}
+    <p class="text-sm text-slate-500 mt-6">Esta sección la construimos en el <strong>Paso {{ paso }}</strong> del plan.</p>
+    {% endif %}
+    <div class="flex flex-wrap justify-center gap-3 mt-8">
+      <a href="{{ url_for('web.index') }}" class="bg-arobe-900 hover:bg-arobe-800 text-white font-semibold px-6 py-3 rounded-lg">← Volver al inicio</a>
+      <a href="https://wa.me/{{ config.WA_PHONE }}" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-6 py-3 rounded-lg">💬 Cotizar por WhatsApp</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
