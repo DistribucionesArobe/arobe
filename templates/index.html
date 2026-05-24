@@ -105,6 +105,45 @@
   </div>
 </section>
 
+<!-- ============ PRODUCTOS DESTACADOS ============ -->
+{% if destacados %}
+<section class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex items-end justify-between flex-wrap gap-4 mb-10">
+      <div>
+        <div class="text-xs font-bold tracking-widest text-arobe-700 uppercase mb-2">Productos en stock</div>
+        <h2 class="text-3xl lg:text-4xl font-extrabold text-arobe-900">Lo más solicitado por nuestros distribuidores</h2>
+      </div>
+      <a href="{{ url_for('web.catalogo') }}" class="text-arobe-900 font-semibold hover:text-amber-600">Ver catálogo completo →</a>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {% for p in destacados %}
+      <a href="{{ url_for('web.producto', slug=p.slug) }}"
+         class="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all">
+        <div class="aspect-square bg-slate-100 overflow-hidden">
+          <img src="{{ url_for('static', filename='img/products/' + p.imagenes[0]) }}"
+               alt="{{ p.nombre }}"
+               loading="lazy"
+               class="w-full h-full object-cover group-hover:scale-105 transition-transform"
+               onerror="this.style.display='none'; this.parentElement.classList.add('flex','items-center','justify-center'); this.parentElement.insertAdjacentHTML('beforeend','<div class=&quot;text-slate-400 text-xs px-2 text-center&quot;>{{ p.nombre }}</div>')">
+        </div>
+        <div class="p-4">
+          {% if p.marca == 'suspan' %}
+            <span class="inline-block text-[10px] font-bold tracking-widest uppercase bg-suspan-500 text-suspan-ink px-2 py-0.5 rounded">SusPan</span>
+          {% else %}
+            <span class="inline-block text-[10px] font-bold tracking-widest uppercase bg-insul-600 text-white px-2 py-0.5 rounded">Insulglass</span>
+          {% endif %}
+          <h3 class="font-bold text-arobe-900 mt-2 group-hover:text-amber-600">{{ p.nombre }}</h3>
+          <p class="text-xs text-slate-500 mt-1 line-clamp-2">{{ p.tagline }}</p>
+          <p class="text-xl font-extrabold text-arobe-900 mt-3">${{ "{:,.0f}".format(p.precio_publico) }}<span class="text-xs font-normal text-slate-500"> MXN</span></p>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
 <!-- ============ ARQUITECTURA DE MARCAS ============ -->
 <section class="py-20">
   <div class="max-w-7xl mx-auto px-4">

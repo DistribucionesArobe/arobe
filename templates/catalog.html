@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}{{ titulo }} — Arobe Group{% endblock %}
+
+{% block content %}
+<section class="bg-arobe-900 text-white py-16">
+  <div class="max-w-7xl mx-auto px-4">
+    <p class="text-xs uppercase tracking-widest text-amber-400 font-bold mb-3">Catálogo</p>
+    <h1 class="text-4xl lg:text-5xl font-extrabold">{{ titulo }}</h1>
+    {% if subtitulo %}
+    <p class="text-lg text-slate-300 mt-3 max-w-2xl">{{ subtitulo }}</p>
+    {% endif %}
+    <div class="flex flex-wrap gap-3 mt-6 text-sm">
+      <a href="{{ url_for('web.catalogo') }}"
+         class="px-4 py-2 rounded-full border border-white/30 {% if marca_filtro is none %}bg-white text-arobe-900 font-semibold{% else %}hover:bg-white/10{% endif %}">
+        Todos
+      </a>
+      <a href="{{ url_for('web.marca_suspan') }}"
+         class="px-4 py-2 rounded-full border border-white/30 {% if marca_filtro == 'suspan' %}bg-amber-400 text-black font-semibold{% else %}hover:bg-white/10{% endif %}">
+        SusPan
+      </a>
+      <a href="{{ url_for('web.marca_insulglass') }}"
+         class="px-4 py-2 rounded-full border border-white/30 {% if marca_filtro == 'insulglass' %}bg-blue-500 text-white font-semibold{% else %}hover:bg-white/10{% endif %}">
+        Insulglass
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="py-12 bg-slate-50">
+  <div class="max-w-7xl mx-auto px-4">
+    {% if productos %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for p in productos %}
+      <a href="{{ url_for('web.producto', slug=p.slug) }}"
+         class="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all">
+        <div class="aspect-square bg-slate-100 overflow-hidden">
+          <img src="{{ url_for('static', filename='img/products/' + p.imagenes[0]) }}"
+               alt="{{ p.nombre }}"
+               loading="lazy"
+               class="w-full h-full object-cover group-hover:scale-105 transition-transform"
+               onerror="this.style.display='none'; this.parentElement.classList.add('flex','items-center','justify-center'); this.parentElement.insertAdjacentHTML('beforeend','<div class=&quot;text-slate-400 text-sm&quot;>{{ p.nombre }}</div>')">
+        </div>
+        <div class="p-5">
+          <div class="flex items-center gap-2 mb-2">
+            {% if p.marca == 'suspan' %}
+              <span class="inline-block text-[10px] font-bold tracking-widest uppercase bg-amber-400 text-black px-2 py-0.5 rounded">SusPan</span>
+            {% else %}
+              <span class="inline-block text-[10px] font-bold tracking-widest uppercase bg-blue-600 text-white px-2 py-0.5 rounded">Insulglass</span>
+            {% endif %}
+            <span class="text-xs text-slate-500">{{ p.tipo }}</span>
+          </div>
+          <h3 class="text-lg font-bold text-arobe-900 group-hover:text-amber-600">{{ p.nombre }}</h3>
+          <p class="text-sm text-slate-600 mt-1 line-clamp-2">{{ p.tagline }}</p>
+          <div class="flex items-end justify-between mt-4">
+            <div>
+              <p class="text-xs text-slate-500">Desde</p>
+              <p class="text-2xl font-extrabold text-arobe-900">${{ "{:,.0f}".format(p.precio_publico) }}<span class="text-sm font-normal text-slate-500"> MXN</span></p>
+            </div>
+            <span class="text-amber-600 group-hover:translate-x-1 transition-transform text-xl">→</span>
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-20">
+      <p class="text-slate-500">No hay productos en esta categoría todavía.</p>
+      <a href="{{ url_for('web.catalogo') }}" class="inline-block mt-4 text-amber-600 font-semibold">← Ver todo el catálogo</a>
+    </div>
+    {% endif %}
+
+    <div class="mt-12 bg-arobe-900 text-white rounded-2xl p-8 lg:p-10 flex flex-col lg:flex-row items-center justify-between gap-6">
+      <div>
+        <p class="text-amber-400 text-xs uppercase tracking-widest font-bold">¿Distribuidor o ferretería?</p>
+        <h2 class="text-2xl lg:text-3xl font-extrabold mt-2">Precios B2B con 15% de descuento</h2>
+        <p class="text-slate-300 mt-2">Solicita acceso al portal de distribuidores y cotiza volúmenes.</p>
+      </div>
+      <a href="https://wa.me/{{ config.WA_PHONE }}?text=Hola%2C+me+interesa+ser+distribuidor+de+Arobe+Group"
+         class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-8 py-4 rounded-xl whitespace-nowrap">
+        💬 Cotizar volumen
+      </a>
+    </div>
+  </div>
+</section>
+{% endblock %}

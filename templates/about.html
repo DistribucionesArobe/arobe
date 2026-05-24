@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}Nosotros — Arobe Group{% endblock %}
+
+{% block content %}
+<section class="bg-arobe-900 text-white py-20">
+  <div class="max-w-4xl mx-auto px-4 text-center">
+    <p class="text-xs uppercase tracking-widest text-amber-400 font-bold mb-3">Bienvenidos a Arobe</p>
+    <h1 class="text-4xl lg:text-5xl font-extrabold">Construimos lo que cubre tu obra.</h1>
+    <p class="text-lg text-slate-300 mt-4 max-w-2xl mx-auto">
+      Grupo empresarial mexicano dedicado al desarrollo y distribución de
+      soluciones especializadas para la industria de la construcción y el
+      sector productivo.
+    </p>
+  </div>
+</section>
+
+<section class="py-16 bg-white">
+  <div class="max-w-4xl mx-auto px-4 prose-arobe">
+    <h2 class="text-3xl font-extrabold text-arobe-900">Conócenos</h2>
+    <p class="text-slate-700 mt-4 leading-relaxed text-lg">
+      Operamos con una mentalidad de <strong>fabricante-distribuidor</strong> que
+      nos permite controlar la cadena de valor completa: desde el diseño y
+      producción hasta la entrega final, garantizando consistencia,
+      disponibilidad y soporte técnico en cada etapa.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12">
+      <div class="bg-amber-50 border-l-4 border-amber-400 rounded-r-2xl p-6">
+        <h3 class="text-xl font-extrabold text-arobe-900">Misión</h3>
+        <p class="text-slate-700 mt-3 leading-relaxed">
+          Brindar soluciones industriales y de construcción de alta calidad a
+          través de productos y marcas confiables, que contribuyan a mejorar la
+          eficiencia operativa, el desempeño técnico y la rentabilidad de
+          nuestros clientes.
+        </p>
+      </div>
+      <div class="bg-blue-50 border-l-4 border-blue-500 rounded-r-2xl p-6">
+        <h3 class="text-xl font-extrabold text-arobe-900">Visión</h3>
+        <p class="text-slate-700 mt-3 leading-relaxed">
+          Consolidarnos como un grupo empresarial referente en el desarrollo y
+          comercialización de soluciones para la industria y la construcción en
+          México, reconocidos por nuestra calidad consistente, capacidad de
+          innovación y compromiso con el éxito de cada proyecto.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-16 bg-slate-50">
+  <div class="max-w-5xl mx-auto px-4">
+    <div class="text-center">
+      <p class="text-xs uppercase tracking-widest text-amber-600 font-bold mb-2">Distribuciones Arobe</p>
+      <h2 class="text-3xl font-extrabold text-arobe-900">Nuestros valores</h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
+
+      <div class="bg-white rounded-2xl border border-slate-200 p-6">
+        <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-2xl">🌱</div>
+        <h3 class="font-bold text-arobe-900 mt-4">Bienestar como prioridad</h3>
+        <p class="text-slate-600 text-sm mt-2 leading-relaxed">
+          Creamos productos que mejoran la calidad de vida de quienes los usan.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-slate-200 p-6">
+        <div class="w-12 h-12 rounded-xl bg-green-100 text-green-700 flex items-center justify-center text-2xl">♻️</div>
+        <h3 class="font-bold text-arobe-900 mt-4">Responsabilidad ambiental</h3>
+        <p class="text-slate-600 text-sm mt-2 leading-relaxed">
+          Apostamos por materiales y procesos que reducen el impacto ambiental.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-slate-200 p-6">
+        <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center text-2xl">⚙️</div>
+        <h3 class="font-bold text-arobe-900 mt-4">Responsabilidad operativa</h3>
+        <p class="text-slate-600 text-sm mt-2 leading-relaxed">
+          Cumplimos nuestros compromisos de entrega, calidad y soporte técnico.
+          Nuestra palabra tiene valor.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-slate-200 p-6">
+        <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-2xl">🤝</div>
+        <h3 class="font-bold text-arobe-900 mt-4">Confianza y transparencia</h3>
+        <p class="text-slate-600 text-sm mt-2 leading-relaxed">
+          Construimos relaciones basadas en la confianza, el servicio profesional
+          y el cumplimiento de lo prometido.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-slate-200 p-6">
+        <div class="w-12 h-12 rounded-xl bg-violet-100 text-violet-700 flex items-center justify-center text-2xl">💡</div>
+        <h3 class="font-bold text-arobe-900 mt-4">Innovación práctica</h3>
+        <p class="text-slate-600 text-sm mt-2 leading-relaxed">
+          Buscamos mejores formas de resolver problemas, sin perder de vista la
+          viabilidad técnica y económica.
+        </p>
+      </div>
+
+      <div class="bg-arobe-900 text-white rounded-2xl p-6 flex flex-col justify-between">
+        <div>
+          <h3 class="font-bold text-xl">¿Listo para trabajar con nosotros?</h3>
+          <p class="text-slate-300 text-sm mt-2">Solicita información comercial o únete como distribuidor.</p>
+        </div>
+        <a href="https://wa.me/{{ config.WA_PHONE }}" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-center px-4 py-3 rounded-lg mt-4">💬 Contáctanos</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}
