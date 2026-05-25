@@ -5,6 +5,7 @@ Marcas: Suspan (paneles) · Insulglass (aislamiento)
 """
 import os
 from flask import Flask, render_template
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 def create_app():
     app = Flask(
@@ -12,6 +13,9 @@ def create_app():
         static_folder="static",
         template_folder="templates",
     )
+    # Detrás del proxy de Render: respeta X-Forwarded-Proto y X-Forwarded-Host
+    # para que url_for y request.host_url generen URLs https en lugar de http
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1, x_for=1)
 
     # ---- Config ----
     app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-change-me-in-prod")

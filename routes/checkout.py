@@ -126,9 +126,10 @@ def start():
     }
     session.modified = True
 
-    # URLs de retorno absolutas
+    # URLs de retorno absolutas. MercadoPago RECHAZA back_urls con http://
+    # (debe ser https). Forzamos siempre https en producción.
     base_url = request.host_url.rstrip("/")
-    if base_url.startswith("http://") and "onrender.com" in base_url:
+    if base_url.startswith("http://"):
         base_url = base_url.replace("http://", "https://", 1)
 
     preference_data = {
@@ -166,8 +167,20 @@ def start():
     status = pref.get("status")
     body = pref.get("response", {})
     if status != 201:
-        log.error("MP preference error %s: %s", status, body)
-        flash(f"MercadoPago respondió error {status}. Intenta de nuevo.", "error")
+        # Log completo para diagnóstico
+        log.error("MP preference error status=%s body=%s", status, json.dumps(body)[:1000])
+        # Saco un mensaje legible para el usuario
+        mp_msg = body.get("message") or body.get("error") or "(sin detalle)"
+        cause = body.get("cause") or []
+        cause_str = ""
+        if cause:
+            cause_str = " · " + "; ".join(
+                f"[{c.get('code','?')}] {c.get('description','')}" for c in cause[:3]
+            )
+        flash(
+            f"MercadoPago respondió error {status}: {mp_msg}{cause_str}",
+            "error",
+        )
         return redirect(url_for("checkout.form"))
 
     # init_point = URL del checkout en producción
@@ -227,6 +240,61 @@ def pending():
         titulo="Tu pago está en revisión",
         mensaje="Si pagaste en OXXO o transferencia SPEI, recibirás un correo cuando el pago se acredite (1-2 días hábiles).",
     )
+
+
+# ============================================================
+# Debug — verifica config sin revelar token
+# ============================================================
+@checkout_bp.get("/debug/mp")
+def debug_mp():
+    token = os.environ.get("MP_ACCESS_TOKEN", "").strip()
+    pub = os.environ.get("MP_PUBLIC_KEY", "").strip()
+
+    def diag(val, name):
+        if not val:
+            return {"name": name, "set": False, "type": "—", "len": 0, "starts": "—"}
+        kind = "PROD" if val.startswith("APP_USR-") else ("TEST" if val.startswith("TEST-") else "INVÁLIDO")
+        return {
+            "name": name,
+            "set": True,
+            "type": kind,
+            "len": len(val),
+            "starts": val[:8] + "…",
+        }
+
+    info = {
+        "access_token": diag(token, "MP_ACCESS_TOKEN"),
+        "public_key": diag(pub, "MP_PUBLIC_KEY"),
+        "host_url": request.host_url,
+        "is_https": request.host_url.startswith("https://"),
+    }
+
+    # Si hay token, intentamos llamar a /users/me como sanity check
+    if token:
+        try:
+            sdk = mercadopago.SDK(token)
+            # Endpoint barato que valida el token
+            import requests as _rq
+            r = _rq.get(
+                "https://api.mercadopago.com/users/me",
+                headers={"Authorization": f"Bearer {token}"},
+                timeout=10,
+            )
+            info["users_me_status"] = r.status_code
+            if r.status_code == 200:
+                u = r.json()
+                info["account"] = {
+                    "site_id": u.get("site_id"),
+                    "country_id": u.get("country_id"),
+                    "nickname": u.get("nickname"),
+                    "email_dominio": (u.get("email") or "").split("@")[-1] if u.get("email") else None,
+                }
+            else:
+                info["users_me_error"] = r.text[:300]
+        except Exception as e:
+            info["users_me_exception"] = str(e)[:200]
+
+    return jsonify(info)
 
 
 # ============================================================
