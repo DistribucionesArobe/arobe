@@ -169,6 +169,13 @@ tailwind.config = {
       </nav>
 
       <div class="flex items-center gap-2">
+        <!-- Mini carrito -->
+        <a href="{{ url_for('cart.view') }}" class="relative text-arobe-900 hover:text-amber-600 px-3 py-2 rounded flex items-center gap-1.5" title="Ver carrito">
+          <span class="text-xl">🛒</span>
+          {% if cart_count and cart_count > 0 %}
+          <span class="absolute -top-1 -right-1 bg-amber-400 text-arobe-900 text-[10px] font-extrabold rounded-full min-w-[18px] h-[18px] grid place-items-center px-1 border-2 border-white">{{ cart_count }}</span>
+          {% endif %}
+        </a>
         <a href="https://wa.me/{{ config.WA_PHONE }}" target="_blank" rel="noopener" class="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-4 py-2 rounded shadow-sm flex items-center gap-1.5">
           <span>💬</span> Cotizar
         </a>

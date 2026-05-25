@@ -22,7 +22,17 @@ def create_app():
 
     # ---- Routes ----
     from routes.web import web_bp
+    from routes.cart import cart_bp, cart_summary
     app.register_blueprint(web_bp)
+    app.register_blueprint(cart_bp)
+
+    # ---- Globals expuestos a Jinja (para el mini-carrito del header) ----
+    @app.context_processor
+    def inject_cart_count():
+        try:
+            return {"cart_count": cart_summary()}
+        except Exception:
+            return {"cart_count": 0}
 
     # ---- Healthcheck (para Render) ----
     @app.get("/healthz")

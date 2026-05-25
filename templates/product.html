@@ -91,14 +91,34 @@
         {% endif %}
       </dl>
 
-      <!-- CTAs -->
-      <div class="flex flex-col sm:flex-row gap-3 mt-6">
+      <!-- Añadir al carrito (form principal) -->
+      <form method="post" action="{{ url_for('cart.add') }}" class="mt-6 bg-white border border-slate-200 rounded-2xl p-5">
+        <input type="hidden" name="slug" value="{{ producto.slug }}">
+        <div class="flex flex-wrap items-end gap-4">
+          <div>
+            <label for="qty" class="block text-xs text-slate-500 uppercase tracking-wide font-bold mb-1">Cantidad</label>
+            <div class="flex items-center gap-0 border-2 border-slate-300 rounded-lg overflow-hidden">
+              <button type="button" onclick="var q=document.getElementById('qty');q.value=Math.max(1,parseInt(q.value||1)-1);" class="px-3 py-2 hover:bg-slate-100 font-bold text-arobe-900">−</button>
+              <input id="qty" type="number" name="qty" value="1" min="1" max="999"
+                     class="w-16 text-center font-bold text-lg py-2 border-x border-slate-300 focus:outline-none">
+              <button type="button" onclick="var q=document.getElementById('qty');q.value=Math.min(999,parseInt(q.value||1)+1);" class="px-3 py-2 hover:bg-slate-100 font-bold text-arobe-900">+</button>
+            </div>
+          </div>
+          <button type="submit"
+                  class="flex-1 bg-amber-400 hover:bg-amber-500 text-arobe-900 font-extrabold px-6 py-4 rounded-xl text-lg flex items-center justify-center gap-2 min-w-[200px]">
+            🛒 Añadir al carrito
+          </button>
+        </div>
+      </form>
+
+      <!-- CTAs alternos -->
+      <div class="flex flex-col sm:flex-row gap-3 mt-3">
         <a href="https://wa.me/{{ config.WA_PHONE }}?text=Hola%2C+me+interesa+cotizar+{{ producto.nombre|urlencode }}"
-           class="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white text-center font-bold px-6 py-4 rounded-xl">
+           class="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white text-center font-bold px-6 py-3 rounded-xl">
           💬 Cotizar por WhatsApp
         </a>
         <a href="mailto:{{ config.EMAIL_VENTAS }}?subject=Cotización {{ producto.nombre }}"
-           class="flex-1 bg-arobe-900 hover:bg-arobe-800 text-white text-center font-bold px-6 py-4 rounded-xl">
+           class="flex-1 bg-arobe-900 hover:bg-arobe-800 text-white text-center font-bold px-6 py-3 rounded-xl">
           ✉ Cotizar por email
         </a>
       </div>
