@@ -28,9 +28,11 @@ def create_app():
     from routes.web import web_bp
     from routes.cart import cart_bp, cart_summary
     from routes.checkout import checkout_bp
+    from routes.seo import seo_bp
     app.register_blueprint(web_bp)
     app.register_blueprint(cart_bp)
     app.register_blueprint(checkout_bp)
+    app.register_blueprint(seo_bp)
 
     # ---- Globals expuestos a Jinja (para el mini-carrito del header) ----
     @app.context_processor

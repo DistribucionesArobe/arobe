@@ -1,6 +1,41 @@
 {% extends "base.html" %}
 
 {% block title %}{{ producto.nombre }} — {% if producto.marca == 'suspan' %}SusPan{% else %}Insulglass{% endif %} | Arobe Group{% endblock %}
+{% block description %}{{ producto.tagline }}. {{ producto.tipo }}. Presentación: {{ producto.presentacion }}. Precio público ${{ "{:,.0f}".format(producto.precio_publico) }} MXN. Precio mayoreo disponible para distribuidores. Envíos a toda la República, factura CFDI 4.0.{% endblock %}
+{% block og_type %}product{% endblock %}
+{% block og_image %}https://arobegroup.com{{ url_for('static', filename='img/products/' + producto.imagenes[0]) }}{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "{{ producto.nombre }}",
+  "description": "{{ producto.descripcion|replace('\n',' ')|replace('"','\\"')|truncate(500, true) }}",
+  "image": [
+    {% for img in producto.imagenes %}"https://arobegroup.com{{ url_for('static', filename='img/products/' + img) }}"{% if not loop.last %},{% endif %}{% endfor %}
+  ],
+  "brand": {
+    "@type": "Brand",
+    "name": "{% if producto.marca == 'suspan' %}SusPan{% else %}Insulglass{% endif %}"
+  },
+  "sku": "{{ producto.slug }}",
+  "category": "{{ producto.tipo }}",
+  "offers": {
+    "@type": "Offer",
+    "url": "https://arobegroup.com{{ url_for('web.producto', slug=producto.slug) }}",
+    "priceCurrency": "MXN",
+    "price": "{{ producto.precio_publico }}",
+    "availability": "https://schema.org/InStock",
+    "itemCondition": "https://schema.org/NewCondition",
+    "seller": {
+      "@type": "Organization",
+      "name": "Arobe Group"
+    }
+  }
+}
+</script>
+{% endblock %}
 
 {% block content %}
 <section class="py-8 bg-white border-b border-slate-100">
