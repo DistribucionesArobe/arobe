@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}Pagar — Arobe Group{% endblock %}
+
+{% block content %}
+<section class="bg-arobe-900 text-white py-10">
+  <div class="max-w-7xl mx-auto px-4">
+    <nav class="text-sm text-slate-300 flex gap-1 mb-3">
+      <a href="{{ url_for('cart.view') }}" class="hover:text-white">← Volver al carrito</a>
+    </nav>
+    <h1 class="text-3xl lg:text-4xl font-extrabold">Datos para tu pedido</h1>
+    <p class="text-slate-300 mt-2">Total a pagar: <strong class="text-white">${{ "{:,.2f}".format(total) }} MXN</strong></p>
+  </div>
+</section>
+
+<section class="py-10 bg-slate-50">
+  <div class="max-w-7xl mx-auto px-4">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, msg in messages %}
+        <div class="mb-4 px-4 py-3 rounded-lg
+                    {% if category == 'success' %}bg-emerald-50 text-emerald-800 border border-emerald-200
+                    {% elif category == 'error' %}bg-rose-50 text-rose-800 border border-rose-200
+                    {% else %}bg-amber-50 text-amber-800 border border-amber-200{% endif %}">
+          {{ msg }}
+        </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="post" action="{{ url_for('checkout.start') }}" class="grid lg:grid-cols-3 gap-8">
+
+      <!-- Form de datos -->
+      <div class="lg:col-span-2 space-y-6">
+        <div class="bg-white rounded-2xl border border-slate-200 p-6">
+          <h2 class="font-extrabold text-arobe-900 text-lg">Contacto</h2>
+          <div class="grid sm:grid-cols-2 gap-4 mt-4">
+            <div class="sm:col-span-2">
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Nombre completo o razón social *</label>
+              <input type="text" name="nombre" required class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Email *</label>
+              <input type="email" name="email" required class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Teléfono</label>
+              <input type="tel" name="telefono" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none" placeholder="+52 81 1234 5678">
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-200 p-6">
+          <h2 class="font-extrabold text-arobe-900 text-lg">Envío</h2>
+          <div class="grid sm:grid-cols-2 gap-4 mt-4">
+            <div class="sm:col-span-2">
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Dirección de entrega</label>
+              <input type="text" name="direccion" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none" placeholder="Calle, número, colonia">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Ciudad</label>
+              <input type="text" name="ciudad" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Estado</label>
+              <input type="text" name="estado" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none" placeholder="Nuevo León, CDMX, etc.">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Código Postal</label>
+              <input type="text" name="cp" pattern="[0-9]{5}" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none" placeholder="64000">
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Notas o instrucciones</label>
+              <textarea name="notas" rows="2" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none" placeholder="Horarios de recepción, referencias..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-200 p-6">
+          <h2 class="font-extrabold text-arobe-900 text-lg">Facturación CFDI 4.0 <span class="text-xs text-slate-500 font-normal">(opcional)</span></h2>
+          <div class="mt-4">
+            <label class="block text-sm font-semibold text-slate-700 mb-1">RFC</label>
+            <input type="text" name="rfc" maxlength="13" class="w-full border border-slate-300 rounded-lg px-3 py-2 uppercase focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none" placeholder="XAXX010101000">
+            <p class="text-xs text-slate-500 mt-1">Si proporcionas RFC, te enviamos factura electrónica.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resumen + pagar -->
+      <div class="lg:col-span-1">
+        <div class="bg-white rounded-2xl border border-slate-200 p-6 sticky top-20">
+          <h3 class="text-lg font-extrabold text-arobe-900">Resumen</h3>
+          <ul class="mt-4 space-y-2 text-sm">
+            {% for item in items %}
+            <li class="flex justify-between gap-2">
+              <span class="text-slate-700">{{ item.quantity }}× {{ item.title }}</span>
+              <span class="font-semibold text-arobe-900 whitespace-nowrap">${{ "{:,.2f}".format(item.unit_price * item.quantity) }}</span>
+            </li>
+            {% endfor %}
+          </ul>
+          <div class="border-t border-slate-200 mt-4 pt-3 flex justify-between items-baseline">
+            <span class="font-bold text-arobe-900">Total</span>
+            <span class="text-2xl font-extrabold text-arobe-900">${{ "{:,.2f}".format(total) }}<span class="text-xs font-normal text-slate-500"> MXN</span></span>
+          </div>
+          <p class="text-xs text-slate-500 mt-2">IVA 16% incluido. Envío se calcula tras confirmar pago.</p>
+
+          <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold py-4 rounded-xl mt-5 text-lg">
+            Pagar con MercadoPago →
+          </button>
+          <div class="mt-4 grid grid-cols-3 gap-2 text-center text-[10px] text-slate-500 uppercase tracking-widest font-bold">
+            <div class="border border-slate-200 rounded py-2">Tarjeta</div>
+            <div class="border border-slate-200 rounded py-2">SPEI</div>
+            <div class="border border-slate-200 rounded py-2">OXXO</div>
+          </div>
+          <p class="text-xs text-slate-400 text-center mt-3">🔒 Pago seguro procesado por MercadoPago</p>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}
