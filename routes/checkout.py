@@ -1,28 +1,34 @@
 """
-Checkout con MercadoPago Checkout Pro — Fase 3.
+Checkout con MercadoPago Checkout Pro — Fase 3 + 4.1 + 4.2.
 
 Flujo:
-  1. Cliente con items en carrito -> GET /checkout: muestra form de datos.
-  2. Submit del form -> POST /checkout/start: crea Preference en MP y redirige.
+  1. Cliente con items en carrito -> GET /checkout: muestra form.
+  2. Submit del form -> POST /checkout/start:
+       a. Crea Order en BD con status=pending
+       b. Crea Preference en MercadoPago
+       c. Guarda mp_preference_id
+       d. Redirige al init_point
   3. Cliente paga en checkout de MP.
   4. MP redirige a /checkout/exito | /fallo | /pendiente (back_urls).
-  5. MP envía webhook a /api/mp/webhook (notification_url) — la fuente de
-     verdad para el estado del pago.
-
-En Fase 4 persistimos la orden en Postgres. Por ahora solo email + logs.
+  5. MP envía webhook a /api/mp/webhook (notification_url):
+       a. Lee detalles del payment vía SDK
+       b. Marca Order.status = paid/failed/pending
+       c. Si paid: dispara emails al cliente y admin (con guard idempotente)
 """
 import os
 import json
-import uuid
 import logging
+from datetime import datetime, timezone
 
 import mercadopago
 from flask import (
     Blueprint, render_template, request, redirect, url_for,
-    session, flash, jsonify, current_app, abort
+    session, flash, jsonify
 )
 
 from data import products as catalog
+from models import db, Order, OrderItem
+from lib.emailer import send_order_confirmation, send_order_admin_notification
 
 log = logging.getLogger("checkout")
 
@@ -32,7 +38,6 @@ IVA_TASA = 0.16
 
 
 def _mp_sdk():
-    """Devuelve el SDK de MercadoPago configurado con el token de env."""
     token = os.environ.get("MP_ACCESS_TOKEN", "").strip()
     if not token:
         return None
@@ -40,9 +45,10 @@ def _mp_sdk():
 
 
 def _hydrate_cart():
-    """Convierte el dict de sesión en items listos para MercadoPago."""
+    """Convierte el dict de sesión en items para MercadoPago + producto enriquecido."""
     cart_dict = session.get("cart", {})
-    items = []
+    mp_items = []
+    full_lines = []   # con producto entero, para guardar en BD
     total = 0.0
     for slug, qty in cart_dict.items():
         p = catalog.get(slug)
@@ -50,7 +56,7 @@ def _hydrate_cart():
             continue
         precio = float(p["precio_publico"])
         line_total = precio * qty
-        items.append({
+        mp_items.append({
             "id": p["slug"],
             "title": p["nombre"],
             "description": p.get("tagline", "")[:250],
@@ -59,35 +65,41 @@ def _hydrate_cart():
             "currency_id": "MXN",
             "category_id": "construction",
         })
+        full_lines.append({
+            "producto": p,
+            "qty": int(qty),
+            "unit_price": round(precio, 2),
+            "line_total": round(line_total, 2),
+        })
         total += line_total
-    return items, round(total, 2)
+    return mp_items, full_lines, round(total, 2)
 
 
 # ============================================================
-# GET /checkout — formulario de datos del comprador
+# GET /checkout
 # ============================================================
 @checkout_bp.get("/checkout")
 def form():
-    items, total = _hydrate_cart()
-    if not items:
+    mp_items, _, total = _hydrate_cart()
+    if not mp_items:
         flash("Tu carrito está vacío", "error")
         return redirect(url_for("cart.view"))
     return render_template(
         "checkout.html",
         page="checkout",
-        items=items,
+        items=mp_items,
         total=total,
         public_key=os.environ.get("MP_PUBLIC_KEY", ""),
     )
 
 
 # ============================================================
-# POST /checkout/start — crea preference y redirige a MP
+# POST /checkout/start
 # ============================================================
 @checkout_bp.post("/checkout/start")
 def start():
-    items, total = _hydrate_cart()
-    if not items:
+    mp_items, full_lines, total = _hydrate_cart()
+    if not mp_items:
         flash("Tu carrito está vacío", "error")
         return redirect(url_for("cart.view"))
 
@@ -101,75 +113,97 @@ def start():
         return redirect(url_for("cart.view"))
 
     # Datos del comprador
-    nombre = request.form.get("nombre", "").strip()
-    email = request.form.get("email", "").strip()
-    telefono = request.form.get("telefono", "").strip()
-    rfc = request.form.get("rfc", "").strip()
+    nombre    = request.form.get("nombre", "").strip()
+    email     = request.form.get("email", "").strip()
+    telefono  = request.form.get("telefono", "").strip()
+    rfc       = request.form.get("rfc", "").strip().upper()
     direccion = request.form.get("direccion", "").strip()
-    ciudad = request.form.get("ciudad", "").strip()
-    estado = request.form.get("estado", "").strip()
-    cp = request.form.get("cp", "").strip()
-    notas = request.form.get("notas", "").strip()
+    ciudad    = request.form.get("ciudad", "").strip()
+    estado    = request.form.get("estado", "").strip()
+    cp        = request.form.get("cp", "").strip()
+    notas     = request.form.get("notas", "").strip()
 
     if not (nombre and email):
         flash("Faltan datos obligatorios (nombre y email)", "error")
         return redirect(url_for("checkout.form"))
 
-    # Genero un ID único de orden para poder rastrear
-    order_id = str(uuid.uuid4())[:8].upper()
-    session["pending_order_id"] = order_id
-    session["pending_order_data"] = {
-        "nombre": nombre, "email": email, "telefono": telefono,
-        "rfc": rfc, "direccion": direccion, "ciudad": ciudad,
-        "estado": estado, "cp": cp, "notas": notas,
-        "items": items, "total": total,
-    }
-    session.modified = True
+    # Calculo de totales: el precio_publico ya incluye IVA
+    subtotal_sin_iva = round(total / (1 + IVA_TASA), 2)
+    iva_amount = round(total - subtotal_sin_iva, 2)
 
-    # URLs de retorno absolutas. MercadoPago RECHAZA back_urls con http://
-    # (debe ser https). Forzamos siempre https en producción.
+    # 1) Crear Order en BD (status=pending)
+    order = Order(
+        status="pending",
+        buyer_name=nombre,
+        buyer_email=email,
+        buyer_phone=telefono or None,
+        buyer_rfc=rfc or None,
+        ship_address=direccion or None,
+        ship_city=ciudad or None,
+        ship_state=estado or None,
+        ship_zip=cp or None,
+        ship_notes=notas or None,
+        subtotal=subtotal_sin_iva,
+        iva=iva_amount,
+        total=total,
+    )
+    db.session.add(order)
+    db.session.flush()  # para obtener order.id
+
+    for line in full_lines:
+        p = line["producto"]
+        item = OrderItem(
+            order_id=order.id,
+            product_slug=p["slug"],
+            product_name=p["nombre"],
+            product_brand=p["marca"],
+            product_image=p["imagenes"][0] if p.get("imagenes") else None,
+            qty=line["qty"],
+            unit_price=line["unit_price"],
+            line_total=line["line_total"],
+        )
+        db.session.add(item)
+    db.session.commit()
+    log.info("Order %s creada en BD · buyer=%s · total=%s", order.id, email, total)
+
+    # 2) URLs absolutas con https
     base_url = request.host_url.rstrip("/")
     if base_url.startswith("http://"):
         base_url = base_url.replace("http://", "https://", 1)
 
     preference_data = {
-        "items": items,
+        "items": mp_items,
         "payer": {
             "name": nombre,
             "email": email,
-            "phone": {"number": telefono} if telefono else None,
-            "address": {
-                "street_name": direccion,
-                "zip_code": cp,
-            } if direccion else None,
         },
         "back_urls": {
-            "success": f"{base_url}/checkout/exito?order={order_id}",
-            "failure": f"{base_url}/checkout/fallo?order={order_id}",
-            "pending": f"{base_url}/checkout/pendiente?order={order_id}",
+            "success": f"{base_url}/checkout/exito?order={order.id}",
+            "failure": f"{base_url}/checkout/fallo?order={order.id}",
+            "pending": f"{base_url}/checkout/pendiente?order={order.id}",
         },
         "auto_return": "approved",
-        "external_reference": order_id,
+        "external_reference": order.id,
         "notification_url": f"{base_url}/api/mp/webhook",
         "statement_descriptor": "AROBEGROUP",
-        "binary_mode": False,  # permitir pagos pendientes (OXXO, SPEI)
+        "binary_mode": False,
     }
-    # Limpio None del payer (MP no le gusta)
-    preference_data["payer"] = {k: v for k, v in preference_data["payer"].items() if v}
+    if telefono:
+        preference_data["payer"]["phone"] = {"number": telefono}
+    if direccion:
+        preference_data["payer"]["address"] = {"street_name": direccion, "zip_code": cp}
 
     try:
         pref = sdk.preference().create(preference_data)
     except Exception as e:
-        log.exception("Error creando preference MP")
+        log.exception("Error creando preference MP para order=%s", order.id)
         flash(f"No pudimos iniciar el pago: {e}", "error")
         return redirect(url_for("checkout.form"))
 
     status = pref.get("status")
     body = pref.get("response", {})
     if status != 201:
-        # Log completo para diagnóstico
-        log.error("MP preference error status=%s body=%s", status, json.dumps(body)[:1000])
-        # Saco un mensaje legible para el usuario
+        log.error("MP preference error order=%s status=%s body=%s", order.id, status, json.dumps(body)[:1000])
         mp_msg = body.get("message") or body.get("error") or "(sin detalle)"
         cause = body.get("cause") or []
         cause_str = ""
@@ -177,34 +211,34 @@ def start():
             cause_str = " · " + "; ".join(
                 f"[{c.get('code','?')}] {c.get('description','')}" for c in cause[:3]
             )
-        flash(
-            f"MercadoPago respondió error {status}: {mp_msg}{cause_str}",
-            "error",
-        )
+        flash(f"MercadoPago respondió error {status}: {mp_msg}{cause_str}", "error")
         return redirect(url_for("checkout.form"))
 
-    # init_point = URL del checkout en producción
-    # sandbox_init_point = URL en sandbox (cuando usas TEST credentials)
+    # Guardar preference_id en la orden
+    order.mp_preference_id = body.get("id")
+    db.session.commit()
+
     redirect_url = body.get("init_point") or body.get("sandbox_init_point")
     if not redirect_url:
         flash("MercadoPago no devolvió URL de pago", "error")
         return redirect(url_for("checkout.form"))
 
-    log.info("MP preference creada order=%s pref_id=%s", order_id, body.get("id"))
+    log.info("Order %s · preference_id=%s · redirigiendo a MP", order.id, body.get("id"))
     return redirect(redirect_url)
 
 
 # ============================================================
-# Retornos del checkout (back_urls)
+# Retornos del checkout
 # ============================================================
 @checkout_bp.get("/checkout/exito")
 def success():
     order_id = request.args.get("order", "")
     payment_id = request.args.get("payment_id", "")
-    # Vacío el carrito porque la compra cuajó
+    # Vacía el carrito porque la compra cuajó
     if session.get("cart"):
         session["cart"] = {}
         session.modified = True
+    # Si el webhook ya llegó, la orden ya está en BD con status=paid
     return render_template(
         "checkout_result.html",
         page="checkout-exito",
@@ -243,7 +277,7 @@ def pending():
 
 
 # ============================================================
-# Debug — verifica config sin revelar token
+# Debug — sin token (vivo para revisar config)
 # ============================================================
 @checkout_bp.get("/debug/mp")
 def debug_mp():
@@ -254,26 +288,19 @@ def debug_mp():
         if not val:
             return {"name": name, "set": False, "type": "—", "len": 0, "starts": "—"}
         kind = "PROD" if val.startswith("APP_USR-") else ("TEST" if val.startswith("TEST-") else "INVÁLIDO")
-        return {
-            "name": name,
-            "set": True,
-            "type": kind,
-            "len": len(val),
-            "starts": val[:8] + "…",
-        }
+        return {"name": name, "set": True, "type": kind, "len": len(val), "starts": val[:8] + "…"}
 
     info = {
         "access_token": diag(token, "MP_ACCESS_TOKEN"),
         "public_key": diag(pub, "MP_PUBLIC_KEY"),
+        "resend_key_set": bool(os.environ.get("RESEND_API_KEY", "").strip()),
+        "db_url_set": bool(os.environ.get("DATABASE_URL", "").strip()),
         "host_url": request.host_url,
         "is_https": request.host_url.startswith("https://"),
     }
 
-    # Si hay token, intentamos llamar a /users/me como sanity check
     if token:
         try:
-            sdk = mercadopago.SDK(token)
-            # Endpoint barato que valida el token
             import requests as _rq
             r = _rq.get(
                 "https://api.mercadopago.com/users/me",
@@ -287,13 +314,9 @@ def debug_mp():
                     "site_id": u.get("site_id"),
                     "country_id": u.get("country_id"),
                     "nickname": u.get("nickname"),
-                    "email_dominio": (u.get("email") or "").split("@")[-1] if u.get("email") else None,
                 }
-            else:
-                info["users_me_error"] = r.text[:300]
         except Exception as e:
             info["users_me_exception"] = str(e)[:200]
-
     return jsonify(info)
 
 
@@ -302,10 +325,6 @@ def debug_mp():
 # ============================================================
 @checkout_bp.post("/api/mp/webhook")
 def webhook():
-    """
-    MercadoPago llama aquí cuando un pago cambia de estado.
-    Body típico: {"action":"payment.updated","data":{"id":"<payment_id>"},"type":"payment"}
-    """
     try:
         payload = request.get_json(silent=True) or {}
         log.info("MP webhook payload: %s", json.dumps(payload)[:500])
@@ -313,21 +332,69 @@ def webhook():
         payment_id = (payload.get("data") or {}).get("id") or request.args.get("id")
         topic = payload.get("type") or request.args.get("topic")
 
-        if topic == "payment" and payment_id:
-            sdk = _mp_sdk()
-            if sdk:
-                resp = sdk.payment().get(payment_id)
-                pay = resp.get("response", {})
-                log.info(
-                    "MP payment %s | status=%s | external_ref=%s | amount=%s",
-                    payment_id,
-                    pay.get("status"),
-                    pay.get("external_reference"),
-                    pay.get("transaction_amount"),
-                )
-                # TODO Fase 4: guardar en Postgres + enviar email transaccional
-        return jsonify({"ok": True}), 200
+        if topic != "payment" or not payment_id:
+            return jsonify({"ok": True, "ignored": True}), 200
+
+        sdk = _mp_sdk()
+        if sdk is None:
+            log.error("MP webhook recibido pero SDK no configurado")
+            return jsonify({"ok": False, "error": "MP_ACCESS_TOKEN no configurado"}), 200
+
+        resp = sdk.payment().get(payment_id)
+        pay = resp.get("response", {})
+        mp_status = pay.get("status")               # approved, pending, rejected, refunded, ...
+        mp_status_detail = pay.get("status_detail")
+        mp_payment_type = pay.get("payment_type_id")
+        external_ref = pay.get("external_reference")  # = order.id
+
+        log.info(
+            "MP payment %s · status=%s · external_ref=%s · amount=%s",
+            payment_id, mp_status, external_ref, pay.get("transaction_amount"),
+        )
+
+        if not external_ref:
+            return jsonify({"ok": True, "no_external_ref": True}), 200
+
+        order = Order.query.get(external_ref)
+        if order is None:
+            log.error("MP webhook: orden %s no existe en BD", external_ref)
+            return jsonify({"ok": True, "order_not_found": True}), 200
+
+        # Actualizar estado de la orden
+        order.mp_payment_id = str(payment_id)
+        order.mp_status = mp_status
+        order.mp_status_detail = mp_status_detail
+        order.mp_payment_type = mp_payment_type
+
+        if mp_status == "approved":
+            order.status = "paid"
+            if order.paid_at is None:
+                order.paid_at = datetime.now(timezone.utc)
+        elif mp_status in ("rejected", "cancelled"):
+            order.status = "failed"
+        elif mp_status in ("pending", "in_process", "authorized"):
+            order.status = "pending"
+        elif mp_status == "refunded":
+            order.status = "refunded"
+
+        db.session.commit()
+        log.info("Order %s actualizada a status=%s", order.id, order.status)
+
+        # Disparar emails solo cuando se aprueba el pago (idempotente)
+        if order.status == "paid":
+            if not order.email_customer_sent:
+                ok, _ = send_order_confirmation(order)
+                if ok:
+                    order.email_customer_sent = True
+                    db.session.commit()
+            if not order.email_admin_sent:
+                ok, _ = send_order_admin_notification(order)
+                if ok:
+                    order.email_admin_sent = True
+                    db.session.commit()
+
+        return jsonify({"ok": True, "order_id": order.id, "status": order.status}), 200
     except Exception as e:
         log.exception("Error en webhook MP")
-        # Aún así devuelvo 200 para que MP no reintente infinito
+        # Aún así 200 para que MP no reintente infinito
         return jsonify({"ok": False, "error": str(e)}), 200

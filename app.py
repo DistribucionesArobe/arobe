@@ -4,8 +4,20 @@ Distribuidor de materiales de construcción ligera
 Marcas: Suspan (paneles) · Insulglass (aislamiento)
 """
 import os
-from flask import Flask, render_template
+import logging
+
+from flask import Flask
 from werkzeug.middleware.proxy_fix import ProxyFix
+
+from models import db
+
+
+# Logs por defecto a INFO (Render los muestra en su consola)
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s — %(message)s",
+)
+
 
 def create_app():
     app = Flask(
@@ -13,8 +25,7 @@ def create_app():
         static_folder="static",
         template_folder="templates",
     )
-    # Detrás del proxy de Render: respeta X-Forwarded-Proto y X-Forwarded-Host
-    # para que url_for y request.host_url generen URLs https en lugar de http
+    # ProxyFix: Render sirve detrás de proxy SSL, respeta X-Forwarded-Proto
     app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1, x_for=1)
 
     # ---- Config ----
@@ -24,17 +35,42 @@ def create_app():
     app.config["WA_PHONE"] = os.environ.get("WA_PHONE", "525500000000")
     app.config["EMAIL_VENTAS"] = os.environ.get("EMAIL_VENTAS", "ventas@arobegroup.com")
 
+    # ---- Database ----
+    db_url = os.environ.get("DATABASE_URL", "").strip()
+    if db_url:
+        # Render entrega postgres:// pero SQLAlchemy 2.x exige postgresql://
+        if db_url.startswith("postgres://"):
+            db_url = db_url.replace("postgres://", "postgresql://", 1)
+        app.config["SQLALCHEMY_DATABASE_URI"] = db_url
+    else:
+        # Fallback local: SQLite (para dev / si Postgres no está configurado)
+        app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///arobegroup.db"
+
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"pool_pre_ping": True}
+
+    db.init_app(app)
+
+    with app.app_context():
+        # Crea tablas si no existen (para producción ligera; cuando crezca usamos Alembic)
+        try:
+            db.create_all()
+        except Exception as e:
+            logging.error("Error creando tablas: %s", e)
+
     # ---- Routes ----
     from routes.web import web_bp
     from routes.cart import cart_bp, cart_summary
     from routes.checkout import checkout_bp
     from routes.seo import seo_bp
+    from routes.admin import admin_bp
     app.register_blueprint(web_bp)
     app.register_blueprint(cart_bp)
     app.register_blueprint(checkout_bp)
     app.register_blueprint(seo_bp)
+    app.register_blueprint(admin_bp)
 
-    # ---- Globals expuestos a Jinja (para el mini-carrito del header) ----
+    # ---- Globals expuestos a Jinja ----
     @app.context_processor
     def inject_cart_count():
         try:
@@ -53,5 +89,4 @@ def create_app():
 app = create_app()
 
 if __name__ == "__main__":
-    # Solo para desarrollo local: `python app.py`
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=True)

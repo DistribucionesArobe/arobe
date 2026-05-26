@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Admin — Arobe Group{% endblock %}
+{% block robots %}noindex, nofollow{% endblock %}
+
+{% block content %}
+<section class="py-16 bg-slate-50 min-h-[60vh]">
+  <div class="max-w-5xl mx-auto px-4">
+    <div class="mb-8">
+      <p class="text-xs uppercase tracking-widest text-amber-600 font-bold">Admin</p>
+      <h1 class="text-3xl font-extrabold text-arobe-900">Panel interno</h1>
+      <p class="text-slate-600 mt-1">Acceso restringido — solo administración de Arobe Group.</p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-4">
+      <a href="{{ url_for('admin.orders') }}" class="bg-white border border-slate-200 rounded-2xl p-6 hover:shadow-lg transition">
+        <div class="text-3xl mb-2">📦</div>
+        <h3 class="font-extrabold text-arobe-900 text-lg">Pedidos</h3>
+        <p class="text-sm text-slate-600 mt-1">Ver todos los pedidos, estado de pago y enviar emails.</p>
+      </a>
+      <a href="{{ url_for('checkout.debug_mp') }}" class="bg-white border border-slate-200 rounded-2xl p-6 hover:shadow-lg transition">
+        <div class="text-3xl mb-2">⚙️</div>
+        <h3 class="font-extrabold text-arobe-900 text-lg">Diagnóstico MP</h3>
+        <p class="text-sm text-slate-600 mt-1">Verificar configuración de MercadoPago, Resend y BD.</p>
+      </a>
+    </div>
+  </div>
+</section>
+{% endblock %}

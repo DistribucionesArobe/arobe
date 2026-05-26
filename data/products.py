@@ -84,8 +84,8 @@ PRODUCTS = [
         "nombre": "Galilei 3004",
         "marca": "suspan",
         "linea": "ceilings",
-        "tipo": "Plafón acústico premium",
-        "tagline": "Plafón cuadrado premium 61×61 cm · línea superior Astrónomos",
+        "tipo": "Plafón acústico premium · textura micro",
+        "tagline": "Plafón premium 61×61 cm · acabado micro refinado · alta reflexión lumínica",
         "precio_publico": 1200,
         "precio_mayoreo": None,
         "presentacion": "Paquete de 10 piezas",
@@ -96,30 +96,49 @@ PRODUCTS = [
             "galilei-3004-2.jpg",
             "galilei-3004-3.png",
         ],
-        # No tengo ficha técnica oficial todavía
+        "ficha_tecnica": "galilei-ficha-tecnica.pdf",
         "descripcion": (
-            "Plafón acústico cuadrado de 61 × 61 cm en presentación premium dentro "
-            "de la Colección Astrónomos. Compatible con suspensión reticular estándar "
-            "tipo T 15/16\". Acabado de lana mineral con textura fisurada para "
-            "absorción acústica óptima y alta reflectancia lumínica."
+            "Panel acústico de lana mineral con textura tipo micro de acabado "
+            "refinado, formato cuadrado versátil 0.61 × 0.61 m. La textura micro "
+            "le da apariencia sofisticada ideal para espacios de presentación, "
+            "salas de juntas y áreas de recepción. Orilla Tegular con acabado "
+            "hundido, compatible con suspensión estándar de 15/16\". Mismo "
+            "desempeño acústico (NRC 0.50) que Kepler pero con acabado superior."
         ),
         "specs": {
             "tipo_orilla": "Tegular (Orilla de sombra)",
             "tamano_panel": "0.61 × 0.61 m (2' × 2')",
             "espesor": "5/8\" (15 mm)",
+            "textura": "Micro · acabado refinado",
+            "clasificacion_fuego": "Clase A",
+            "nrc": "0.50",
+            "cac_min": "30",
+            "lr": "0.82",
             "color": "Blanco estándar",
             "suspension": "Perfil T 15/16\"",
+            "emisiones_voc": "Bajo",
+            "resistencia_moho": "Estándar",
+            "contenido_reciclado": "20-30%",
+            "peso": "0.70-0.95 lb/ft² (3.4-4.6 kg/m²)",
+            "resistencia_termica": "R-1.4",
+            "humedad_max": "90% HR",
+            "astm_e1264": "Tipo III, Forma 2, Patrón C",
+            "astm_e84": "Clase A",
+            "garantia": "10 años en aplicaciones comerciales",
         },
         "usos": [
             "Acabado decorativo premium en techos suspendidos",
-            "Espacios donde se busca mejor desempeño acústico que en gama económica",
-            "Disimular instalaciones eléctricas y de A/C con estética superior",
+            "Espacios de presentación que requieren apariencia refinada",
+            "Mismo desempeño acústico que Kepler pero con textura micro sofisticada",
+            "Mejor reflectancia lumínica (LR 0.82) — reduce necesidad de iluminación",
         ],
         "aplicaciones": [
-            "Oficinas corporativas premium",
-            "Salas de juntas y boardrooms",
-            "Hoteles y espacios hospitality",
-            "Showrooms y áreas comerciales premium",
+            "Oficinas corporativas",
+            "Comercios y retail premium",
+            "Salas de cine",
+            "Restaurantes",
+            "Espacios educativos",
+            "Áreas de recepción y presentación",
         ],
         "destacado": True,
     },

@@ -1,8 +1,15 @@
+databases:
+  - name: arobegroup-db
+    plan: free                # $7/mes después de 90 días. Te avisa antes de cobrar.
+    region: oregon
+    ipAllowList: []           # solo Render interno
+    postgresMajorVersion: 16
+
 services:
   - type: web
     name: arobegroup-web
     runtime: python
-    plan: starter            # $7 USD/mes. Para empezar puedes usar "free" pero duerme tras 15 min.
+    plan: starter            # $7 USD/mes
     region: oregon
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --threads 4 --timeout 60
@@ -10,9 +17,21 @@ services:
     envVars:
       - key: SECRET_KEY
         generateValue: true
-      - key: WA_PHONE
-        value: "525500000000"      # Reemplazar con tu WhatsApp real
-      - key: EMAIL_VENTAS
-        value: "ventas@arobegroup.com"
       - key: PYTHON_VERSION
         value: "3.11.9"
+      # ---- Datos de contacto (los configura el admin en Render UI) ----
+      - key: WA_PHONE
+        value: "528130783171"
+      - key: EMAIL_VENTAS
+        value: "contacto@arobegroup.com"
+      # ---- DB (Render conecta automáticamente al crear el servicio) ----
+      - key: DATABASE_URL
+        fromDatabase:
+          name: arobegroup-db
+          property: connectionString
+      # ---- Las siguientes las configuras a mano en Render → Environment ----
+      # MP_ACCESS_TOKEN  - secreto de MercadoPago (Access Token de producción)
+      # MP_PUBLIC_KEY    - clave pública de MercadoPago
+      # RESEND_API_KEY   - API key de Resend para emails
+      # ADMIN_USER       - usuario admin (default: admin)
+      # ADMIN_PASSWORD   - password admin (REQUERIDO para /admin)
