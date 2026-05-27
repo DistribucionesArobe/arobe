@@ -31,6 +31,8 @@ PRODUCTS = [
         "presentacion": "Paquete de 10 piezas",
         "dimensiones": "1.22 m × 0.61 m por pieza",
         "rendimiento_m2": 7.44,
+        "peso_kg": 32,            # paq 10pz, calculado de 4.6 kg/m² × 7.44 m²
+        "no_paqueteria": True,    # formato grande 1.22m, mejor por fletera
         "imagenes": [
             "brahe-2402-1.png",
             "brahe-2402-2.jpg",
@@ -91,6 +93,8 @@ PRODUCTS = [
         "presentacion": "Paquete de 10 piezas",
         "dimensiones": "0.61 × 0.61 m por pieza",
         "rendimiento_m2": 3.72,
+        "peso_kg": 16,            # paq 10pz, 4.6 kg/m² × 3.72 m²
+        "no_paqueteria": False,   # 61×61 sí cabe en paquetería estándar
         "imagenes": [
             "galilei-3004-1.png",
             "galilei-3004-2.jpg",
@@ -154,6 +158,8 @@ PRODUCTS = [
         "presentacion": "Paquete de 10 piezas",
         "dimensiones": "0.61 × 0.61 m por pieza",
         "rendimiento_m2": 3.72,
+        "peso_kg": 16,            # paq 10pz, 4.6 kg/m² × 3.72 m²
+        "no_paqueteria": False,
         "imagenes": [
             "kepler-0504-1.png",
             "kepler-0504-2.jpg",
@@ -218,6 +224,8 @@ PRODUCTS = [
         "presentacion": "Paquete de 2 rollos · 1.22 m combinado",
         "dimensiones": "0.61 m ancho × 15.24 m largo × 2.5\" (6.4 cm) espesor por rollo",
         "rendimiento_m2": 18.6,  # paquete completo (2 rollos × 9.3 m²)
+        "peso_kg": 13,           # 2 rollos × 0.595 m³ × 10.81 kg/m³
+        "no_paqueteria": True,   # rollo largo de 15.24m no entra en paquetería
         "imagenes": [
             "aislamiento-acustico-1.png",
             "aislamiento-acustico-2.png",
@@ -278,6 +286,8 @@ PRODUCTS = [
         "presentacion": "Rollo de 39.63 m²",
         "dimensiones": "1.30 m × 30.48 m × 3\" (7.62 cm) espesor",
         "rendimiento_m2": 39.63,
+        "peso_kg": 38,           # rollo 1.30 × 30.48 × 0.0762 m × ~12 kg/m³ + kraft + polipropileno
+        "no_paqueteria": True,   # rollo industrial de 30m, requiere fletera obligatorio
         "imagenes": [
             "mbi-techos-1.png",
             "mbi-techos-2.png",

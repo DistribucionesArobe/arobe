@@ -61,6 +61,15 @@
                 <td colspan="3" class="px-5 py-2 text-right text-slate-600 text-sm">IVA 16%</td>
                 <td class="px-5 py-2 text-right text-slate-700">${{ "{:,.2f}".format(order.iva) }}</td>
               </tr>
+              {% if order.shipping_cost and order.shipping_cost > 0 %}
+              <tr>
+                <td colspan="3" class="px-5 py-2 text-right text-slate-600 text-sm">
+                  Envío · {{ order.shipping_carrier or order.shipping_tier }}
+                  {% if order.shipping_weight_kg %}<span class="text-xs text-slate-500">({{ order.shipping_weight_kg }} kg)</span>{% endif %}
+                </td>
+                <td class="px-5 py-2 text-right text-slate-700">${{ "{:,.2f}".format(order.shipping_cost) }}</td>
+              </tr>
+              {% endif %}
               <tr class="border-t-2 border-arobe-900">
                 <td colspan="3" class="px-5 py-3 text-right font-extrabold text-arobe-900">Total</td>
                 <td class="px-5 py-3 text-right font-extrabold text-arobe-900 text-lg">${{ "{:,.2f}".format(order.total) }} MXN</td>

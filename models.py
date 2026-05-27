@@ -58,10 +58,18 @@ class Order(db.Model):
     ship_zip = Column(String(10), nullable=True)
     ship_notes = Column(Text, nullable=True)
 
+    # Cotización de envío
+    shipping_tier = Column(String(20), nullable=True)      # paqueteria | fletera | dedicado
+    shipping_carrier = Column(String(80), nullable=True)
+    shipping_cost = Column(Float, default=0.0, nullable=False)
+    shipping_days = Column(String(40), nullable=True)
+    shipping_zone = Column(String(40), nullable=True)
+    shipping_weight_kg = Column(Float, nullable=True)
+
     # Totales (todos en MXN; el precio_publico ya incluye IVA)
-    subtotal = Column(Float, nullable=False)         # sin IVA
+    subtotal = Column(Float, nullable=False)         # sin IVA, productos
     iva = Column(Float, nullable=False)
-    total = Column(Float, nullable=False)            # con IVA
+    total = Column(Float, nullable=False)            # con IVA, INCLUYE envío
 
     # Auditoría
     created_at = Column(DateTime(timezone=True), default=_now, nullable=False, index=True)

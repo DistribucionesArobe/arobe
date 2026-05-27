@@ -27,6 +27,7 @@ from flask import (
 )
 
 from data import products as catalog
+from data import shipping
 from models import db, Order, OrderItem
 from lib.emailer import send_order_confirmation, send_order_admin_notification
 
@@ -94,6 +95,22 @@ def form():
 
 
 # ============================================================
+# GET /api/shipping/quote?zip=XXXXX
+# Cotiza envío para el carrito actual (AJAX en checkout.html)
+# ============================================================
+@checkout_bp.get("/api/shipping/quote")
+def shipping_quote():
+    zip_code = request.args.get("zip", "").strip()
+    _, full_lines, _ = _hydrate_cart()
+    if not full_lines:
+        return jsonify({"error": "Carrito vacío"}), 400
+    if not zip_code or not zip_code.isdigit() or len(zip_code) != 5:
+        return jsonify({"error": "CP inválido (5 dígitos)"}), 400
+    quote = shipping.calculate_shipping(full_lines, zip_code)
+    return jsonify(quote)
+
+
+# ============================================================
 # POST /checkout/start
 # ============================================================
 @checkout_bp.post("/checkout/start")
@@ -131,6 +148,15 @@ def start():
     subtotal_sin_iva = round(total / (1 + IVA_TASA), 2)
     iva_amount = round(total - subtotal_sin_iva, 2)
 
+    # Cotización de envío (si tenemos CP)
+    ship_cost = 0.0
+    ship_quote = None
+    if cp and cp.isdigit() and len(cp) == 5:
+        ship_quote = shipping.calculate_shipping(full_lines, cp)
+        ship_cost = float(ship_quote.get("cost") or 0.0)
+
+    total_con_envio = round(total + ship_cost, 2)
+
     # 1) Crear Order en BD (status=pending)
     order = Order(
         status="pending",
@@ -143,9 +169,15 @@ def start():
         ship_state=estado or None,
         ship_zip=cp or None,
         ship_notes=notas or None,
+        shipping_tier=ship_quote.get("tier") if ship_quote else None,
+        shipping_carrier=ship_quote.get("carrier") if ship_quote else None,
+        shipping_cost=ship_cost,
+        shipping_days=ship_quote.get("days") if ship_quote else None,
+        shipping_zone=ship_quote.get("zone") if ship_quote else None,
+        shipping_weight_kg=ship_quote.get("weight_kg") if ship_quote else None,
         subtotal=subtotal_sin_iva,
         iva=iva_amount,
-        total=total,
+        total=total_con_envio,
     )
     db.session.add(order)
     db.session.flush()  # para obtener order.id
@@ -171,8 +203,21 @@ def start():
     if base_url.startswith("http://"):
         base_url = base_url.replace("http://", "https://", 1)
 
+    # Si hay envío con costo, lo agrego como item separado en MP
+    mp_items_with_shipping = list(mp_items)
+    if ship_cost > 0 and ship_quote:
+        mp_items_with_shipping.append({
+            "id": "envio",
+            "title": f"Envío · {ship_quote.get('carrier','Fletera')}",
+            "description": f"Entrega en {ship_quote.get('days','3-5')} días hábiles a {ship_quote.get('zone_label','destino')}",
+            "quantity": 1,
+            "unit_price": round(ship_cost, 2),
+            "currency_id": "MXN",
+            "category_id": "shipping",
+        })
+
     preference_data = {
-        "items": mp_items,
+        "items": mp_items_with_shipping,
         "payer": {
             "name": nombre,
             "email": email,
