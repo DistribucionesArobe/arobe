@@ -96,7 +96,8 @@ def form():
 
 # ============================================================
 # GET /api/shipping/quote?zip=XXXXX
-# Cotiza envío para el carrito actual (AJAX en checkout.html)
+# Devuelve OPCIONES múltiples de envío (Skydropx si está configurado,
+# fallback estático si no). El frontend muestra radio buttons.
 # ============================================================
 @checkout_bp.get("/api/shipping/quote")
 def shipping_quote():
@@ -106,8 +107,8 @@ def shipping_quote():
         return jsonify({"error": "Carrito vacío"}), 400
     if not zip_code or not zip_code.isdigit() or len(zip_code) != 5:
         return jsonify({"error": "CP inválido (5 dígitos)"}), 400
-    quote = shipping.calculate_shipping(full_lines, zip_code)
-    return jsonify(quote)
+    result = shipping.get_shipping_options(full_lines, zip_code)
+    return jsonify(result)
 
 
 # ============================================================
@@ -148,12 +149,38 @@ def start():
     subtotal_sin_iva = round(total / (1 + IVA_TASA), 2)
     iva_amount = round(total - subtotal_sin_iva, 2)
 
-    # Cotización de envío (si tenemos CP)
+    # Envío: el cliente ya eligió una opción del radio en el form
+    # (o si Skydropx no está disponible viene 1 sola opción del fallback).
     ship_cost = 0.0
-    ship_quote = None
-    if cp and cp.isdigit() and len(cp) == 5:
-        ship_quote = shipping.calculate_shipping(full_lines, cp)
-        ship_cost = float(ship_quote.get("cost") or 0.0)
+    ship_carrier = None
+    ship_service = None
+    ship_days = None
+    ship_zone = None
+    ship_tier = None
+    ship_weight = None
+    try:
+        ship_price_form = request.form.get("shipping_price", "").strip()
+        if ship_price_form:
+            ship_cost = float(ship_price_form)
+        ship_carrier = request.form.get("shipping_carrier", "").strip() or None
+        ship_service = request.form.get("shipping_service", "").strip() or None
+        ship_days = request.form.get("shipping_days", "").strip() or None
+        ship_tier = request.form.get("shipping_tier", "").strip() or None
+    except (ValueError, TypeError):
+        ship_cost = 0.0
+
+    # Si no vino nada del form pero tenemos CP, cotizo la más barata como fallback
+    if not ship_carrier and cp and cp.isdigit() and len(cp) == 5:
+        fallback = shipping.get_shipping_options(full_lines, cp)
+        if fallback.get("options"):
+            opt = fallback["options"][0]
+            ship_cost = float(opt["price"])
+            ship_carrier = opt["carrier"]
+            ship_service = opt.get("service")
+            ship_days = str(opt.get("days") or "")
+            ship_tier = opt.get("tier")
+        ship_zone = fallback.get("zone")
+        ship_weight = fallback.get("weight_kg")
 
     total_con_envio = round(total + ship_cost, 2)
 
@@ -169,12 +196,12 @@ def start():
         ship_state=estado or None,
         ship_zip=cp or None,
         ship_notes=notas or None,
-        shipping_tier=ship_quote.get("tier") if ship_quote else None,
-        shipping_carrier=ship_quote.get("carrier") if ship_quote else None,
+        shipping_tier=ship_tier,
+        shipping_carrier=(ship_carrier + (" · " + ship_service if ship_service else "")) if ship_carrier else None,
         shipping_cost=ship_cost,
-        shipping_days=ship_quote.get("days") if ship_quote else None,
-        shipping_zone=ship_quote.get("zone") if ship_quote else None,
-        shipping_weight_kg=ship_quote.get("weight_kg") if ship_quote else None,
+        shipping_days=ship_days,
+        shipping_zone=ship_zone,
+        shipping_weight_kg=ship_weight,
         subtotal=subtotal_sin_iva,
         iva=iva_amount,
         total=total_con_envio,
@@ -205,11 +232,14 @@ def start():
 
     # Si hay envío con costo, lo agrego como item separado en MP
     mp_items_with_shipping = list(mp_items)
-    if ship_cost > 0 and ship_quote:
+    if ship_cost > 0:
+        title = f"Envío · {ship_carrier or 'Fletera'}"
+        if ship_service:
+            title += " " + ship_service
         mp_items_with_shipping.append({
             "id": "envio",
-            "title": f"Envío · {ship_quote.get('carrier','Fletera')}",
-            "description": f"Entrega en {ship_quote.get('days','3-5')} días hábiles a {ship_quote.get('zone_label','destino')}",
+            "title": title[:250],
+            "description": f"Entrega en {ship_days or '3-5'} días hábiles"[:250],
             "quantity": 1,
             "unit_price": round(ship_cost, 2),
             "currency_id": "MXN",
@@ -335,10 +365,27 @@ def debug_mp():
         kind = "PROD" if val.startswith("APP_USR-") else ("TEST" if val.startswith("TEST-") else "INVÁLIDO")
         return {"name": name, "set": True, "type": kind, "len": len(val), "starts": val[:8] + "…"}
 
+    # Estado Skydropx (sin exponer valores)
+    sk_id = os.environ.get("SKYDROPX_CLIENT_ID", "").strip()
+    sk_sec = os.environ.get("SKYDROPX_CLIENT_SECRET", "").strip()
+    sk_diag = {
+        "configured": bool(sk_id and sk_sec),
+        "client_id_len": len(sk_id),
+        "client_secret_len": len(sk_sec),
+    }
+    if sk_diag["configured"]:
+        try:
+            from lib import skydropx
+            token_ok = skydropx._get_token() is not None
+            sk_diag["oauth_token_ok"] = token_ok
+        except Exception as e:
+            sk_diag["oauth_error"] = str(e)[:200]
+
     info = {
         "access_token": diag(token, "MP_ACCESS_TOKEN"),
         "public_key": diag(pub, "MP_PUBLIC_KEY"),
         "resend_key_set": bool(os.environ.get("RESEND_API_KEY", "").strip()),
+        "skydropx": sk_diag,
         "db_url_set": bool(os.environ.get("DATABASE_URL", "").strip()),
         "host_url": request.host_url,
         "is_https": request.host_url.startswith("https://"),

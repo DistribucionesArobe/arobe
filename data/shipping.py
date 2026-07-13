@@ -1,17 +1,32 @@
 """
 Cálculo de envío para Arobe Group.
 Almacén origen: Victoria, Tamaulipas (CP 87020).
-Fletera base: Castores (tarifas promedio de mercado mientras Alejandro busca mejor).
 
-Tres tiers:
-  - paqueteria: pedidos chicos (~5 kg, sin rollos) — Estafeta/Mexpost/FedEx
-  - fletera:    pedidos medianos (8-300 kg, o cualquier rollo) — Castores LTL
-  - dedicado:   pedidos grandes (>300 kg o >$15k MXN) — cotización manual por WhatsApp
-
-Para ajustar tarifas: editar la tabla ZONES más abajo.
+Estrategia:
+  1) Si SKYDROPX está configurado → cotización en tiempo real con Skydropx API
+     (múltiples carriers, precios reales, days estimados).
+  2) Si Skydropx falla o no está configurado → fallback a tabla estática por zona
+     (tarifas promedio Castores como estimación).
+  3) Si pedido cae en "dedicado" (>300 kg o >$15k) → siempre cotización manual
+     por WhatsApp, no importa qué diga la API.
 """
+import logging
+
+log = logging.getLogger("shipping")
 
 ORIGIN_ZIP = "87020"  # Victoria, Tamaulipas
+
+# ----------------------------------------------------------
+# Dimensiones aproximadas de bulto por SKU (cm)
+# Se usan para el cálculo volumétrico de Skydropx.
+# ----------------------------------------------------------
+PRODUCT_DIMS = {
+    "brahe-2402":           {"length": 122, "width": 61, "height": 15},   # caja 10 pz
+    "galilei-3004":         {"length": 61,  "width": 61, "height": 15},   # caja 10 pz
+    "kepler-0504":          {"length": 61,  "width": 61, "height": 15},   # caja 10 pz
+    "aislamiento-acustico": {"length": 61,  "width": 61, "height": 100},  # rollo enrollado
+    "mbi-techos":           {"length": 130, "width": 60, "height": 60},   # rollo grande
+}
 
 # ----------------------------------------------------------
 # Mapeo CP → zona
@@ -108,30 +123,8 @@ def get_zone(zip_code):
     return ZIP_PREFIX_TO_ZONE.get(prefix, "unknown")
 
 
-def calculate_shipping(products_in_cart, dest_zip):
-    """
-    Calcula envío para una lista de productos en el carrito.
-
-    Args:
-        products_in_cart: lista de dicts con keys producto (dict) + qty (int)
-                          ej. [{"producto": {...}, "qty": 3, "line_total": 5670}, ...]
-        dest_zip: código postal destino (5 dígitos)
-
-    Returns:
-        dict con:
-          - tier: "paqueteria" | "fletera" | "dedicado"
-          - cost: int (MXN, sin IVA) o None si dedicado
-          - carrier: nombre sugerido
-          - days: rango de días estimado
-          - zone: zona destino
-          - zone_label: descripción amigable
-          - weight_kg: peso total estimado
-          - reason: explicación corta de por qué cae en este tier
-    """
-    zone = get_zone(dest_zip)
-    zone_info = ZONES[zone]
-
-    # Sumar peso y volumen total
+def _cart_totals(products_in_cart):
+    """Suma peso, monto y detecta bultos no-paqueteria."""
     total_weight = 0.0
     total_amount = 0.0
     has_no_paq_item = False
@@ -142,45 +135,172 @@ def calculate_shipping(products_in_cart, dest_zip):
         total_amount += line.get("line_total", p.get("precio_publico", 0) * qty)
         if p.get("no_paqueteria"):
             has_no_paq_item = True
+    return round(total_weight, 1), round(total_amount, 2), has_no_paq_item
 
-    # Decidir tier
+
+def _build_parcels(products_in_cart):
+    """
+    Consolida el carrito en 1 o más bultos para pasar a Skydropx.
+    Estrategia simple: 1 parcel por línea del carrito × qty.
+    """
+    parcels = []
+    for line in products_in_cart:
+        p = line["producto"]
+        qty = line["qty"]
+        dims = PRODUCT_DIMS.get(p["slug"], {"length": 40, "width": 40, "height": 30})
+        peso_por_unidad = max(1.0, float(p.get("peso_kg", 5)))
+        for _ in range(qty):
+            parcels.append({
+                "weight": peso_por_unidad,
+                "length": dims["length"],
+                "width":  dims["width"],
+                "height": dims["height"],
+            })
+    return parcels
+
+
+def _static_option(zone_info, tier_name, weight_kg):
+    """Convierte una fila de ZONES en un formato de opción unificado."""
+    if tier_name == "paqueteria":
+        return {
+            "source": "estimate",
+            "id": f"static-paq-{zone_info['label']}",
+            "carrier": "Estafeta / Mexpost",
+            "service": "Terrestre (estimado)",
+            "price": zone_info["paqueteria"],
+            "currency": "MXN",
+            "days": zone_info["dias_paq"],
+            "tier": "paqueteria",
+            "weight_kg": weight_kg,
+        }
+    else:  # fletera
+        return {
+            "source": "estimate",
+            "id": f"static-ltl-{zone_info['label']}",
+            "carrier": "Castores LTL",
+            "service": "Consolidada (estimado)",
+            "price": zone_info["fletera"],
+            "currency": "MXN",
+            "days": zone_info["dias_ltl"],
+            "tier": "fletera",
+            "weight_kg": weight_kg,
+        }
+
+
+def get_shipping_options(products_in_cart, dest_zip, try_realtime=True):
+    """
+    Devuelve las opciones de envío para el carrito.
+
+    Returns:
+        dict con:
+          - tier: "paqueteria" | "fletera" | "dedicado"
+          - options: lista de opciones (vacía si dedicado)
+          - dedicated: True/False
+          - weight_kg, amount, zone, zone_label
+          - reason: explicación
+          - source: "skydropx" | "estimate"
+    """
+    total_weight, total_amount, has_no_paq_item = _cart_totals(products_in_cart)
+    zone = get_zone(dest_zip)
+    zone_info = ZONES[zone]
+
+    base = {
+        "weight_kg": total_weight,
+        "amount": total_amount,
+        "zone": zone,
+        "zone_label": zone_info["label"],
+        "options": [],
+        "dedicated": False,
+        "source": "estimate",
+    }
+
+    # Regla dura: pedido grande = cotización manual
     if total_weight >= PESO_DEDICADO_MIN or total_amount >= MONTO_DEDICADO_MIN:
+        base.update({
+            "tier": "dedicado",
+            "dedicated": True,
+            "reason": (
+                f"Pedido grande ({total_weight:.0f} kg / ${total_amount:,.0f} MXN) — "
+                "te cotizamos por WhatsApp en minutos."
+            ),
+        })
+        return base
+
+    # Intento Skydropx primero
+    if try_realtime:
+        try:
+            from lib import skydropx
+            if skydropx.is_configured():
+                parcels = _build_parcels(products_in_cart)
+                rt_options = skydropx.get_quotations(dest_zip, parcels)
+                if rt_options:
+                    # Filtro top 5 y agrego metadatos
+                    top = rt_options[:5]
+                    for opt in top:
+                        opt["source"] = "skydropx"
+                        opt["tier"] = "fletera" if opt["price"] > 400 else "paqueteria"
+                        opt["weight_kg"] = total_weight
+                    base.update({
+                        "tier": "auto",
+                        "options": top,
+                        "source": "skydropx",
+                        "reason": f"Cotización en vivo ({len(top)} opciones · {total_weight:.0f} kg)",
+                    })
+                    return base
+                else:
+                    log.info("Skydropx sin rates, uso fallback estático")
+        except Exception as e:
+            log.warning("Skydropx exception, fallback estático: %s", e)
+
+    # Fallback: tabla estática — devuelvo 1 opción según el tier
+    if has_no_paq_item or total_weight > PESO_PAQUETERIA_MAX or total_amount > MONTO_PAQUETERIA_MAX:
+        opt = _static_option(zone_info, "fletera", total_weight)
+        base.update({
+            "tier": "fletera",
+            "options": [opt],
+            "reason": (
+                "Pedido por fletera consolidada"
+                + (" (incluye producto en rollo)" if has_no_paq_item else "")
+            ),
+        })
+    else:
+        opt = _static_option(zone_info, "paqueteria", total_weight)
+        base.update({
+            "tier": "paqueteria",
+            "options": [opt],
+            "reason": "Pedido pequeño · paquetería estándar",
+        })
+    return base
+
+
+# ----------------------------------------------------------
+# Retrocompatible: la función vieja sigue funcionando
+# (usada por endpoints antiguos que solo quieren 1 opción)
+# ----------------------------------------------------------
+def calculate_shipping(products_in_cart, dest_zip):
+    """Retorna 1 sola opción (la más barata) para compatibilidad."""
+    result = get_shipping_options(products_in_cart, dest_zip)
+    if result["dedicated"]:
         return {
             "tier": "dedicado",
             "cost": None,
             "carrier": "Camión dedicado · cotización manual",
             "days": "1-3 (sale el día siguiente)",
-            "zone": zone,
-            "zone_label": zone_info["label"],
-            "weight_kg": round(total_weight, 1),
-            "reason": (
-                "Pedido grande — te cotizamos por WhatsApp en minutos. "
-                f"({total_weight:.0f} kg / ${total_amount:,.0f} MXN)"
-            ),
+            "zone": result["zone"],
+            "zone_label": result["zone_label"],
+            "weight_kg": result["weight_kg"],
+            "reason": result["reason"],
         }
-
-    if has_no_paq_item or total_weight > PESO_PAQUETERIA_MAX or total_amount > MONTO_PAQUETERIA_MAX:
-        return {
-            "tier": "fletera",
-            "cost": zone_info["fletera"],
-            "carrier": "Castores LTL",
-            "days": zone_info["dias_ltl"],
-            "zone": zone,
-            "zone_label": zone_info["label"],
-            "weight_kg": round(total_weight, 1),
-            "reason": (
-                "Pedido por fletera consolidada"
-                + (" (incluye producto en rollo no apto para paquetería)" if has_no_paq_item else "")
-            ),
-        }
-
+    if not result["options"]:
+        return None
+    opt = result["options"][0]
     return {
-        "tier": "paqueteria",
-        "cost": zone_info["paqueteria"],
-        "carrier": "Estafeta / Mexpost",
-        "days": zone_info["dias_paq"],
-        "zone": zone,
-        "zone_label": zone_info["label"],
-        "weight_kg": round(total_weight, 1),
-        "reason": "Pedido pequeño · paquetería estándar",
+        "tier": opt.get("tier", result["tier"]),
+        "cost": opt["price"],
+        "carrier": opt["carrier"] + (" · " + opt["service"] if opt.get("service") else ""),
+        "days": opt.get("days") or "3-5",
+        "zone": result["zone"],
+        "zone_label": result["zone_label"],
+        "weight_kg": result["weight_kg"],
+        "reason": result["reason"],
     }

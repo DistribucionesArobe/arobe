@@ -103,15 +103,13 @@
             </li>
             {% endfor %}
           </ul>
-          <!-- Envío (se llena con JS al teclear CP) -->
-          <div id="shipping-box" class="border-t border-slate-200 mt-3 pt-3 text-sm hidden">
-            <div class="flex justify-between items-start">
-              <div>
-                <p class="text-slate-700 font-semibold">Envío</p>
-                <p id="shipping-detail" class="text-xs text-slate-500"></p>
-              </div>
-              <p id="shipping-cost" class="font-bold text-arobe-900 whitespace-nowrap">—</p>
-            </div>
+          <!-- Envío: opciones dinámicas (se llenan con JS al teclear CP) -->
+          <div id="shipping-box" class="border-t border-slate-200 mt-3 pt-3 hidden">
+            <p class="text-slate-700 font-semibold text-sm mb-2">Opciones de envío</p>
+            <p id="shipping-info" class="text-xs text-slate-500 mb-2"></p>
+            <div id="shipping-loading" class="hidden text-xs text-slate-500 italic">Cotizando en vivo…</div>
+            <div id="shipping-options" class="space-y-2"></div>
+            <div id="shipping-dedicated" class="hidden bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm text-amber-800"></div>
           </div>
 
           <div class="border-t border-slate-200 mt-4 pt-3 flex justify-between items-baseline">
@@ -121,6 +119,13 @@
             </span>
           </div>
           <p class="text-xs text-slate-500 mt-2">IVA 16% incluido.</p>
+
+          <!-- Hidden fields con la opción elegida -->
+          <input type="hidden" name="shipping_price"   id="shipping-price-input">
+          <input type="hidden" name="shipping_carrier" id="shipping-carrier-input">
+          <input type="hidden" name="shipping_service" id="shipping-service-input">
+          <input type="hidden" name="shipping_days"    id="shipping-days-input">
+          <input type="hidden" name="shipping_tier"    id="shipping-tier-input">
 
           <button type="submit" id="pay-btn"
                   class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold py-4 rounded-xl mt-5 text-lg">
@@ -142,26 +147,62 @@
 (function() {
   const cpInput = document.getElementById('cp-input');
   const shipBox = document.getElementById('shipping-box');
-  const shipDetail = document.getElementById('shipping-detail');
-  const shipCost = document.getElementById('shipping-cost');
+  const shipInfo = document.getElementById('shipping-info');
+  const shipLoading = document.getElementById('shipping-loading');
+  const shipOptions = document.getElementById('shipping-options');
+  const shipDedicated = document.getElementById('shipping-dedicated');
   const grandTotal = document.getElementById('grand-total');
   const payBtn = document.getElementById('pay-btn');
   const productsTotal = parseFloat(grandTotal.dataset.productsTotal);
 
-  const fmt = (n) => '$' + n.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  // Hidden inputs para el submit
+  const inPrice   = document.getElementById('shipping-price-input');
+  const inCarrier = document.getElementById('shipping-carrier-input');
+  const inService = document.getElementById('shipping-service-input');
+  const inDays    = document.getElementById('shipping-days-input');
+  const inTier    = document.getElementById('shipping-tier-input');
 
-  function setShippingUI(quote) {
-    if (!quote) {
-      shipBox.classList.add('hidden');
-      grandTotal.innerHTML = fmt(productsTotal) + '<span class="text-xs font-normal text-slate-500"> MXN</span>';
-      payBtn.disabled = false;
-      return;
-    }
+  const fmt = (n) => '$' + Number(n).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  function resetUI() {
+    shipBox.classList.add('hidden');
+    shipOptions.innerHTML = '';
+    shipDedicated.classList.add('hidden');
+    inPrice.value = ''; inCarrier.value = ''; inService.value = '';
+    inDays.value = ''; inTier.value = '';
+    grandTotal.innerHTML = fmt(productsTotal) + '<span class="text-xs font-normal text-slate-500"> MXN</span>';
+    setPayNormal();
+  }
+
+  function setPayNormal() {
+    payBtn.disabled = false;
+    payBtn.classList.add('bg-emerald-500', 'hover:bg-emerald-600');
+    payBtn.classList.remove('bg-slate-300', 'cursor-not-allowed');
+    payBtn.textContent = 'Pagar con MercadoPago →';
+    payBtn.type = 'submit';
+    payBtn.onclick = null;
+  }
+
+  function selectOption(opt) {
+    inPrice.value   = opt.price;
+    inCarrier.value = opt.carrier;
+    inService.value = opt.service || '';
+    inDays.value    = opt.days ? String(opt.days) : '';
+    inTier.value    = opt.tier || '';
+    const grand = productsTotal + Number(opt.price || 0);
+    grandTotal.innerHTML = fmt(grand) + '<span class="text-xs font-normal text-slate-500"> MXN</span>';
+  }
+
+  function renderOptions(quote) {
     shipBox.classList.remove('hidden');
-    if (quote.tier === 'dedicado') {
-      // Pedido grande: bloqueo el pago online y mando a WhatsApp
-      shipDetail.innerHTML = '<strong class="text-amber-700">Pedido grande</strong> · ' + quote.reason;
-      shipCost.textContent = 'Cotizar';
+    shipDedicated.classList.add('hidden');
+
+    // Caso dedicado: bloquea pago online
+    if (quote.dedicated) {
+      shipInfo.textContent = '';
+      shipOptions.innerHTML = '';
+      shipDedicated.classList.remove('hidden');
+      shipDedicated.innerHTML = '<strong>Pedido grande</strong><br>' + quote.reason;
       grandTotal.innerHTML = fmt(productsTotal) + '<span class="text-xs font-normal text-slate-500"> + envío</span>';
       payBtn.disabled = true;
       payBtn.classList.remove('bg-emerald-500', 'hover:bg-emerald-600');
@@ -171,18 +212,54 @@
       payBtn.onclick = () => {
         window.open('https://wa.me/{{ config.WA_PHONE }}?text=' + encodeURIComponent('Hola, quiero cotizar envío para mi pedido (${{ "{:,.0f}".format(total) }} MXN, ~' + quote.weight_kg + ' kg) a CP ' + cpInput.value), '_blank');
       };
-    } else {
-      shipDetail.innerHTML = quote.carrier + ' · ' + quote.zone_label + ' · ' + quote.days + ' días';
-      shipCost.textContent = fmt(quote.cost);
-      const grand = productsTotal + (quote.cost || 0);
-      grandTotal.innerHTML = fmt(grand) + '<span class="text-xs font-normal text-slate-500"> MXN</span>';
-      payBtn.disabled = false;
-      payBtn.classList.add('bg-emerald-500', 'hover:bg-emerald-600');
-      payBtn.classList.remove('bg-slate-300', 'cursor-not-allowed');
-      payBtn.textContent = 'Pagar con MercadoPago →';
-      payBtn.type = 'submit';
-      payBtn.onclick = null;
+      return;
     }
+
+    const opts = quote.options || [];
+    if (opts.length === 0) {
+      shipInfo.textContent = 'No pudimos cotizar automáticamente. Contáctanos por WhatsApp.';
+      shipOptions.innerHTML = '';
+      return;
+    }
+
+    shipInfo.textContent = quote.source === 'skydropx'
+      ? 'Cotización en vivo · ' + opts.length + ' opciones · zona ' + quote.zone_label
+      : 'Estimación (tarifa promedio) · ' + quote.zone_label;
+
+    // Renderiza radio buttons
+    shipOptions.innerHTML = opts.map((o, i) => {
+      const days = o.days ? (typeof o.days === 'number' ? o.days + ' días' : o.days) : '3-5 días';
+      const svc = o.service ? '<div class="text-xs text-slate-500">' + o.service + '</div>' : '';
+      return `
+        <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-200 hover:border-amber-400 cursor-pointer transition ${i===0?'bg-amber-50 border-amber-400':''}">
+          <input type="radio" name="ship-choice" value="${i}" ${i===0?'checked':''} class="mt-1">
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between gap-2">
+              <div class="font-semibold text-arobe-900 truncate">${o.carrier}</div>
+              <div class="font-extrabold text-arobe-900 whitespace-nowrap">${fmt(o.price)}</div>
+            </div>
+            ${svc}
+            <div class="text-xs text-slate-500 mt-0.5">Entrega en ${days}</div>
+          </div>
+        </label>
+      `;
+    }).join('');
+
+    // Handlers de selección
+    shipOptions.querySelectorAll('input[name="ship-choice"]').forEach((r, idx) => {
+      r.addEventListener('change', () => {
+        // Estilos: amber para la seleccionada
+        shipOptions.querySelectorAll('label').forEach((l, i) => {
+          l.classList.toggle('bg-amber-50', i === idx);
+          l.classList.toggle('border-amber-400', i === idx);
+        });
+        selectOption(opts[idx]);
+      });
+    });
+
+    // Selecciona la más barata por default
+    selectOption(opts[0]);
+    setPayNormal();
   }
 
   let timer = null;
@@ -191,19 +268,28 @@
     const cp = cpInput.value.replace(/\D/g, '').slice(0, 5);
     cpInput.value = cp;
     if (cp.length !== 5) {
-      setShippingUI(null);
+      resetUI();
       return;
     }
+    // Loading state
+    shipBox.classList.remove('hidden');
+    shipDedicated.classList.add('hidden');
+    shipLoading.classList.remove('hidden');
+    shipOptions.innerHTML = '';
+    shipInfo.textContent = '';
+
     timer = setTimeout(async () => {
       try {
         const r = await fetch('/api/shipping/quote?zip=' + cp);
-        if (!r.ok) return setShippingUI(null);
+        shipLoading.classList.add('hidden');
+        if (!r.ok) { resetUI(); return; }
         const quote = await r.json();
-        setShippingUI(quote);
+        renderOptions(quote);
       } catch (e) {
         console.error(e);
+        shipLoading.classList.add('hidden');
       }
-    }, 300);
+    }, 400);
   });
 })();
 </script>
