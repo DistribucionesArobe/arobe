@@ -413,6 +413,50 @@ def debug_mp():
 
 
 # ============================================================
+# Debug Skydropx — muestra el error exacto del OAuth
+# ============================================================
+@checkout_bp.get("/debug/skydropx")
+def debug_skydropx():
+    from lib import skydropx
+    # Reset del cache para forzar reintento
+    skydropx._token_cache = {"token": None, "expires_at": 0.0}
+    skydropx._last_oauth_error = {"status": None, "body": None}
+
+    if not skydropx.is_configured():
+        return jsonify({
+            "configured": False,
+            "hint": "Falta SKYDROPX_CLIENT_ID y/o SKYDROPX_CLIENT_SECRET en env vars.",
+        })
+
+    token = skydropx._get_token()
+    if token:
+        # Prueba una cotización dummy
+        opts = skydropx.get_quotations("64000", [{
+            "weight": 5, "length": 30, "width": 30, "height": 30,
+        }])
+        return jsonify({
+            "configured": True,
+            "oauth_ok": True,
+            "token_preview": token[:20] + "…",
+            "test_quote_zip_64000": {
+                "options_count": len(opts) if opts is not None else None,
+                "sample": opts[:3] if opts else None,
+            },
+        })
+    else:
+        return jsonify({
+            "configured": True,
+            "oauth_ok": False,
+            "last_error": skydropx.last_oauth_error(),
+            "hint": (
+                "El OAuth falla. Verifica en pro.skydropx.com → Configuración → API → "
+                "que la aplicación esté ACTIVA y las credenciales sean de PRODUCCIÓN "
+                "(no sandbox). Si generaste sandbox, cambia a producción."
+            ),
+        })
+
+
+# ============================================================
 # Webhook IPN de MercadoPago
 # ============================================================
 @checkout_bp.post("/api/mp/webhook")

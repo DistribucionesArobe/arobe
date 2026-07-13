@@ -30,6 +30,33 @@ _token_cache = {"token": None, "expires_at": 0.0}
 # ============================================================
 # Auth
 # ============================================================
+_last_oauth_error = {"status": None, "body": None}
+
+
+def _try_oauth(client_id, client_secret, scope=None):
+    """Intenta obtener token con un scope específico. Devuelve (token, status, body)."""
+    payload = {
+        "client_id": client_id,
+        "client_secret": client_secret,
+        "grant_type": "client_credentials",
+    }
+    if scope:
+        payload["scope"] = scope
+    try:
+        r = requests.post(
+            f"{BASE_URL}/oauth/token",
+            json=payload,
+            headers={"Content-Type": "application/json"},
+            timeout=10,
+        )
+        if r.status_code == 200:
+            data = r.json()
+            return data.get("access_token"), 200, data
+        return None, r.status_code, r.text[:500]
+    except Exception as e:
+        return None, None, str(e)[:500]
+
+
 def _get_token():
     """Devuelve un access token válido, cacheado en memoria."""
     now = time.time()
@@ -43,30 +70,36 @@ def _get_token():
             log.warning("Skydropx no configurado (falta CLIENT_ID/SECRET)")
             return None
 
-        try:
-            r = requests.post(
-                f"{BASE_URL}/oauth/token",
-                json={
-                    "client_id": client_id,
-                    "client_secret": client_secret,
-                    "grant_type": "client_credentials",
-                    "scope": "default orders.create shipments.create",
-                },
-                headers={"Content-Type": "application/json"},
-                timeout=10,
-            )
-            if r.status_code == 200:
-                data = r.json()
-                _token_cache["token"] = data.get("access_token")
-                _token_cache["expires_at"] = now + int(data.get("expires_in", 3600))
-                log.info("Skydropx token renovado (expira en %ss)", data.get("expires_in"))
-                return _token_cache["token"]
-            else:
-                log.error("Skydropx OAuth error %s: %s", r.status_code, r.text[:400])
-                return None
-        except Exception as e:
-            log.exception("Skydropx OAuth exception")
-            return None
+        # Skydropx PRO acepta varios scopes. Probamos en orden: default → sin scope
+        # → orders.create → shipments.create. El primero que funcione lo usamos.
+        scopes_to_try = [
+            "default",
+            None,
+            "default orders.create shipments.create",
+            "orders.create shipments.create default",
+            "orders.create",
+        ]
+        last_status = None
+        last_body = None
+        for scope in scopes_to_try:
+            token, status, body = _try_oauth(client_id, client_secret, scope)
+            last_status = status
+            last_body = body
+            if token:
+                _token_cache["token"] = token
+                _token_cache["expires_at"] = now + int(body.get("expires_in", 3600) if isinstance(body, dict) else 3600)
+                log.info("Skydropx OAuth OK con scope=%r", scope)
+                return token
+            log.warning("Skydropx OAuth scope=%r → %s: %s", scope, status, str(body)[:200])
+
+        _last_oauth_error["status"] = last_status
+        _last_oauth_error["body"] = last_body
+        return None
+
+
+def last_oauth_error():
+    """Para diagnóstico: último error de OAuth."""
+    return dict(_last_oauth_error)
 
 
 def is_configured():
