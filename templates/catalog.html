@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
-{% block title %}{{ titulo }} — Arobe Group{% endblock %}
+{% block title %}{% if marca_filtro == 'suspan' %}Plafones acústicos SusPan · Brahe, Galilei, Kepler{% elif marca_filtro == 'insulglass' %}Aislantes térmicos y acústicos Insulglass · MBI, Glasswool{% else %}Catálogo Arobe Group · Plafones SusPan y aislantes Insulglass{% endif %} | Distribuidor México{% endblock %}
+{% block description %}{% if marca_filtro == 'suspan' %}Plafones acústicos SusPan de lana mineral · Colección Astrónomos (Brahe 1.22×0.61m, Galilei y Kepler 61×61 cm) · NRC 0.50, Clase A/B, garantía 10 años. Distribuidor mexicano, envíos a toda la República, CFDI 4.0.{% elif marca_filtro == 'insulglass' %}Aislantes térmicos y acústicos Insulglass · MBI para techos R-10, Glasswool acústico NRC 0.90 · fibra de vidrio de importación directa. Distribuidor mexicano, precios mayoreo.{% else %}Catálogo completo Arobe Group: plafones acústicos SusPan y aislantes Insulglass. Precios público y mayoreo, fichas técnicas descargables, envíos toda la República, factura CFDI 4.0.{% endif %}{% endblock %}
 
 {% block content %}
 <section class="bg-arobe-900 text-white py-16">
@@ -36,7 +37,7 @@
          class="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all">
         <div class="aspect-square bg-slate-100 overflow-hidden">
           <img src="{{ url_for('static', filename='img/products/' + p.imagenes[0]) }}"
-               alt="{{ p.nombre }}"
+               alt="{{ p.seo_image_alt or p.nombre }}"
                loading="lazy"
                class="w-full h-full object-cover group-hover:scale-105 transition-transform"
                onerror="this.style.display='none'; this.parentElement.classList.add('flex','items-center','justify-center'); this.parentElement.insertAdjacentHTML('beforeend','<div class=&quot;text-slate-400 text-sm&quot;>{{ p.nombre }}</div>')">

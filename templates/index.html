@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
-{% block title %}Arobe Group — SusPan e Insulglass · Distribuidor de construcción ligera en México{% endblock %}
+{% block title %}Arobe Group · Plafones acústicos SusPan y aislantes Insulglass en México{% endblock %}
+{% block description %}Distribuidor mexicano de plafones acústicos SusPan (Brahe, Galilei, Kepler) y aislantes térmicos y acústicos Insulglass (MBI R-10, Glasswool NRC 0.90). Importadores directos, precios mayoreo para distribuidores y ferreterías, factura CFDI 4.0, envíos a toda la República desde Ciudad Victoria, Tamaulipas.{% endblock %}
 
 {% block content %}
 
@@ -122,7 +123,7 @@
          class="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all">
         <div class="aspect-square bg-slate-100 overflow-hidden">
           <img src="{{ url_for('static', filename='img/products/' + p.imagenes[0]) }}"
-               alt="{{ p.nombre }}"
+               alt="{{ p.seo_image_alt or p.nombre }}"
                loading="lazy"
                class="w-full h-full object-cover group-hover:scale-105 transition-transform"
                onerror="this.style.display='none'; this.parentElement.classList.add('flex','items-center','justify-center'); this.parentElement.insertAdjacentHTML('beforeend','<div class=&quot;text-slate-400 text-xs px-2 text-center&quot;>{{ p.nombre }}</div>')">
