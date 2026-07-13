@@ -31,6 +31,7 @@ _token_cache = {"token": None, "expires_at": 0.0}
 # Auth
 # ============================================================
 _last_oauth_error = {"status": None, "body": None}
+_last_quote_debug = {"status": None, "body": None, "payload": None, "url": None}
 
 
 def _try_oauth(client_id, client_secret, scope=None):
@@ -144,21 +145,25 @@ def get_quotations(dest_zip, parcels, origin_zip=None):
             "mass_unit": "KG",
         })
 
+    # Skydropx PRO v1 acepta este payload
     payload = {
         "quotation": {
             "address_from": {"country_code": "mx", "postal_code": str(origin)},
             "address_to": {"country_code": "mx", "postal_code": str(dest_zip)},
             "parcels": clean_parcels,
             "requested_carriers": [
-                "estafeta", "fedex", "dhl", "paquetexpress",
-                "redpack", "sendex", "carssa", "quiken", "ampm",
+                "estafeta", "fedex", "dhl", "paquetexpress", "redpack", "sendex",
             ],
         }
     }
+    url = f"{BASE_URL}/quotations"
+
+    _last_quote_debug["url"] = url
+    _last_quote_debug["payload"] = payload
 
     try:
         r = requests.post(
-            f"{BASE_URL}/quotations",
+            url,
             json=payload,
             headers={
                 "Authorization": f"Bearer {token}",
@@ -167,40 +172,79 @@ def get_quotations(dest_zip, parcels, origin_zip=None):
             },
             timeout=25,
         )
-        if r.status_code not in (200, 201):
-            log.error("Skydropx quotation error %s: %s", r.status_code, r.text[:500])
+        _last_quote_debug["status"] = r.status_code
+        try:
+            _last_quote_debug["body"] = r.json()
+        except Exception:
+            _last_quote_debug["body"] = r.text[:1500]
+
+        if r.status_code not in (200, 201, 202):
+            log.error("Skydropx quotation error %s: %s", r.status_code, r.text[:800])
             return None
 
         data = r.json()
-        # La respuesta puede venir en {data:{attributes:{rates:[]}}} o {rates:[]}
+        # La respuesta puede venir en distintos formatos según versión de API
         rates = None
         if isinstance(data, dict):
             if "data" in data and isinstance(data["data"], dict):
                 rates = data["data"].get("attributes", {}).get("rates")
             if rates is None:
                 rates = data.get("rates")
+            # Otra variante: data como lista
+            if rates is None and isinstance(data.get("data"), list):
+                rates = data["data"]
 
         if not rates:
-            log.warning("Skydropx no devolvió rates: %s", str(data)[:400])
+            log.warning("Skydropx sin rates: %s", str(data)[:600])
             return []
 
         options = []
         for rate in rates:
-            price = rate.get("total") or rate.get("amount_local") or rate.get("amount")
+            # Rate puede ser {attributes:{...}} o dict plano
+            attrs = rate.get("attributes") if isinstance(rate, dict) and "attributes" in rate else rate
+            price = (
+                attrs.get("total")
+                or attrs.get("amount_local")
+                or attrs.get("amount")
+                or attrs.get("price")
+            )
             if price is None:
                 continue
             options.append({
-                "id": str(rate.get("id") or ""),
-                "carrier": rate.get("provider_name") or rate.get("provider") or "Carrier",
-                "service": rate.get("provider_service_name") or rate.get("service_level_name") or rate.get("service_level_code") or "",
+                "id": str(rate.get("id") or attrs.get("id") or ""),
+                "carrier": (
+                    attrs.get("provider_name")
+                    or attrs.get("provider")
+                    or attrs.get("carrier")
+                    or attrs.get("carrier_name")
+                    or "Carrier"
+                ),
+                "service": (
+                    attrs.get("provider_service_name")
+                    or attrs.get("service_level_name")
+                    or attrs.get("service_level_code")
+                    or attrs.get("service")
+                    or ""
+                ),
                 "price": float(price),
-                "currency": rate.get("currency") or "MXN",
-                "days": rate.get("days") or rate.get("estimated_delivery") or None,
+                "currency": attrs.get("currency") or "MXN",
+                "days": (
+                    attrs.get("days")
+                    or attrs.get("estimated_delivery")
+                    or attrs.get("delivery_days")
+                    or None
+                ),
             })
 
-        # Ordeno por precio ascendente
         options.sort(key=lambda o: o["price"])
         return options
     except Exception as e:
         log.exception("Skydropx quotation exception")
+        _last_quote_debug["status"] = "EXCEPTION"
+        _last_quote_debug["body"] = str(e)[:500]
         return None
+
+
+def last_quote_debug():
+    """Para diagnóstico: último intento de cotización."""
+    return dict(_last_quote_debug)

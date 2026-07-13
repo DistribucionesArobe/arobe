@@ -430,9 +430,9 @@ def debug_skydropx():
 
     token = skydropx._get_token()
     if token:
-        # Prueba una cotización dummy
+        # Prueba una cotización dummy realista (MBI a Monterrey)
         opts = skydropx.get_quotations("64000", [{
-            "weight": 5, "length": 30, "width": 30, "height": 30,
+            "weight": 38, "length": 130, "width": 60, "height": 60,
         }])
         return jsonify({
             "configured": True,
@@ -442,6 +442,7 @@ def debug_skydropx():
                 "options_count": len(opts) if opts is not None else None,
                 "sample": opts[:3] if opts else None,
             },
+            "last_quote_debug": skydropx.last_quote_debug(),
         })
     else:
         return jsonify({
@@ -450,8 +451,7 @@ def debug_skydropx():
             "last_error": skydropx.last_oauth_error(),
             "hint": (
                 "El OAuth falla. Verifica en pro.skydropx.com → Configuración → API → "
-                "que la aplicación esté ACTIVA y las credenciales sean de PRODUCCIÓN "
-                "(no sandbox). Si generaste sandbox, cambia a producción."
+                "que la aplicación esté ACTIVA y las credenciales sean de PRODUCCIÓN."
             ),
         })
 
