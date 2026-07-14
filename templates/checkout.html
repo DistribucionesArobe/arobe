@@ -197,15 +197,6 @@
     shipBox.classList.remove('hidden');
     shipDedicated.classList.add('hidden');
 
-    // Caso dedicado: muestra la opción calculada + nota de confirmación por WA
-    if (quote.dedicated && quote.options && quote.options.length) {
-      shipDedicated.classList.remove('hidden');
-      shipDedicated.innerHTML = '<strong>🚚 Camión dedicado</strong><br>' + quote.reason
-        + '<br><a href="https://wa.me/{{ config.WA_PHONE }}?text='
-        + encodeURIComponent('Hola, quiero confirmar envío de camión dedicado a CP ' + cpInput.value + ' (~' + quote.weight_kg + ' kg)')
-        + '" target="_blank" class="text-amber-700 font-bold underline mt-2 inline-block">💬 Confirmar por WhatsApp</a>';
-    }
-
     const opts = quote.options || [];
     if (opts.length === 0) {
       shipInfo.textContent = 'No pudimos cotizar automáticamente. Contáctanos por WhatsApp.';
@@ -221,16 +212,23 @@
     shipOptions.innerHTML = opts.map((o, i) => {
       const days = o.days ? (typeof o.days === 'number' ? o.days + ' días' : o.days) : '3-5 días';
       const svc = o.service ? '<div class="text-xs text-slate-500">' + o.service + '</div>' : '';
+      const badge = o.source === 'dedicated'
+        ? '<span class="inline-block text-[9px] font-bold uppercase tracking-widest bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded ml-1">Exclusivo</span>'
+        : '';
+      const confirmNote = o.requires_confirmation
+        ? '<div class="text-[10px] text-amber-700 mt-0.5">⚠ Confirmamos disponibilidad por WhatsApp</div>'
+        : '';
       return `
         <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-200 hover:border-amber-400 cursor-pointer transition ${i===0?'bg-amber-50 border-amber-400':''}">
           <input type="radio" name="ship-choice" value="${i}" ${i===0?'checked':''} class="mt-1">
           <div class="flex-1 min-w-0">
             <div class="flex items-center justify-between gap-2">
-              <div class="font-semibold text-arobe-900 truncate">${o.carrier}</div>
+              <div class="font-semibold text-arobe-900 truncate">${o.carrier}${badge}</div>
               <div class="font-extrabold text-arobe-900 whitespace-nowrap">${fmt(o.price)}</div>
             </div>
             ${svc}
             <div class="text-xs text-slate-500 mt-0.5">Entrega en ${days}</div>
+            ${confirmNote}
           </div>
         </label>
       `;

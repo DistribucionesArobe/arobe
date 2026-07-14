@@ -110,9 +110,13 @@ ZONES = {
 
 # Umbrales para tier
 PESO_PAQUETERIA_MAX = 8       # kg — más de esto pasa a fletera
-PESO_DEDICADO_MIN = 300       # kg — más de esto pasa a camión dedicado
+PESO_HIBRIDO_MIN = 300        # kg — 300-800 kg: LTL + dedicado (cliente elige)
+PESO_SOLO_DEDICADO_MIN = 800  # kg — más: solo camión dedicado tiene sentido
 MONTO_DEDICADO_MIN = 15000    # MXN
 MONTO_PAQUETERIA_MAX = 1500   # MXN — si es muy chico va por paquetería
+
+# Retrocompat con código viejo que use la constante anterior
+PESO_DEDICADO_MIN = PESO_HIBRIDO_MIN
 
 
 # ============================================================
@@ -302,30 +306,70 @@ def get_shipping_options(products_in_cart, dest_zip, try_realtime=True, dest_are
         "source": "estimate",
     }
 
-    # Regla dura: pedido grande = camión dedicado con precio calculado
-    if total_weight >= PESO_DEDICADO_MIN or total_amount >= MONTO_DEDICADO_MIN:
+    # ------------------------------------------------------------
+    # Camión dedicado — construido para reuso en varios ramos
+    # ------------------------------------------------------------
+    def _dedicated_option():
         ded = dedicated_price(dest_zip)
-        opt = {
+        return {
             "source": "dedicated",
             "id": f"dedicated-{zone}",
-            "carrier": "Camión seca dedicado (25 ton)",
-            "service": f"{ded['km']} km × ${DEDICADO_COSTO_KM_CON_IVA:.2f}/km",
+            "carrier": "Camión seca dedicado",
+            "service": f"{ded['km']} km · caja 25 ton (2.60 × 16 m)",
             "price": ded["price"],
             "currency": "MXN",
             "days": "1-2 (sale al día siguiente)",
             "tier": "dedicado",
             "weight_kg": total_weight,
+            "requires_confirmation": True,
         }
+
+    # Peso muy grande: SOLO camión dedicado (LTL ya no aplica)
+    if total_weight >= PESO_SOLO_DEDICADO_MIN:
         base.update({
             "tier": "dedicado",
             "dedicated": True,
-            "options": [opt],
+            "options": [_dedicated_option()],
             "reason": (
-                f"Pedido grande ({total_weight:.0f} kg / ${total_amount:,.0f} MXN) · "
-                f"{ded['km']} km desde Victoria · precio estimado con caja seca dedicada. "
-                "Confirmamos disponibilidad y fecha por WhatsApp antes de despachar."
+                f"Pedido de {total_weight:.0f} kg — supera capacidad de fletera "
+                "consolidada. Camión dedicado exclusivo. Confirmamos disponibilidad "
+                "por WhatsApp antes de despachar."
             ),
             "source": "dedicated",
+        })
+        return base
+
+    # Rango híbrido: 300-800 kg O monto > $15k → LTL + dedicado juntos
+    if total_weight >= PESO_HIBRIDO_MIN or total_amount >= MONTO_DEDICADO_MIN:
+        options = []
+        # Intento Skydropx primero para tener opciones LTL reales
+        if try_realtime:
+            try:
+                from lib import skydropx
+                if skydropx.is_configured():
+                    parcels = _build_parcels(products_in_cart)
+                    rt = skydropx.get_quotations(dest_zip, parcels, dest_area=dest_area)
+                    if rt:
+                        for opt in rt[:4]:  # top 4 más baratas
+                            opt["source"] = "skydropx"
+                            opt["tier"] = "fletera"
+                            opt["weight_kg"] = total_weight
+                            options.append(opt)
+            except Exception as e:
+                log.warning("Skydropx exception en híbrido: %s", e)
+        # Siempre agrego el dedicado como opción premium al final
+        options.append(_dedicated_option())
+        base.update({
+            "tier": "hibrido",
+            "dedicated": True,   # marca visual: hay opción dedicada
+            "options": options,
+            "reason": (
+                f"Pedido grande ({total_weight:.0f} kg / ${total_amount:,.0f} MXN) · "
+                f"{len(options)} opciones: fletera consolidada (más económica, 3-6 días) "
+                "o camión dedicado (más rápido, exclusivo). Confirmamos disponibilidad "
+                "de camión dedicado por WhatsApp."
+            ),
+            "source": "skydropx" if any(o.get("source") == "skydropx" for o in options) else "dedicated",
         })
         return base
 
