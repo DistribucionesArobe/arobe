@@ -3,6 +3,21 @@
 {% block title %}{{ titulo }} — Arobe Group{% endblock %}
 {% block robots %}noindex, nofollow{% endblock %}
 
+{% block structured_data %}
+{% if estado == 'exito' and config.GA4_ID and order_id %}
+<script>
+  // GA4 purchase event — se dispara cuando el cliente aterriza en /checkout/exito
+  if (typeof gtag === 'function') {
+    gtag('event', 'purchase', {
+      transaction_id: '{{ order_id }}',
+      currency: 'MXN',
+      value: 0  // el valor real está en el webhook del server, aquí solo marcamos evento
+    });
+  }
+</script>
+{% endif %}
+{% endblock %}
+
 {% block content %}
 <section class="py-20 min-h-[60vh] bg-slate-50">
   <div class="max-w-2xl mx-auto px-4 text-center">
