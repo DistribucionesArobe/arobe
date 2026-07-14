@@ -187,9 +187,16 @@ def _static_option(zone_info, tier_name, weight_kg):
         }
 
 
-def get_shipping_options(products_in_cart, dest_zip, try_realtime=True):
+def get_shipping_options(products_in_cart, dest_zip, try_realtime=True, dest_area=None):
     """
     Devuelve las opciones de envío para el carrito.
+
+    Args:
+        products_in_cart: lista de items del carrito
+        dest_zip: CP destino de 5 dígitos
+        try_realtime: si intentar Skydropx antes del fallback estático
+        dest_area: dict opcional con area_level1 (estado), area_level2 (municipio),
+                   area_level3 (colonia). Skydropx PRO los requiere.
 
     Returns:
         dict con:
@@ -232,7 +239,7 @@ def get_shipping_options(products_in_cart, dest_zip, try_realtime=True):
             from lib import skydropx
             if skydropx.is_configured():
                 parcels = _build_parcels(products_in_cart)
-                rt_options = skydropx.get_quotations(dest_zip, parcels)
+                rt_options = skydropx.get_quotations(dest_zip, parcels, dest_area=dest_area)
                 if rt_options:
                     # Filtro top 5 y agrego metadatos
                     top = rt_options[:5]

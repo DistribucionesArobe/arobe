@@ -262,35 +262,38 @@
     setPayNormal();
   }
 
-  let timer = null;
-  cpInput.addEventListener('input', () => {
-    clearTimeout(timer);
+  // Inputs de ciudad/estado para pasarlos como area_level a Skydropx
+  const ciudadInput = document.querySelector('input[name="ciudad"]');
+  const estadoInput = document.querySelector('input[name="estado"]');
+
+  function fetchQuote() {
     const cp = cpInput.value.replace(/\D/g, '').slice(0, 5);
-    cpInput.value = cp;
-    if (cp.length !== 5) {
-      resetUI();
-      return;
-    }
-    // Loading state
+    if (cp.length !== 5) { resetUI(); return; }
     shipBox.classList.remove('hidden');
     shipDedicated.classList.add('hidden');
     shipLoading.classList.remove('hidden');
     shipOptions.innerHTML = '';
     shipInfo.textContent = '';
 
-    timer = setTimeout(async () => {
-      try {
-        const r = await fetch('/api/shipping/quote?zip=' + cp);
-        shipLoading.classList.add('hidden');
-        if (!r.ok) { resetUI(); return; }
-        const quote = await r.json();
-        renderOptions(quote);
-      } catch (e) {
-        console.error(e);
-        shipLoading.classList.add('hidden');
-      }
-    }, 400);
+    const params = new URLSearchParams({ zip: cp });
+    if (ciudadInput && ciudadInput.value.trim()) params.set('ciudad', ciudadInput.value.trim());
+    if (estadoInput && estadoInput.value.trim()) params.set('estado', estadoInput.value.trim());
+
+    fetch('/api/shipping/quote?' + params.toString())
+      .then(r => { shipLoading.classList.add('hidden'); return r.ok ? r.json() : null; })
+      .then(quote => { if (quote) renderOptions(quote); else resetUI(); })
+      .catch(e => { console.error(e); shipLoading.classList.add('hidden'); });
+  }
+
+  let timer = null;
+  const debouncedFetch = () => { clearTimeout(timer); timer = setTimeout(fetchQuote, 400); };
+
+  cpInput.addEventListener('input', () => {
+    cpInput.value = cpInput.value.replace(/\D/g, '').slice(0, 5);
+    debouncedFetch();
   });
+  if (ciudadInput) ciudadInput.addEventListener('input', debouncedFetch);
+  if (estadoInput) estadoInput.addEventListener('input', debouncedFetch);
 })();
 </script>
 {% endblock %}

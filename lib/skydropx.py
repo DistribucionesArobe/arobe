@@ -111,9 +111,19 @@ def is_configured():
 
 
 # ============================================================
+# Datos del origen (Victoria, Tamaulipas — almacén Arobe)
+# ============================================================
+ORIGIN_AREA = {
+    "area_level1": "TAMAULIPAS",           # estado
+    "area_level2": "VICTORIA",              # municipio
+    "area_level3": "ADOLFO LOPEZ MATEOS",   # colonia (según CSF de la empresa)
+}
+
+
+# ============================================================
 # Cotización
 # ============================================================
-def get_quotations(dest_zip, parcels, origin_zip=None):
+def get_quotations(dest_zip, parcels, origin_zip=None, dest_area=None):
     """
     Cotiza envío en tiempo real.
 
@@ -121,6 +131,9 @@ def get_quotations(dest_zip, parcels, origin_zip=None):
         dest_zip: CP destino de 5 dígitos
         parcels: lista de bultos [{"weight": kg, "length": cm, "width": cm, "height": cm}]
         origin_zip: opcional, default 87020 (Victoria)
+        dest_area: dict con area_level1 (estado), area_level2 (municipio),
+                   area_level3 (colonia) del destino. Si no viene, usamos
+                   valores genéricos que la mayoría de carriers aceptan.
 
     Returns:
         Lista de opciones ordenadas por precio ascendente:
@@ -132,6 +145,12 @@ def get_quotations(dest_zip, parcels, origin_zip=None):
         return None
 
     origin = origin_zip or ORIGIN_ZIP
+
+    # Área de destino: uso lo que venga del form o placeholders genéricos.
+    dest = dest_area or {}
+    dest_a1 = (dest.get("area_level1") or "MEXICO").upper().strip()[:120]
+    dest_a2 = (dest.get("area_level2") or dest_a1 or "MEXICO").upper().strip()[:120]
+    dest_a3 = (dest.get("area_level3") or "CENTRO").upper().strip()[:120]
 
     # Normalizo parcels: Skydropx requiere int, weight >= 1kg
     clean_parcels = []
@@ -145,11 +164,23 @@ def get_quotations(dest_zip, parcels, origin_zip=None):
             "mass_unit": "KG",
         })
 
-    # Skydropx PRO v1 acepta este payload
+    # Skydropx PRO v1 requiere area_level1/2/3 en address_from y address_to
     payload = {
         "quotation": {
-            "address_from": {"country_code": "mx", "postal_code": str(origin)},
-            "address_to": {"country_code": "mx", "postal_code": str(dest_zip)},
+            "address_from": {
+                "country_code": "mx",
+                "postal_code": str(origin),
+                "area_level1": ORIGIN_AREA["area_level1"],
+                "area_level2": ORIGIN_AREA["area_level2"],
+                "area_level3": ORIGIN_AREA["area_level3"],
+            },
+            "address_to": {
+                "country_code": "mx",
+                "postal_code": str(dest_zip),
+                "area_level1": dest_a1,
+                "area_level2": dest_a2,
+                "area_level3": dest_a3,
+            },
             "parcels": clean_parcels,
             "requested_carriers": [
                 "estafeta", "fedex", "dhl", "paquetexpress", "redpack", "sendex",

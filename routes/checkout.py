@@ -107,7 +107,13 @@ def shipping_quote():
         return jsonify({"error": "Carrito vacío"}), 400
     if not zip_code or not zip_code.isdigit() or len(zip_code) != 5:
         return jsonify({"error": "CP inválido (5 dígitos)"}), 400
-    result = shipping.get_shipping_options(full_lines, zip_code)
+    # Área destino (Skydropx PRO requiere area_level1/2/3). Vienen del form.
+    dest_area = {
+        "area_level1": request.args.get("estado", "").strip() or None,  # estado
+        "area_level2": request.args.get("ciudad", "").strip() or None,  # municipio
+        "area_level3": request.args.get("colonia", "").strip() or None, # colonia (opcional)
+    }
+    result = shipping.get_shipping_options(full_lines, zip_code, dest_area=dest_area)
     return jsonify(result)
 
 
