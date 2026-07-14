@@ -197,22 +197,13 @@
     shipBox.classList.remove('hidden');
     shipDedicated.classList.add('hidden');
 
-    // Caso dedicado: bloquea pago online
-    if (quote.dedicated) {
-      shipInfo.textContent = '';
-      shipOptions.innerHTML = '';
+    // Caso dedicado: muestra la opción calculada + nota de confirmación por WA
+    if (quote.dedicated && quote.options && quote.options.length) {
       shipDedicated.classList.remove('hidden');
-      shipDedicated.innerHTML = '<strong>Pedido grande</strong><br>' + quote.reason;
-      grandTotal.innerHTML = fmt(productsTotal) + '<span class="text-xs font-normal text-slate-500"> + envío</span>';
-      payBtn.disabled = true;
-      payBtn.classList.remove('bg-emerald-500', 'hover:bg-emerald-600');
-      payBtn.classList.add('bg-slate-300', 'cursor-not-allowed');
-      payBtn.textContent = 'Cotiza por WhatsApp →';
-      payBtn.type = 'button';
-      payBtn.onclick = () => {
-        window.open('https://wa.me/{{ config.WA_PHONE }}?text=' + encodeURIComponent('Hola, quiero cotizar envío para mi pedido (${{ "{:,.0f}".format(total) }} MXN, ~' + quote.weight_kg + ' kg) a CP ' + cpInput.value), '_blank');
-      };
-      return;
+      shipDedicated.innerHTML = '<strong>🚚 Camión dedicado</strong><br>' + quote.reason
+        + '<br><a href="https://wa.me/{{ config.WA_PHONE }}?text='
+        + encodeURIComponent('Hola, quiero confirmar envío de camión dedicado a CP ' + cpInput.value + ' (~' + quote.weight_kg + ' kg)')
+        + '" target="_blank" class="text-amber-700 font-bold underline mt-2 inline-block">💬 Confirmar por WhatsApp</a>';
     }
 
     const opts = quote.options || [];

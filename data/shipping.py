@@ -115,6 +115,87 @@ MONTO_DEDICADO_MIN = 15000    # MXN
 MONTO_PAQUETERIA_MAX = 1500   # MXN — si es muy chico va por paquetería
 
 
+# ============================================================
+# Camión dedicado (caja seca 25 ton · 2.60m × 16m)
+# ============================================================
+# Tarifa: $1.60/km/ton × 25 ton = $40/km neto → $46.40/km con IVA 16%
+DEDICADO_CAPACIDAD_TON = 25
+DEDICADO_TARIFA_KM_TON = 1.60           # MXN neto
+DEDICADO_COSTO_KM_NETO = DEDICADO_CAPACIDAD_TON * DEDICADO_TARIFA_KM_TON  # = $40
+DEDICADO_COSTO_KM_CON_IVA = round(DEDICADO_COSTO_KM_NETO * (1 + 0.16), 2)  # = $46.40
+DEDICADO_DIMS = "2.60 m ancho × 16 m largo · 25 toneladas"
+
+# Distancia aproximada (km terrestres) desde Victoria, Tamaulipas (CP 87020)
+# al centro de cada estado. Prefijo de 2 dígitos del CP → km.
+# Ajustar cuando tengas datos reales por ruta.
+KM_DESDE_VICTORIA = {
+    # Tamaulipas (mismo estado)
+    "87": 0, "88": 250, "89": 250,   # Victoria / Reynosa-Matamoros / Tampico
+    # Nuevo León (Monterrey área)
+    "64": 320, "65": 340, "66": 340, "67": 320,
+    # Norte cercano
+    "25": 400, "26": 500, "27": 620,   # Coahuila (Saltillo → Torreón)
+    "78": 460, "79": 480,               # SLP
+    "98": 470, "99": 470,               # Zacatecas
+    # Frontera / Chihuahua-Durango
+    "31": 850, "32": 1100, "33": 900,   # Chihuahua / Cd. Juárez
+    "34": 800, "35": 620,                # Durango
+    # Centro (CDMX área extendida)
+    "00": 620, "01": 620, "02": 620, "03": 620, "04": 620, "05": 620,
+    "06": 620, "07": 620, "08": 620, "09": 620, "10": 620, "11": 620,
+    "12": 620, "13": 620, "14": 620, "15": 620, "16": 620,
+    "50": 620, "51": 620, "52": 620, "53": 620,
+    "54": 620, "55": 620, "56": 620, "57": 620,
+    "20": 570, "36": 550, "37": 480, "38": 480,   # Ags / Guanajuato
+    "42": 580,                                     # Hidalgo
+    "62": 700, "63": 730,                          # Morelos / Nayarit
+    "76": 480,                                     # Querétaro
+    "90": 660,                                     # Tlaxcala
+    # Occidente
+    "44": 750, "45": 750, "46": 780, "47": 700, "48": 800, "49": 800,   # Jalisco
+    "28": 850,                                                            # Colima
+    "58": 850, "59": 830, "60": 800, "61": 800,                          # Michoacán
+    # Pacífico norte
+    "80": 950, "81": 950, "82": 900,     # Sinaloa
+    "83": 1200, "84": 1350, "85": 1400,  # Sonora
+    "21": 1800, "22": 1900, "23": 1900,  # Baja California
+    # Sureste
+    "91": 780, "92": 850, "93": 900, "94": 950, "95": 1000, "96": 1000,   # Veracruz
+    "72": 720, "73": 750, "74": 800, "75": 780,                            # Puebla
+    "86": 1050,                                                             # Tabasco
+    "97": 1700,                                                             # Yucatán
+    "77": 2000,                                                             # QR
+    "24": 1500,                                                             # Campeche
+    # Sur
+    "68": 1000, "69": 1050, "70": 1000, "71": 1050,   # Oaxaca
+    "39": 900, "40": 900, "41": 850,                   # Guerrero
+    "29": 1300, "30": 1400,                            # Chiapas
+}
+KM_DEFAULT = 800   # si no encuentro el CP
+
+
+def km_from_victoria(dest_zip):
+    """Distancia aproximada en km desde Victoria (87020) al CP destino."""
+    if not dest_zip or len(str(dest_zip)) < 2:
+        return KM_DEFAULT
+    prefix = str(dest_zip).strip()[:2]
+    return KM_DESDE_VICTORIA.get(prefix, KM_DEFAULT)
+
+
+def dedicated_price(dest_zip):
+    """Calcula precio de camión dedicado según distancia."""
+    km = km_from_victoria(dest_zip)
+    price = round(km * DEDICADO_COSTO_KM_CON_IVA, 2)
+    return {
+        "km": km,
+        "price": price,
+        "detail": (
+            f"Camión seca dedicado ({DEDICADO_DIMS}) · "
+            f"{km} km × ${DEDICADO_COSTO_KM_CON_IVA:.2f}/km"
+        ),
+    }
+
+
 def get_zone(zip_code):
     """Devuelve la zona para un CP mexicano de 5 dígitos."""
     if not zip_code or len(str(zip_code).strip()) < 2:
@@ -221,15 +302,30 @@ def get_shipping_options(products_in_cart, dest_zip, try_realtime=True, dest_are
         "source": "estimate",
     }
 
-    # Regla dura: pedido grande = cotización manual
+    # Regla dura: pedido grande = camión dedicado con precio calculado
     if total_weight >= PESO_DEDICADO_MIN or total_amount >= MONTO_DEDICADO_MIN:
+        ded = dedicated_price(dest_zip)
+        opt = {
+            "source": "dedicated",
+            "id": f"dedicated-{zone}",
+            "carrier": "Camión seca dedicado (25 ton)",
+            "service": f"{ded['km']} km × ${DEDICADO_COSTO_KM_CON_IVA:.2f}/km",
+            "price": ded["price"],
+            "currency": "MXN",
+            "days": "1-2 (sale al día siguiente)",
+            "tier": "dedicado",
+            "weight_kg": total_weight,
+        }
         base.update({
             "tier": "dedicado",
             "dedicated": True,
+            "options": [opt],
             "reason": (
-                f"Pedido grande ({total_weight:.0f} kg / ${total_amount:,.0f} MXN) — "
-                "te cotizamos por WhatsApp en minutos."
+                f"Pedido grande ({total_weight:.0f} kg / ${total_amount:,.0f} MXN) · "
+                f"{ded['km']} km desde Victoria · precio estimado con caja seca dedicada. "
+                "Confirmamos disponibilidad y fecha por WhatsApp antes de despachar."
             ),
+            "source": "dedicated",
         })
         return base
 
