@@ -111,6 +111,28 @@ def is_configured():
 
 
 # ============================================================
+# Helpers de rates
+# ============================================================
+def _rate_ready(rate):
+    """Rate lista = success=true + total válido (>0)."""
+    if not isinstance(rate, dict):
+        return False
+    total = rate.get("total") or rate.get("amount")
+    try:
+        total_num = float(total) if total is not None else 0.0
+    except (ValueError, TypeError):
+        total_num = 0.0
+    return bool(rate.get("success")) and total_num > 0
+
+
+def _all_pending(rates):
+    """True si TODAS las rates están pending o fallidas (nada listo aún)."""
+    if not rates:
+        return True
+    return not any(_rate_ready(r) for r in rates)
+
+
+# ============================================================
 # Datos del origen (Victoria, Tamaulipas — almacén Arobe)
 # ============================================================
 ORIGIN_AREA = {
@@ -183,7 +205,7 @@ def get_quotations(dest_zip, parcels, origin_zip=None, dest_area=None):
             },
             "parcels": clean_parcels,
             "requested_carriers": [
-                "estafeta", "fedex", "dhl", "paquetexpress", "redpack", "sendex",
+                "estafeta", "fedex", "dhl", "paquetexpress", "sendex",
             ],
         }
     }
@@ -201,7 +223,7 @@ def get_quotations(dest_zip, parcels, origin_zip=None, dest_area=None):
                 "Content-Type": "application/json",
                 "Accept": "application/json",
             },
-            timeout=25,
+            timeout=15,
         )
         _last_quote_debug["status"] = r.status_code
         try:
@@ -214,16 +236,44 @@ def get_quotations(dest_zip, parcels, origin_zip=None, dest_area=None):
             return None
 
         data = r.json()
-        # La respuesta puede venir en distintos formatos según versión de API
-        rates = None
-        if isinstance(data, dict):
-            if "data" in data and isinstance(data["data"], dict):
-                rates = data["data"].get("attributes", {}).get("rates")
-            if rates is None:
-                rates = data.get("rates")
-            # Otra variante: data como lista
-            if rates is None and isinstance(data.get("data"), list):
-                rates = data["data"]
+        quotation_id = data.get("id") or (data.get("data") or {}).get("id")
+
+        # Extraigo rates iniciales
+        rates = data.get("rates") or (data.get("data") or {}).get("attributes", {}).get("rates")
+        is_completed = data.get("is_completed", False)
+
+        # Skydropx v1 procesa asíncronamente: si is_completed=False o todas las rates
+        # están pending, tenemos que hacer polling hasta que estén completadas.
+        if quotation_id and (not is_completed or _all_pending(rates or [])):
+            poll_url = f"{BASE_URL}/quotations/{quotation_id}"
+            for attempt in range(10):  # hasta ~10 segundos total
+                time.sleep(1.0)
+                try:
+                    rp = requests.get(
+                        poll_url,
+                        headers={
+                            "Authorization": f"Bearer {token}",
+                            "Accept": "application/json",
+                        },
+                        timeout=10,
+                    )
+                    if rp.status_code != 200:
+                        log.warning("Skydropx polling %s: %s", rp.status_code, rp.text[:200])
+                        continue
+                    poll_data = rp.json()
+                    rates = poll_data.get("rates") or rates
+                    is_completed = poll_data.get("is_completed", False)
+                    completed_count = sum(1 for x in (rates or []) if _rate_ready(x))
+                    log.info(
+                        "Skydropx poll %d: is_completed=%s completed_rates=%d/%d",
+                        attempt + 1, is_completed, completed_count, len(rates or []),
+                    )
+                    _last_quote_debug["body"] = poll_data
+                    if is_completed or completed_count >= 3:
+                        break
+                except Exception as e:
+                    log.warning("Skydropx polling exception: %s", e)
+                    continue
 
         if not rates:
             log.warning("Skydropx sin rates: %s", str(data)[:600])
@@ -231,43 +281,38 @@ def get_quotations(dest_zip, parcels, origin_zip=None, dest_area=None):
 
         options = []
         for rate in rates:
-            # Rate puede ser {attributes:{...}} o dict plano
             attrs = rate.get("attributes") if isinstance(rate, dict) and "attributes" in rate else rate
-            price = (
-                attrs.get("total")
-                or attrs.get("amount_local")
-                or attrs.get("amount")
-                or attrs.get("price")
-            )
-            if price is None:
+            # SOLO acepto rates listas (success=true + total>0)
+            if not _rate_ready(attrs):
                 continue
+            price = attrs.get("total") or attrs.get("amount") or attrs.get("amount_local")
+            try:
+                price_num = float(price)
+            except (ValueError, TypeError):
+                continue
+            provider = (
+                attrs.get("provider_display_name")
+                or attrs.get("provider_name")
+                or attrs.get("carrier")
+                or "Carrier"
+            )
+            service = (
+                attrs.get("provider_service_name")
+                or attrs.get("service_level_name")
+                or attrs.get("provider_service_code")
+                or ""
+            )
             options.append({
                 "id": str(rate.get("id") or attrs.get("id") or ""),
-                "carrier": (
-                    attrs.get("provider_name")
-                    or attrs.get("provider")
-                    or attrs.get("carrier")
-                    or attrs.get("carrier_name")
-                    or "Carrier"
-                ),
-                "service": (
-                    attrs.get("provider_service_name")
-                    or attrs.get("service_level_name")
-                    or attrs.get("service_level_code")
-                    or attrs.get("service")
-                    or ""
-                ),
-                "price": float(price),
-                "currency": attrs.get("currency") or "MXN",
-                "days": (
-                    attrs.get("days")
-                    or attrs.get("estimated_delivery")
-                    or attrs.get("delivery_days")
-                    or None
-                ),
+                "carrier": provider,
+                "service": service,
+                "price": price_num,
+                "currency": attrs.get("currency_code") or attrs.get("currency") or "MXN",
+                "days": attrs.get("days") or attrs.get("estimated_delivery") or None,
             })
 
         options.sort(key=lambda o: o["price"])
+        log.info("Skydropx devolvió %d opciones listas de %d rates totales", len(options), len(rates))
         return options
     except Exception as e:
         log.exception("Skydropx quotation exception")
