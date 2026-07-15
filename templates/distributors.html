@@ -1,0 +1,264 @@
+{% extends "base.html" %}
+
+{% block title %}Programa Distribuidores B2B · Arobe Group{% endblock %}
+{% block description %}Únete al programa de distribuidores Arobe Group. 15% de descuento en SusPan e Insulglass, envío gratis, crédito 30 días. Para ferreterías, constructoras, contratistas y distribuidores de materiales de construcción en México.{% endblock %}
+
+{% block content %}
+
+{# ============ HERO ============ #}
+<section class="bg-arobe-900 text-white relative overflow-hidden">
+  <div class="absolute inset-0 stamp-tex opacity-10"></div>
+  <div class="relative max-w-7xl mx-auto px-4 py-16 lg:py-24 grid lg:grid-cols-2 gap-10 items-center">
+    <div>
+      <div class="inline-flex items-center gap-2 bg-amber-400 text-arobe-900 text-xs font-bold px-3 py-1.5 rounded-full mb-6 uppercase tracking-widest">
+        Programa B2B · Importadores directos
+      </div>
+      <h1 class="text-4xl lg:text-5xl font-extrabold leading-tight">
+        Vende SusPan e Insulglass en tu <span class="text-amber-400">ferretería, obra o showroom</span>.
+      </h1>
+      <p class="text-lg text-slate-300 mt-5 max-w-xl">
+        Únete al programa Distribuidores Arobe y accede a precios mayoreo, envío directo desde
+        almacén y soporte técnico para tus clientes. Sin cuotas ni compromisos anuales.
+      </p>
+      <div class="flex flex-wrap gap-3 mt-8">
+        <a href="#aplicar" class="bg-amber-400 hover:bg-amber-500 text-arobe-900 font-extrabold px-6 py-3 rounded-lg text-base">Solicitar cuenta →</a>
+        <a href="https://wa.me/{{ config.WA_PHONE }}?text=Hola%2C+quiero+info+del+programa+de+distribuidores" target="_blank" rel="noopener" class="border-2 border-white/30 text-white hover:bg-white/10 font-bold px-6 py-3 rounded-lg text-base">💬 Pregúntanos</a>
+      </div>
+    </div>
+    <div class="hidden lg:block">
+      <div class="grid grid-cols-2 gap-4">
+        <div class="bg-white/10 backdrop-blur border border-white/20 rounded-2xl p-6 text-center">
+          <div class="text-4xl font-black text-amber-400">15%</div>
+          <div class="text-sm text-slate-300 mt-1">descuento mayoreo</div>
+        </div>
+        <div class="bg-white/10 backdrop-blur border border-white/20 rounded-2xl p-6 text-center">
+          <div class="text-4xl font-black text-amber-400">+5%</div>
+          <div class="text-sm text-slate-300 mt-1">extra 1er pedido</div>
+        </div>
+        <div class="bg-white/10 backdrop-blur border border-white/20 rounded-2xl p-6 text-center">
+          <div class="text-4xl font-black text-amber-400">30 días</div>
+          <div class="text-sm text-slate-300 mt-1">crédito al 3er pedido</div>
+        </div>
+        <div class="bg-white/10 backdrop-blur border border-white/20 rounded-2xl p-6 text-center">
+          <div class="text-4xl font-black text-amber-400">🚚</div>
+          <div class="text-sm text-slate-300 mt-1">envío gratis $30k+</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# ============ BENEFICIOS ============ #}
+<section class="py-16 bg-white">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="text-center max-w-2xl mx-auto mb-12">
+      <p class="text-xs uppercase tracking-widest text-amber-600 font-bold mb-2">Qué te damos</p>
+      <h2 class="text-3xl lg:text-4xl font-extrabold text-arobe-900">Un socio comercial completo, no solo un proveedor.</h2>
+    </div>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6">
+        <div class="w-12 h-12 bg-amber-400 text-arobe-900 rounded-xl grid place-items-center text-2xl font-black">💰</div>
+        <h3 class="font-bold text-arobe-900 mt-4">Precios mayoreo reales</h3>
+        <p class="text-sm text-slate-600 mt-2">15% de descuento sobre precio público en todos los SKUs, sin volumen mínimo mensual.</p>
+      </div>
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6">
+        <div class="w-12 h-12 bg-emerald-500 text-white rounded-xl grid place-items-center text-2xl font-black">🚚</div>
+        <h3 class="font-bold text-arobe-900 mt-4">Envío directo desde almacén</h3>
+        <p class="text-sm text-slate-600 mt-2">Salimos de Victoria, Tamaulipas. Fletera consolidada o camión dedicado según tu pedido.</p>
+      </div>
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6">
+        <div class="w-12 h-12 bg-blue-600 text-white rounded-xl grid place-items-center text-2xl font-black">📄</div>
+        <h3 class="font-bold text-arobe-900 mt-4">Factura CFDI 4.0 al momento</h3>
+        <p class="text-sm text-slate-600 mt-2">Timbramos con tu RFC en cuanto se acredita el pago. Sin trámites, sin esperas.</p>
+      </div>
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6">
+        <div class="w-12 h-12 bg-violet-600 text-white rounded-xl grid place-items-center text-2xl font-black">🎓</div>
+        <h3 class="font-bold text-arobe-900 mt-4">Soporte técnico + capacitación</h3>
+        <p class="text-sm text-slate-600 mt-2">Te ayudamos a resolver dudas de instalación y specs de tus clientes por WhatsApp directo.</p>
+      </div>
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6">
+        <div class="w-12 h-12 bg-rose-500 text-white rounded-xl grid place-items-center text-2xl font-black">📢</div>
+        <h3 class="font-bold text-arobe-900 mt-4">Kit de venta gratuito</h3>
+        <p class="text-sm text-slate-600 mt-2">Folletos, mockups, flyers y catálogos digitales para que vendas mejor en tu punto de venta.</p>
+      </div>
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6">
+        <div class="w-12 h-12 bg-arobe-900 text-white rounded-xl grid place-items-center text-2xl font-black">🤝</div>
+        <h3 class="font-bold text-arobe-900 mt-4">Crédito a 30 días</h3>
+        <p class="text-sm text-slate-600 mt-2">Después de 3 pedidos consecutivos pagados en tiempo, activamos línea de crédito.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# ============ QUIÉN ES ESTE PROGRAMA PARA ============ #}
+<section class="py-16 bg-slate-50 border-y border-slate-200">
+  <div class="max-w-5xl mx-auto px-4">
+    <div class="text-center mb-10">
+      <h2 class="text-2xl lg:text-3xl font-extrabold text-arobe-900">¿Para quién es el programa?</h2>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+      <div class="bg-white border border-slate-200 rounded-xl p-5">
+        <div class="text-3xl mb-2">🔧</div>
+        <div class="font-bold text-arobe-900 text-sm">Ferreterías</div>
+        <div class="text-xs text-slate-500 mt-1">materiales de construcción</div>
+      </div>
+      <div class="bg-white border border-slate-200 rounded-xl p-5">
+        <div class="text-3xl mb-2">🏗️</div>
+        <div class="font-bold text-arobe-900 text-sm">Constructoras</div>
+        <div class="text-xs text-slate-500 mt-1">chicas y medianas</div>
+      </div>
+      <div class="bg-white border border-slate-200 rounded-xl p-5">
+        <div class="text-3xl mb-2">📐</div>
+        <div class="font-bold text-arobe-900 text-sm">Arquitectos</div>
+        <div class="text-xs text-slate-500 mt-1">diseño interior/comercial</div>
+      </div>
+      <div class="bg-white border border-slate-200 rounded-xl p-5">
+        <div class="text-3xl mb-2">👷</div>
+        <div class="font-bold text-arobe-900 text-sm">Contratistas</div>
+        <div class="text-xs text-slate-500 mt-1">tablaroca y plafones</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# ============ FORMULARIO ============ #}
+<section id="aplicar" class="py-16 bg-white">
+  <div class="max-w-3xl mx-auto px-4">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for cat, msg in messages %}
+        <div class="mb-4 px-4 py-3 rounded-lg {% if cat == 'error' %}bg-rose-50 text-rose-800 border border-rose-200{% else %}bg-emerald-50 text-emerald-800 border border-emerald-200{% endif %}">{{ msg }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="text-center mb-8">
+      <p class="text-xs uppercase tracking-widest text-amber-600 font-bold mb-2">Solicita tu cuenta</p>
+      <h2 class="text-3xl lg:text-4xl font-extrabold text-arobe-900">Aplica al programa en 2 minutos</h2>
+      <p class="text-slate-600 mt-3">Te contactamos por WhatsApp en las próximas 24h hábiles.</p>
+    </div>
+
+    <form method="post" action="{{ url_for('web.distribuidores_aplicar') }}" class="bg-slate-50 border border-slate-200 rounded-2xl p-6 lg:p-8 space-y-6">
+
+      <!-- honeypot anti-spam (oculto) -->
+      <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px" aria-hidden="true">
+
+      <div>
+        <h3 class="font-bold text-arobe-900 text-lg mb-3">Datos de tu empresa</h3>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="sm:col-span-2">
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Razón social *</label>
+            <input type="text" name="razon_social" required class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none" placeholder="Ferretería La Esperanza S.A. de C.V.">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Nombre comercial</label>
+            <input type="text" name="nombre_comercial" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none" placeholder="Ferretería La Esperanza">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">RFC</label>
+            <input type="text" name="rfc" maxlength="13" class="w-full border border-slate-300 rounded-lg px-3 py-2 uppercase focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none" placeholder="XAXX010101000">
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Giro del negocio</label>
+            <select name="giro" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none">
+              <option value="">Selecciona…</option>
+              <option value="ferreteria">Ferretería / materiales de construcción</option>
+              <option value="constructora">Constructora</option>
+              <option value="contratista">Contratista (tablaroca, plafones, acabados)</option>
+              <option value="arquitecto">Arquitecto / diseñador</option>
+              <option value="distribuidor">Distribuidor de materiales</option>
+              <option value="otro">Otro</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="font-bold text-arobe-900 text-lg mb-3">Contacto</h3>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="sm:col-span-2">
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Nombre completo *</label>
+            <input type="text" name="contacto_nombre" required class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Puesto</label>
+            <input type="text" name="contacto_puesto" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none" placeholder="Dueño, Gerente, Comprador...">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Email *</label>
+            <input type="email" name="email" required class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">WhatsApp / Teléfono *</label>
+            <input type="tel" name="telefono" required class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none" placeholder="+52 81 1234 5678">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Ciudad</label>
+            <input type="text" name="ciudad" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Estado</label>
+            <input type="text" name="estado" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none" placeholder="Nuevo León, CDMX...">
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="font-bold text-arobe-900 text-lg mb-3">Perfil comercial</h3>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Volumen mensual estimado de compras (MXN)</label>
+            <select name="volumen_mensual" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none">
+              <option value="">Selecciona…</option>
+              <option value="menor_5k">Menor a $5,000</option>
+              <option value="5k_20k">$5,000 - $20,000</option>
+              <option value="20k_50k">$20,000 - $50,000</option>
+              <option value="50k_100k">$50,000 - $100,000</option>
+              <option value="mayor_100k">Mayor a $100,000</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-2">Marcas de interés</label>
+            <div class="flex flex-wrap gap-4">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" name="marcas" value="suspan" class="w-4 h-4">
+                <span class="text-sm text-slate-700">SusPan (plafones y decorativos)</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" name="marcas" value="insulglass" class="w-4 h-4">
+                <span class="text-sm text-slate-700">Insulglass (aislantes)</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" name="marcas" value="ambas" checked class="w-4 h-4">
+                <span class="text-sm text-slate-700">Ambas</span>
+              </label>
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Productos específicos de interés</label>
+            <textarea name="productos_interes" rows="2" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none" placeholder="Ej. Plafones acústicos 61×61, MBI para naves, glasswool para tablaroca..."></textarea>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">¿Cómo nos conociste?</label>
+            <input type="text" name="origen" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none" placeholder="Google, Facebook, recomendación, etc.">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Notas o preguntas (opcional)</label>
+            <textarea name="notas" rows="3" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold py-4 rounded-xl text-lg">
+        Enviar solicitud →
+      </button>
+      <p class="text-xs text-center text-slate-500">
+        Al enviar aceptas ser contactado por WhatsApp o email para activar tu cuenta.
+        Nunca compartimos tus datos con terceros.
+      </p>
+    </form>
+  </div>
+</section>
+
+{% endblock %}

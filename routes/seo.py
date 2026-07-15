@@ -54,7 +54,7 @@ def sitemap_xml():
         ("/marcas/insulglass",             "0.8", "weekly"),
         ("/marcas/insulglass/glasswool",   "0.6", "monthly"),
         ("/marcas/insulglass/mbi",         "0.6", "monthly"),
-        ("/distribuidores",                "0.5", "monthly"),
+        ("/distribuidores",                "0.8", "weekly"),
         ("/contacto",                      "0.5", "monthly"),
     ]
 

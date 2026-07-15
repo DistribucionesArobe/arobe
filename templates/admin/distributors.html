@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}Distribuidores — Admin{% endblock %}
+{% block robots %}noindex, nofollow{% endblock %}
+
+{% block content %}
+<section class="py-10 bg-slate-50 min-h-[80vh]">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex justify-between items-end flex-wrap gap-3 mb-6">
+      <div>
+        <p class="text-xs uppercase tracking-widest text-amber-600 font-bold">Admin</p>
+        <h1 class="text-3xl font-extrabold text-arobe-900">Solicitudes de distribuidores</h1>
+      </div>
+      <a href="{{ url_for('admin.home') }}" class="text-slate-600 hover:text-arobe-900 text-sm">← Panel</a>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+      <div class="bg-white border border-slate-200 rounded-xl p-4">
+        <p class="text-xs text-slate-500 uppercase tracking-wide">Total</p>
+        <p class="text-2xl font-extrabold text-arobe-900">{{ stats.total }}</p>
+      </div>
+      <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
+        <p class="text-xs text-blue-700 uppercase tracking-wide">Nuevos</p>
+        <p class="text-2xl font-extrabold text-blue-700">{{ stats.nuevos }}</p>
+      </div>
+      <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
+        <p class="text-xs text-amber-700 uppercase tracking-wide">Contactados</p>
+        <p class="text-2xl font-extrabold text-amber-700">{{ stats.contactados }}</p>
+      </div>
+      <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
+        <p class="text-xs text-emerald-700 uppercase tracking-wide">Aprobados</p>
+        <p class="text-2xl font-extrabold text-emerald-700">{{ stats.aprobados }}</p>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap gap-2 mb-6">
+      <a href="{{ url_for('admin.distributor_leads') }}" class="px-3 py-1.5 rounded-full text-sm font-semibold {% if not estado_filtro %}bg-arobe-900 text-white{% else %}bg-white border border-slate-300 text-slate-700 hover:bg-slate-100{% endif %}">Todos</a>
+      <a href="{{ url_for('admin.distributor_leads', estado='nuevo') }}" class="px-3 py-1.5 rounded-full text-sm font-semibold {% if estado_filtro == 'nuevo' %}bg-blue-600 text-white{% else %}bg-white border border-slate-300 text-slate-700 hover:bg-slate-100{% endif %}">Nuevos</a>
+      <a href="{{ url_for('admin.distributor_leads', estado='contactado') }}" class="px-3 py-1.5 rounded-full text-sm font-semibold {% if estado_filtro == 'contactado' %}bg-amber-500 text-white{% else %}bg-white border border-slate-300 text-slate-700 hover:bg-slate-100{% endif %}">Contactados</a>
+      <a href="{{ url_for('admin.distributor_leads', estado='aprobado') }}" class="px-3 py-1.5 rounded-full text-sm font-semibold {% if estado_filtro == 'aprobado' %}bg-emerald-600 text-white{% else %}bg-white border border-slate-300 text-slate-700 hover:bg-slate-100{% endif %}">Aprobados</a>
+    </div>
+
+    {% if leads %}
+    <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden">
+      <table class="w-full text-sm">
+        <thead class="bg-slate-100 text-xs uppercase tracking-wide text-slate-600">
+          <tr>
+            <th class="px-4 py-3 text-left">Folio</th>
+            <th class="px-4 py-3 text-left">Fecha</th>
+            <th class="px-4 py-3 text-left">Empresa</th>
+            <th class="px-4 py-3 text-left">Contacto</th>
+            <th class="px-4 py-3 text-left">Ubicación</th>
+            <th class="px-4 py-3 text-left">Volumen</th>
+            <th class="px-4 py-3 text-center">Estado</th>
+            <th class="px-4 py-3"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          {% for l in leads %}
+          <tr class="hover:bg-slate-50">
+            <td class="px-4 py-3 font-mono font-bold text-arobe-900 text-xs">#{{ l.id }}</td>
+            <td class="px-4 py-3 text-slate-600 text-xs">{{ l.created_at.strftime('%d/%m/%y %H:%M') }}</td>
+            <td class="px-4 py-3">
+              <div class="font-semibold text-arobe-900">{{ l.razon_social }}</div>
+              {% if l.giro %}<div class="text-xs text-slate-500">{{ l.giro|title }}</div>{% endif %}
+            </td>
+            <td class="px-4 py-3">
+              <div class="text-slate-900">{{ l.contacto_nombre }}</div>
+              <div class="text-xs text-slate-500">{{ l.email }}</div>
+              <a href="https://wa.me/{{ l.telefono|replace(' ','')|replace('+','')|replace('-','') }}" target="_blank" class="text-xs text-emerald-600">📱 {{ l.telefono }}</a>
+            </td>
+            <td class="px-4 py-3 text-slate-600 text-sm">{{ l.ciudad or '—' }}{% if l.estado %}, {{ l.estado }}{% endif %}</td>
+            <td class="px-4 py-3 text-slate-600 text-xs">{{ l.volumen_mensual_mxn or '—' }}</td>
+            <td class="px-4 py-3 text-center">
+              {% if l.status == 'nuevo' %}
+              <span class="bg-blue-100 text-blue-800 text-xs font-bold uppercase px-2 py-1 rounded">Nuevo</span>
+              {% elif l.status == 'contactado' %}
+              <span class="bg-amber-100 text-amber-800 text-xs font-bold uppercase px-2 py-1 rounded">Contactado</span>
+              {% elif l.status == 'aprobado' %}
+              <span class="bg-emerald-100 text-emerald-800 text-xs font-bold uppercase px-2 py-1 rounded">Aprobado</span>
+              {% elif l.status == 'rechazado' %}
+              <span class="bg-rose-100 text-rose-800 text-xs font-bold uppercase px-2 py-1 rounded">Rechazado</span>
+              {% endif %}
+            </td>
+            <td class="px-4 py-3 text-right">
+              <a href="{{ url_for('admin.distributor_detail', lead_id=l.id) }}" class="text-amber-600 font-semibold text-sm hover:underline">Ver →</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="bg-white border border-slate-200 rounded-2xl p-12 text-center">
+      <div class="text-5xl mb-2">🤝</div>
+      <p class="text-slate-600">Aún no hay solicitudes {{ estado_filtro }}.</p>
+      <p class="text-sm text-slate-500 mt-2">Cuando alguien aplique en <code>/distribuidores</code> aparecerá aquí.</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

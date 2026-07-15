@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}¡Solicitud recibida! · Distribuidores Arobe Group{% endblock %}
+{% block robots %}noindex, nofollow{% endblock %}
+
+{% block structured_data %}
+{% if config.GA4_ID %}
+<script>
+  if (typeof gtag === 'function') {
+    gtag('event', 'generate_lead', {
+      lead_id: '{{ lead.id }}',
+      lead_source: 'distributor_application'
+    });
+  }
+</script>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<section class="py-20 bg-slate-50 min-h-[70vh]">
+  <div class="max-w-2xl mx-auto px-4 text-center">
+    <div class="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full grid place-items-center text-5xl mx-auto">✓</div>
+    <h1 class="text-3xl lg:text-4xl font-extrabold text-arobe-900 mt-6">¡Solicitud recibida, {{ lead.contacto_nombre.split(' ')[0] }}!</h1>
+    <p class="text-lg text-slate-700 mt-4">
+      Gracias por interesarte en el programa <strong>Distribuidores Arobe</strong>.
+      En las próximas <strong>24 horas hábiles</strong> te contactaremos por WhatsApp o
+      teléfono para validar tu perfil y activar tu cuenta.
+    </p>
+
+    <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 mt-8 inline-block">
+      <p class="text-xs uppercase tracking-widest text-amber-700 font-bold">Tu folio de solicitud</p>
+      <p class="text-3xl font-black text-arobe-900 font-mono mt-1">#{{ lead.id }}</p>
+    </div>
+
+    <p class="text-sm text-slate-600 mt-6">
+      También te enviamos un correo a <strong>{{ lead.email }}</strong> con la confirmación
+      y los beneficios completos del programa. Si no lo ves en tu bandeja, revisa spam o
+      promociones.
+    </p>
+
+    <div class="flex flex-wrap justify-center gap-3 mt-10">
+      <a href="{{ url_for('web.catalogo') }}" class="bg-arobe-900 hover:bg-arobe-800 text-white font-bold px-6 py-3 rounded-lg">Explorar catálogo</a>
+      <a href="https://wa.me/{{ config.WA_PHONE }}?text=Hola%2C+acabo+de+aplicar+como+distribuidor+folio+{{ lead.id }}"
+         class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-6 py-3 rounded-lg" target="_blank" rel="noopener">💬 Escríbenos ahora</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

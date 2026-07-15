@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Distribuidor #{{ lead.id }} — Admin{% endblock %}
+{% block robots %}noindex, nofollow{% endblock %}
+
+{% block content %}
+<section class="py-10 bg-slate-50 min-h-[80vh]">
+  <div class="max-w-4xl mx-auto px-4">
+    <nav class="text-sm text-slate-500 mb-3">
+      <a href="{{ url_for('admin.distributor_leads') }}" class="hover:text-arobe-900">← Volver a distribuidores</a>
+    </nav>
+
+    <div class="flex items-start justify-between gap-4 flex-wrap mb-6">
+      <div>
+        <p class="text-xs uppercase tracking-widest text-amber-600 font-bold">Solicitud de distribuidor</p>
+        <h1 class="text-3xl font-extrabold text-arobe-900 font-mono">#{{ lead.id }}</h1>
+        <p class="text-slate-600 text-sm mt-1">{{ lead.created_at.strftime('%d %B %Y · %H:%M UTC') }}</p>
+      </div>
+      <div>
+        {% if lead.status == 'nuevo' %}
+        <span class="bg-blue-100 text-blue-800 text-sm font-bold uppercase px-3 py-1.5 rounded-lg">Nuevo</span>
+        {% elif lead.status == 'contactado' %}
+        <span class="bg-amber-100 text-amber-800 text-sm font-bold uppercase px-3 py-1.5 rounded-lg">Contactado</span>
+        {% elif lead.status == 'aprobado' %}
+        <span class="bg-emerald-100 text-emerald-800 text-sm font-bold uppercase px-3 py-1.5 rounded-lg">✓ Aprobado</span>
+        {% elif lead.status == 'rechazado' %}
+        <span class="bg-rose-100 text-rose-800 text-sm font-bold uppercase px-3 py-1.5 rounded-lg">✗ Rechazado</span>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="grid lg:grid-cols-3 gap-6">
+      <div class="lg:col-span-2 space-y-4">
+        <div class="bg-white border border-slate-200 rounded-2xl p-6">
+          <h3 class="font-extrabold text-arobe-900 mb-3">Empresa</h3>
+          <dl class="grid sm:grid-cols-2 gap-3 text-sm">
+            <div><dt class="text-slate-500 text-xs uppercase">Razón social</dt><dd class="font-semibold text-arobe-900">{{ lead.razon_social }}</dd></div>
+            {% if lead.nombre_comercial %}<div><dt class="text-slate-500 text-xs uppercase">Nombre comercial</dt><dd class="text-arobe-900">{{ lead.nombre_comercial }}</dd></div>{% endif %}
+            {% if lead.rfc %}<div><dt class="text-slate-500 text-xs uppercase">RFC</dt><dd class="font-mono text-arobe-900">{{ lead.rfc }}</dd></div>{% endif %}
+            {% if lead.giro %}<div><dt class="text-slate-500 text-xs uppercase">Giro</dt><dd class="text-arobe-900">{{ lead.giro|title }}</dd></div>{% endif %}
+            {% if lead.ciudad or lead.estado %}<div class="sm:col-span-2"><dt class="text-slate-500 text-xs uppercase">Ubicación</dt><dd class="text-arobe-900">{{ lead.ciudad or '' }}{% if lead.estado %}, {{ lead.estado }}{% endif %}</dd></div>{% endif %}
+          </dl>
+        </div>
+
+        <div class="bg-white border border-slate-200 rounded-2xl p-6">
+          <h3 class="font-extrabold text-arobe-900 mb-3">Contacto</h3>
+          <p class="font-semibold text-arobe-900">{{ lead.contacto_nombre }}{% if lead.contacto_puesto %} <span class="text-slate-500 font-normal">— {{ lead.contacto_puesto }}</span>{% endif %}</p>
+          <p class="text-sm mt-2">📧 <a href="mailto:{{ lead.email }}" class="text-blue-600 hover:underline">{{ lead.email }}</a></p>
+          <p class="text-sm mt-1">📱 <a href="https://wa.me/{{ lead.telefono|replace(' ','')|replace('+','')|replace('-','') }}?text=Hola%20{{ lead.contacto_nombre.split(' ')[0]|urlencode }}%2C%20recibimos%20tu%20solicitud%20como%20distribuidor%20Arobe%20(folio%20{{ lead.id }})" target="_blank" class="text-emerald-600 hover:underline">💬 {{ lead.telefono }} (abrir en WhatsApp)</a></p>
+        </div>
+
+        <div class="bg-white border border-slate-200 rounded-2xl p-6">
+          <h3 class="font-extrabold text-arobe-900 mb-3">Perfil comercial</h3>
+          <dl class="space-y-3 text-sm">
+            <div><dt class="text-slate-500 text-xs uppercase">Volumen mensual estimado</dt><dd class="font-semibold text-arobe-900">{{ lead.volumen_mensual_mxn or '—' }}</dd></div>
+            <div><dt class="text-slate-500 text-xs uppercase">Marcas de interés</dt><dd class="text-arobe-900">{{ (lead.marcas_interes or '').replace(',', ', ') or '—' }}</dd></div>
+            {% if lead.productos_interes %}<div><dt class="text-slate-500 text-xs uppercase">Productos específicos</dt><dd class="text-arobe-900">{{ lead.productos_interes }}</dd></div>{% endif %}
+            {% if lead.origen %}<div><dt class="text-slate-500 text-xs uppercase">Cómo nos conoció</dt><dd class="text-arobe-900">{{ lead.origen }}</dd></div>{% endif %}
+            {% if lead.notas %}<div><dt class="text-slate-500 text-xs uppercase">Notas</dt><dd class="text-arobe-900 italic bg-slate-50 rounded p-3 mt-1">{{ lead.notas }}</dd></div>{% endif %}
+          </dl>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <div class="bg-white border border-slate-200 rounded-2xl p-5">
+          <h3 class="font-extrabold text-arobe-900 mb-3">Cambiar estado</h3>
+          <form method="post" action="{{ url_for('admin.distributor_set_status', lead_id=lead.id) }}" class="space-y-2">
+            <select name="estado" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
+              <option value="nuevo" {% if lead.status=='nuevo' %}selected{% endif %}>Nuevo</option>
+              <option value="contactado" {% if lead.status=='contactado' %}selected{% endif %}>Contactado</option>
+              <option value="aprobado" {% if lead.status=='aprobado' %}selected{% endif %}>Aprobado</option>
+              <option value="rechazado" {% if lead.status=='rechazado' %}selected{% endif %}>Rechazado</option>
+            </select>
+            <button type="submit" class="w-full bg-arobe-900 hover:bg-arobe-800 text-white text-sm font-bold py-2 rounded-lg">Guardar</button>
+          </form>
+        </div>
+
+        <div class="bg-white border border-slate-200 rounded-2xl p-5">
+          <h3 class="font-extrabold text-arobe-900 mb-3">Notificaciones</h3>
+          <div class="text-sm space-y-1">
+            <p>📧 Cliente: <strong class="{{ 'text-emerald-600' if lead.email_customer_sent else 'text-slate-500' }}">{{ 'Enviado ✓' if lead.email_customer_sent else 'No enviado' }}</strong></p>
+            <p>🔔 Admin: <strong class="{{ 'text-emerald-600' if lead.email_admin_sent else 'text-slate-500' }}">{{ 'Enviado ✓' if lead.email_admin_sent else 'No enviado' }}</strong></p>
+          </div>
+        </div>
+
+        <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-5">
+          <h3 class="font-extrabold text-emerald-800 mb-2">Siguiente paso</h3>
+          <p class="text-sm text-emerald-900">Contactar por WhatsApp en las próximas 24h hábiles para validar y activar cuenta.</p>
+          <a href="https://wa.me/{{ lead.telefono|replace(' ','')|replace('+','')|replace('-','') }}?text=Hola%20{{ lead.contacto_nombre.split(' ')[0]|urlencode }}%2C%20soy%20Alejandro%20de%20Arobe%20Group.%20Recibimos%20tu%20solicitud%20de%20distribuidor%20(folio%20{{ lead.id }})%20y%20quiero%20confirmarte%20algunos%20datos%20para%20activar%20tu%20cuenta." target="_blank" rel="noopener" class="mt-3 inline-block w-full text-center bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-bold py-2 rounded-lg">💬 Contactar ahora</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

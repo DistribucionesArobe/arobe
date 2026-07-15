@@ -168,6 +168,89 @@ def send_order_confirmation(order):
     return send_email(order.buyer_email, f"✅ Pedido #{order.id} confirmado — Arobe Group", html)
 
 
+def send_distributor_confirmation(lead):
+    """Email al distribuidor confirmando su solicitud + kit de bienvenida."""
+    body = f"""
+      <h1 style="color:#0a1a2e;margin:0 0 8px">¡Gracias por tu interés, {lead.contacto_nombre.split(' ')[0]}!</h1>
+      <p style="color:#475569;font-size:16px;line-height:1.6">
+        Recibimos la solicitud de <strong>{lead.razon_social}</strong> para el programa
+        <strong>Distribuidores Arobe</strong>. En las próximas <strong>24 horas hábiles</strong>
+        te contactaremos por WhatsApp o teléfono ({lead.telefono}) para validar tu perfil
+        y darte de alta.
+      </p>
+
+      <div style="background:#fef9c3;border-left:4px solid #f2c84a;padding:16px;margin:24px 0;border-radius:0 8px 8px 0">
+        <strong style="color:#0a1a2e">Folio de solicitud:</strong> <code style="background:white;padding:4px 8px;border-radius:4px">#{lead.id}</code>
+      </div>
+
+      <h3 style="color:#0a1a2e;margin-top:32px">Beneficios del programa</h3>
+      <ul style="color:#475569;line-height:1.8">
+        <li>✅ <strong>15% de descuento</strong> sobre precio público en todos los productos SusPan e Insulglass</li>
+        <li>✅ <strong>5% adicional</strong> en tu primer pedido de bienvenida</li>
+        <li>✅ <strong>Envío gratis</strong> para pedidos de $30,000 MXN o más dentro del norte de México</li>
+        <li>✅ <strong>Crédito 30 días</strong> después de 3 pedidos consecutivos pagados</li>
+        <li>✅ Acceso a fichas técnicas oficiales y kit de venta para tus clientes</li>
+        <li>✅ Soporte técnico directo por WhatsApp para dudas de instalación</li>
+        <li>✅ Materiales de marketing (folletos, flyers, mockups) para tu ferretería/showroom</li>
+      </ul>
+
+      <h3 style="color:#0a1a2e;margin-top:32px">Mientras nos contactamos, revisa nuestro catálogo</h3>
+      <p>
+        <a href="https://arobegroup.com/catalogo" style="display:inline-block;background:#0a1a2e;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:700;margin-right:8px">Ver catálogo</a>
+        <a href="https://wa.me/{os.environ.get('WA_PHONE','528130783171')}?text=Hola%2C+soy+distribuidor+registrado+folio+{lead.id}" style="display:inline-block;background:#10b981;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:700">💬 Escríbenos por WhatsApp</a>
+      </p>
+
+      <p style="margin-top:32px;font-size:14px;color:#64748b">
+        Si tienes dudas escríbenos a
+        <a href="mailto:contacto@arobegroup.com" style="color:#0a1a2e">contacto@arobegroup.com</a>
+        o por WhatsApp a <a href="https://wa.me/528130783171" style="color:#10b981">+52 81 3078 3171</a>.
+      </p>
+    """
+    html = _wrapper("Bienvenido al programa Distribuidores Arobe", body)
+    return send_email(lead.email, f"✅ Solicitud #{lead.id} recibida · Distribuidores Arobe", html)
+
+
+def send_distributor_admin(lead):
+    """Email al admin notificando nueva solicitud de distribuidor."""
+    marcas = (lead.marcas_interes or "").replace(",", ", ") or "—"
+    body = f"""
+      <h1 style="color:#0a1a2e;margin:0 0 8px">🔔 Nueva solicitud de distribuidor</h1>
+      <p style="color:#475569;font-size:16px">
+        Folio <strong>#{lead.id}</strong> — recibida {lead.created_at.strftime('%d/%m/%Y %H:%M UTC') if lead.created_at else ''}
+      </p>
+
+      <h3 style="color:#0a1a2e">Empresa</h3>
+      <p style="margin:4px 0"><strong>Razón social:</strong> {lead.razon_social}</p>
+      {f'<p style="margin:4px 0"><strong>Nombre comercial:</strong> {lead.nombre_comercial}</p>' if lead.nombre_comercial else ''}
+      {f'<p style="margin:4px 0"><strong>RFC:</strong> <code>{lead.rfc}</code></p>' if lead.rfc else ''}
+      {f'<p style="margin:4px 0"><strong>Giro:</strong> {lead.giro}</p>' if lead.giro else ''}
+      {f'<p style="margin:4px 0"><strong>Ubicación:</strong> {lead.ciudad or ""} {lead.estado or ""}</p>' if (lead.ciudad or lead.estado) else ''}
+
+      <h3 style="color:#0a1a2e;margin-top:24px">Contacto</h3>
+      <p style="margin:4px 0"><strong>{lead.contacto_nombre}</strong>{f' — {lead.contacto_puesto}' if lead.contacto_puesto else ''}</p>
+      <p style="margin:4px 0">📧 <a href="mailto:{lead.email}">{lead.email}</a></p>
+      <p style="margin:4px 0">📱 <a href="https://wa.me/{lead.telefono.replace(' ','').replace('+','').replace('-','')}">{lead.telefono}</a></p>
+
+      <h3 style="color:#0a1a2e;margin-top:24px">Interés comercial</h3>
+      <p style="margin:4px 0"><strong>Volumen mensual estimado:</strong> {lead.volumen_mensual_mxn or 'No especificado'}</p>
+      <p style="margin:4px 0"><strong>Marcas de interés:</strong> {marcas}</p>
+      {f'<p style="margin:4px 0"><strong>Productos:</strong> {lead.productos_interes}</p>' if lead.productos_interes else ''}
+      {f'<p style="margin:4px 0"><strong>Cómo nos conoció:</strong> {lead.origen}</p>' if lead.origen else ''}
+      {f'<div style="background:#f8fafc;border-radius:8px;padding:12px;margin:12px 0"><strong>Notas:</strong><br>{lead.notas}</div>' if lead.notas else ''}
+
+      <p style="margin-top:32px">
+        <a href="https://arobegroup.com/admin/distribuidores/{lead.id}" style="display:inline-block;background:#0a1a2e;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:700">Ver en admin</a>
+      </p>
+
+      <p style="margin-top:24px;font-size:13px;color:#64748b">
+        Acción requerida: contactar por WhatsApp/teléfono en las próximas 24h hábiles para validar
+        y activar cuenta de distribuidor.
+      </p>
+    """
+    html = _wrapper("Nueva solicitud de distribuidor", body)
+    return send_email(_admin_email(), f"🤝 Nuevo distribuidor: {lead.razon_social} · {lead.ciudad or ''}", html, reply_to=lead.email)
+
+
 def send_order_admin_notification(order):
     """Email al administrador notificando nuevo pedido pagado."""
     body = f"""

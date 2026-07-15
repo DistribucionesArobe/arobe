@@ -11,16 +11,21 @@
       <p class="text-slate-600 mt-1">Acceso restringido — solo administración de Arobe Group.</p>
     </div>
 
-    <div class="grid sm:grid-cols-2 gap-4">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
       <a href="{{ url_for('admin.orders') }}" class="bg-white border border-slate-200 rounded-2xl p-6 hover:shadow-lg transition">
         <div class="text-3xl mb-2">📦</div>
         <h3 class="font-extrabold text-arobe-900 text-lg">Pedidos</h3>
         <p class="text-sm text-slate-600 mt-1">Ver todos los pedidos, estado de pago y enviar emails.</p>
       </a>
+      <a href="{{ url_for('admin.distributor_leads') }}" class="bg-white border border-slate-200 rounded-2xl p-6 hover:shadow-lg transition">
+        <div class="text-3xl mb-2">🤝</div>
+        <h3 class="font-extrabold text-arobe-900 text-lg">Distribuidores</h3>
+        <p class="text-sm text-slate-600 mt-1">Solicitudes de nuevos distribuidores B2B, estados y contacto.</p>
+      </a>
       <a href="{{ url_for('checkout.debug_mp') }}" class="bg-white border border-slate-200 rounded-2xl p-6 hover:shadow-lg transition">
         <div class="text-3xl mb-2">⚙️</div>
-        <h3 class="font-extrabold text-arobe-900 text-lg">Diagnóstico MP</h3>
-        <p class="text-sm text-slate-600 mt-1">Verificar configuración de MercadoPago, Resend y BD.</p>
+        <h3 class="font-extrabold text-arobe-900 text-lg">Diagnóstico</h3>
+        <p class="text-sm text-slate-600 mt-1">Verificar MercadoPago, Resend, Skydropx y BD.</p>
       </a>
     </div>
   </div>

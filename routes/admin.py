@@ -10,9 +10,9 @@ import functools
 import logging
 from datetime import datetime, timezone
 
-from flask import Blueprint, render_template, Response, request, abort
+from flask import Blueprint, render_template, Response, request, abort, redirect, url_for
 
-from models import db, Order, OrderItem
+from models import db, Order, OrderItem, DistributorLead
 from lib.emailer import send_order_confirmation, send_order_admin_notification
 
 log = logging.getLogger("admin")
@@ -90,6 +90,46 @@ def order_detail(order_id):
     if order is None:
         abort(404)
     return render_template("admin/order_detail.html", page="admin-order", order=order)
+
+
+@admin_bp.get("/distribuidores")
+@require_admin
+def distributor_leads():
+    estado = request.args.get("estado", "").strip()
+    q = DistributorLead.query.order_by(DistributorLead.created_at.desc())
+    if estado:
+        q = q.filter_by(status=estado)
+    leads = q.limit(200).all()
+    stats = {
+        "total": DistributorLead.query.count(),
+        "nuevos": DistributorLead.query.filter_by(status="nuevo").count(),
+        "contactados": DistributorLead.query.filter_by(status="contactado").count(),
+        "aprobados": DistributorLead.query.filter_by(status="aprobado").count(),
+    }
+    return render_template("admin/distributors.html", page="admin-distribuidores",
+                           leads=leads, estado_filtro=estado, stats=stats)
+
+
+@admin_bp.get("/distribuidores/<lead_id>")
+@require_admin
+def distributor_detail(lead_id):
+    lead = DistributorLead.query.get(lead_id)
+    if lead is None:
+        abort(404)
+    return render_template("admin/distributor_detail.html", page="admin-distribuidor", lead=lead)
+
+
+@admin_bp.post("/distribuidores/<lead_id>/estado")
+@require_admin
+def distributor_set_status(lead_id):
+    lead = DistributorLead.query.get(lead_id)
+    if lead is None:
+        abort(404)
+    nuevo_estado = request.form.get("estado", "").strip()
+    if nuevo_estado in ("nuevo", "contactado", "aprobado", "rechazado"):
+        lead.status = nuevo_estado
+        db.session.commit()
+    return redirect(url_for("admin.distributor_detail", lead_id=lead_id))
 
 
 @admin_bp.post("/pedidos/<order_id>/reenviar-email")

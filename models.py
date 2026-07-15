@@ -126,3 +126,58 @@ class OrderItem(db.Model):
             "unit_price": self.unit_price,
             "line_total": self.line_total,
         }
+
+
+# ============================================================
+# DistributorLead — solicitudes de distribuidor B2B
+# ============================================================
+class DistributorLead(db.Model):
+    __tablename__ = "distributor_leads"
+
+    id = Column(String(12), primary_key=True, default=_gen_id)
+
+    # Empresa
+    razon_social = Column(String(200), nullable=False)
+    nombre_comercial = Column(String(200), nullable=True)
+    rfc = Column(String(13), nullable=True)
+    giro = Column(String(80), nullable=True)   # ferretería, constructora, arquitecto, contratista, distribuidor
+
+    # Contacto
+    contacto_nombre = Column(String(200), nullable=False)
+    contacto_puesto = Column(String(120), nullable=True)
+    email = Column(String(200), nullable=False, index=True)
+    telefono = Column(String(40), nullable=False)
+
+    # Ubicación
+    ciudad = Column(String(120), nullable=True)
+    estado = Column(String(120), nullable=True)
+
+    # Comercial
+    volumen_mensual_mxn = Column(String(60), nullable=True)  # rango como texto ("$5k-20k")
+    marcas_interes = Column(String(120), nullable=True)      # "suspan,insulglass,ambas"
+    productos_interes = Column(Text, nullable=True)
+    origen = Column(String(120), nullable=True)              # cómo nos conociste
+    notas = Column(Text, nullable=True)
+
+    # Auditoría
+    status = Column(String(20), default="nuevo", nullable=False, index=True)  # nuevo, contactado, aprobado, rechazado
+    created_at = Column(DateTime(timezone=True), default=_now, nullable=False, index=True)
+    ip = Column(String(60), nullable=True)
+    user_agent = Column(String(500), nullable=True)
+
+    # Notificaciones
+    email_customer_sent = Column(Boolean, default=False, nullable=False)
+    email_admin_sent = Column(Boolean, default=False, nullable=False)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "razon_social": self.razon_social,
+            "contacto_nombre": self.contacto_nombre,
+            "email": self.email,
+            "telefono": self.telefono,
+            "ciudad": self.ciudad,
+            "estado": self.estado,
+            "status": self.status,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+        }

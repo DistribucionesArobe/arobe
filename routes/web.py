@@ -2,9 +2,14 @@
 Rutas públicas del sitio web (frontend).
 Paso 1.2 — catálogo real con SKUs migrados desde insulglass.mx.
 """
-from flask import Blueprint, render_template, abort
+import logging
+from flask import Blueprint, render_template, abort, request, redirect, url_for, flash
 
 from data import products as catalog
+from models import db, DistributorLead
+from lib.emailer import send_distributor_confirmation, send_distributor_admin
+
+log = logging.getLogger("web")
 
 web_bp = Blueprint("web", __name__)
 
@@ -145,7 +150,73 @@ def nosotros():
 
 @web_bp.get("/distribuidores")
 def distribuidores():
-    return render_template("coming_soon.html", titulo="Programa B2B para distribuidores", paso="1.5")
+    return render_template("distributors.html", page="distribuidores")
+
+
+@web_bp.post("/distribuidores/aplicar")
+def distribuidores_aplicar():
+    # Datos del formulario
+    razon = request.form.get("razon_social", "").strip()
+    nombre_comercial = request.form.get("nombre_comercial", "").strip()
+    rfc = request.form.get("rfc", "").strip().upper()
+    giro = request.form.get("giro", "").strip()
+    contacto = request.form.get("contacto_nombre", "").strip()
+    puesto = request.form.get("contacto_puesto", "").strip()
+    email = request.form.get("email", "").strip()
+    telefono = request.form.get("telefono", "").strip()
+    ciudad = request.form.get("ciudad", "").strip()
+    estado = request.form.get("estado", "").strip()
+    volumen = request.form.get("volumen_mensual", "").strip()
+    marcas = request.form.getlist("marcas")
+    productos = request.form.get("productos_interes", "").strip()
+    origen = request.form.get("origen", "").strip()
+    notas = request.form.get("notas", "").strip()
+
+    # Anti-spam simple: honeypot
+    if request.form.get("website"):
+        return redirect(url_for("web.distribuidores"))
+
+    # Validación mínima
+    if not (razon and contacto and email and telefono):
+        flash("Faltan datos obligatorios (razón social, contacto, email y teléfono)", "error")
+        return redirect(url_for("web.distribuidores"))
+
+    lead = DistributorLead(
+        razon_social=razon,
+        nombre_comercial=nombre_comercial or None,
+        rfc=rfc or None,
+        giro=giro or None,
+        contacto_nombre=contacto,
+        contacto_puesto=puesto or None,
+        email=email,
+        telefono=telefono,
+        ciudad=ciudad or None,
+        estado=estado or None,
+        volumen_mensual_mxn=volumen or None,
+        marcas_interes=",".join(marcas) if marcas else None,
+        productos_interes=productos or None,
+        origen=origen or None,
+        notas=notas or None,
+        ip=request.headers.get("X-Forwarded-For", request.remote_addr or "")[:60],
+        user_agent=(request.headers.get("User-Agent") or "")[:500],
+    )
+    db.session.add(lead)
+    db.session.commit()
+    log.info("Nuevo distribuidor: %s (%s) %s", razon, email, lead.id)
+
+    # Emails
+    try:
+        ok, _ = send_distributor_confirmation(lead)
+        if ok:
+            lead.email_customer_sent = True
+        ok, _ = send_distributor_admin(lead)
+        if ok:
+            lead.email_admin_sent = True
+        db.session.commit()
+    except Exception as e:
+        log.warning("Error enviando emails de distribuidor: %s", e)
+
+    return render_template("distributors_thanks.html", page="distribuidores-gracias", lead=lead)
 
 
 @web_bp.get("/contacto")
