@@ -6,6 +6,7 @@ import logging
 from flask import Blueprint, render_template, abort, request, redirect, url_for, flash
 
 from data import products as catalog
+from data import blog as blog_data
 from models import db, DistributorLead
 from lib.emailer import send_distributor_confirmation, send_distributor_admin
 
@@ -217,6 +218,36 @@ def distribuidores_aplicar():
         log.warning("Error enviando emails de distribuidor: %s", e)
 
     return render_template("distributors_thanks.html", page="distribuidores-gracias", lead=lead)
+
+
+# ============================================================
+# Blog SEO
+# ============================================================
+@web_bp.get("/blog")
+def blog_list():
+    return render_template(
+        "blog_list.html",
+        page="blog",
+        posts=blog_data.all_posts(),
+        categories=blog_data.categories(),
+    )
+
+
+@web_bp.get("/blog/<slug>")
+def blog_post(slug):
+    post = blog_data.get(slug)
+    if post is None:
+        abort(404)
+    # Productos relacionados hidratados
+    related = [catalog.get(s) for s in (post.get("related_products") or [])]
+    related = [p for p in related if p]
+    return render_template(
+        "blog_post.html",
+        page="blog-post",
+        post=post,
+        related=related,
+        other_posts=[p for p in blog_data.all_posts() if p["slug"] != slug][:3],
+    )
 
 
 @web_bp.get("/contacto")

@@ -7,6 +7,7 @@ from flask import Blueprint, Response, url_for, request, current_app
 from datetime import datetime, timezone
 
 from data import products as catalog
+from data import blog as blog_data
 
 seo_bp = Blueprint("seo", __name__)
 
@@ -46,6 +47,7 @@ def sitemap_xml():
     static_urls = [
         ("/",                              "1.0", "weekly"),
         ("/catalogo",                      "0.9", "weekly"),
+        ("/blog",                          "0.8", "weekly"),
         ("/nosotros",                      "0.7", "monthly"),
         ("/marcas/suspan",                 "0.8", "weekly"),
         ("/marcas/suspan/board",           "0.6", "monthly"),
@@ -77,6 +79,18 @@ def sitemap_xml():
             f"    <lastmod>{today}</lastmod>\n"
             "    <changefreq>weekly</changefreq>\n"
             "    <priority>0.8</priority>\n"
+            "  </url>"
+        )
+
+    # URLs dinámicas de blog posts
+    for post in blog_data.all_posts():
+        lastmod = post.get("updated") or post.get("published") or today
+        rows.append(
+            "  <url>\n"
+            f"    <loc>{_abs_url('/blog/' + post['slug'])}</loc>\n"
+            f"    <lastmod>{lastmod}</lastmod>\n"
+            "    <changefreq>monthly</changefreq>\n"
+            "    <priority>0.7</priority>\n"
             "  </url>"
         )
 
