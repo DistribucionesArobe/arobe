@@ -21,9 +21,10 @@
         almacén y soporte técnico para tus clientes. Sin cuotas ni compromisos anuales.
       </p>
       <div class="flex flex-wrap gap-3 mt-8">
-        <a href="#aplicar" class="bg-amber-400 hover:bg-amber-500 text-arobe-900 font-extrabold px-6 py-3 rounded-lg text-base">Solicitar cuenta →</a>
-        <a href="https://wa.me/{{ config.WA_PHONE }}?text=Hola%2C+quiero+info+del+programa+de+distribuidores" target="_blank" rel="noopener" class="border-2 border-white/30 text-white hover:bg-white/10 font-bold px-6 py-3 rounded-lg text-base">💬 Pregúntanos</a>
+        <a href="{{ url_for('web.contacto', tipo='muestra') }}" class="bg-amber-400 hover:bg-amber-500 text-arobe-900 font-extrabold px-6 py-3 rounded-lg text-base">📦 Solicitar muestra o lista de precios</a>
+        <a href="https://wa.me/{{ config.WA_PHONE }}?text=Hola%2C+quiero+info+del+programa+de+distribuidores" target="_blank" rel="noopener" class="border-2 border-white/30 text-white hover:bg-white/10 font-bold px-6 py-3 rounded-lg text-base">💬 WhatsApp</a>
       </div>
+      <p class="text-sm text-slate-400 mt-4">¿Ya quieres darte de alta? <a href="#aplicar" class="text-amber-400 underline">Aplicar al programa →</a></p>
     </div>
     <div class="hidden lg:block">
       <div class="grid grid-cols-2 gap-4">

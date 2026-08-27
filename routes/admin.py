@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 
 from flask import Blueprint, render_template, Response, request, abort, redirect, url_for
 
-from models import db, Order, OrderItem, DistributorLead
+from models import db, Order, OrderItem, DistributorLead, ContactLead
 from lib.emailer import send_order_confirmation, send_order_admin_notification
 
 log = logging.getLogger("admin")
@@ -130,6 +130,15 @@ def distributor_set_status(lead_id):
         lead.status = nuevo_estado
         db.session.commit()
     return redirect(url_for("admin.distributor_detail", lead_id=lead_id))
+
+
+@admin_bp.get("/contactos")
+@require_admin
+def contact_leads():
+    leads = ContactLead.query.order_by(ContactLead.created_at.desc()).limit(200).all()
+    return render_template("admin/contacts.html", page="admin-contactos", leads=leads,
+                           stats={"total": ContactLead.query.count(),
+                                  "nuevos": ContactLead.query.filter_by(status="nuevo").count()})
 
 
 @admin_bp.post("/pedidos/<order_id>/reenviar-email")

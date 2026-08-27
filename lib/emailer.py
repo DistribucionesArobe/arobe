@@ -251,6 +251,49 @@ def send_distributor_admin(lead):
     return send_email(_admin_email(), f"🤝 Nuevo distribuidor: {lead.razon_social} · {lead.ciudad or ''}", html, reply_to=lead.email)
 
 
+def send_contact_confirmation(lead):
+    """Email al lead confirmando contacto recibido."""
+    tipo_label = {
+        "lista_precios": "Lista de precios",
+        "muestra": "Muestra de producto",
+        "cotizacion": "Cotización",
+        "general": "Contacto general",
+    }.get(lead.tipo, "Contacto")
+
+    body = f"""
+      <h1 style="color:#0a1a2e;margin:0 0 8px">Recibimos tu mensaje, {lead.nombre.split(' ')[0]}</h1>
+      <p style="color:#475569;font-size:16px;line-height:1.6">
+        Tu solicitud (<strong>{tipo_label}</strong>) llegó bien. En las próximas
+        <strong>24 horas hábiles</strong> te respondemos por WhatsApp o correo.
+      </p>
+      <div style="background:#fef9c3;border-left:4px solid #f2c84a;padding:16px;margin:24px 0;border-radius:0 8px 8px 0">
+        <strong style="color:#0a1a2e">Folio:</strong> <code style="background:white;padding:4px 8px;border-radius:4px">#{lead.id}</code>
+      </div>
+      <p style="margin-top:24px;font-size:14px;color:#64748b">
+        Si necesitas atención inmediata escríbenos por WhatsApp a
+        <a href="https://wa.me/{os.environ.get('WA_PHONE','528130783171')}" style="color:#10b981">+52 81 3078 3171</a>.
+      </p>
+    """
+    return send_email(lead.email, f"✅ Solicitud #{lead.id} recibida · Arobe Group", _wrapper("Contacto recibido", body))
+
+
+def send_contact_admin(lead):
+    """Email al admin notificando nuevo contacto."""
+    body = f"""
+      <h1 style="color:#0a1a2e;margin:0 0 8px">📩 Nuevo contacto</h1>
+      <p style="color:#475569;font-size:15px">
+        Folio <strong>#{lead.id}</strong> · Tipo: <strong>{lead.tipo}</strong>
+      </p>
+      <p style="margin:4px 0"><strong>{lead.nombre}</strong>{f' — {lead.empresa}' if lead.empresa else ''}</p>
+      <p style="margin:4px 0">📧 <a href="mailto:{lead.email}">{lead.email}</a></p>
+      <p style="margin:4px 0">📱 <a href="https://wa.me/{lead.telefono.replace(' ','').replace('+','').replace('-','')}">{lead.telefono}</a></p>
+      {f'<p style="margin:4px 0">📍 {lead.ciudad}</p>' if lead.ciudad else ''}
+      {f'<p style="margin:4px 0"><strong>Producto de interés:</strong> {lead.producto_interes}</p>' if lead.producto_interes else ''}
+      {f'<div style="background:#f8fafc;border-radius:8px;padding:12px;margin:12px 0"><strong>Mensaje:</strong><br>{lead.mensaje}</div>' if lead.mensaje else ''}
+    """
+    return send_email(_admin_email(), f"📩 Contacto: {lead.nombre} · {lead.tipo}", _wrapper("Nuevo contacto", body), reply_to=lead.email)
+
+
 def send_order_admin_notification(order):
     """Email al administrador notificando nuevo pedido pagado."""
     body = f"""

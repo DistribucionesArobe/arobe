@@ -12,19 +12,19 @@
     <div class="lg:col-span-7">
       <div class="inline-flex items-center gap-2 bg-arobe-50 text-arobe-700 text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
         <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-        Importadores directos · Stock disponible
+        Importadores directos · Stock en Ciudad Victoria
       </div>
       <h1 class="text-4xl lg:text-6xl font-extrabold text-arobe-900 leading-[1.05] tracking-tight">
-        Paneles que <span class="bg-suspan-500 text-suspan-ink px-2">se nota</span><br>
-        donde lo coloques.<br>
-        <span class="text-insul-600">Aislamiento</span> que no se ve.
+        <span class="text-insul-600">Plafones y aislamiento</span> a precio de <span class="bg-suspan-500 text-suspan-ink px-2">distribuidor</span>.
       </h1>
       <p class="text-lg text-slate-600 mt-6 max-w-xl">
-        Arobe Group importa y distribuye en México las marcas <strong class="text-suspan-ink bg-suspan-500 px-1">SusPan</strong> (paneles para techo, muro y decorativo) e <strong class="text-insul-500">Insulglass</strong> (aislamiento térmico-acústico premium).
+        Venta por caja y tarima. Stock en Ciudad Victoria, Tamaulipas. Envíos a toda la
+        República con factura CFDI 4.0. Ideal para ferreterías, contratistas y constructoras.
       </p>
       <div class="flex flex-wrap gap-3 mt-7">
-        <a href="{{ url_for('web.catalogo') }}" class="bg-arobe-900 hover:bg-arobe-800 text-white font-semibold px-6 py-3 rounded-lg shadow-sm">Ver catálogo →</a>
-        <a href="{{ url_for('web.distribuidores') }}" class="border-2 border-arobe-900 text-arobe-900 hover:bg-arobe-50 font-semibold px-6 py-3 rounded-lg">Soy distribuidor</a>
+        <a href="{{ url_for('web.contacto', tipo='lista_precios') }}" class="bg-arobe-900 hover:bg-arobe-800 text-white font-bold px-6 py-3 rounded-lg shadow-sm">📋 Recibir lista de precios</a>
+        <a href="{{ url_for('quoter.form') }}" class="border-2 border-arobe-900 text-arobe-900 hover:bg-arobe-50 font-bold px-6 py-3 rounded-lg">Cotiza libre de flete</a>
+        <a href="https://wa.me/{{ config.WA_PHONE }}?text=Hola%2C+quiero+cotizar" target="_blank" rel="noopener" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-6 py-3 rounded-lg">💬 WhatsApp</a>
       </div>
       <div class="flex flex-wrap items-center gap-x-6 gap-y-2 mt-8 text-xs text-slate-500">
         <span>✓ Importadores directos</span>
@@ -101,6 +101,42 @@
       <div>
         <div class="font-bold text-arobe-900">Envío nacional</div>
         <div class="text-sm text-slate-600 mt-1">Paquetería y tarima consolidada.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRUST / QUIENES SOMOS ============ -->
+<section class="py-12 bg-white border-y border-slate-200">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="grid md:grid-cols-4 gap-6 text-center md:text-left">
+      <div class="flex md:flex-col items-center md:items-start gap-4 md:gap-2">
+        <div class="text-3xl md:text-4xl">🏭</div>
+        <div>
+          <p class="font-extrabold text-arobe-900">Almacén propio</p>
+          <p class="text-xs text-slate-500 mt-1">Ciudad Victoria, Tamaulipas · CP 87020</p>
+        </div>
+      </div>
+      <div class="flex md:flex-col items-center md:items-start gap-4 md:gap-2">
+        <div class="text-3xl md:text-4xl">📄</div>
+        <div>
+          <p class="font-extrabold text-arobe-900">Empresa constituida</p>
+          <p class="text-xs text-slate-500 mt-1">Distribuciones Arobe S.A.S. de C.V. · CFDI 4.0</p>
+        </div>
+      </div>
+      <div class="flex md:flex-col items-center md:items-start gap-4 md:gap-2">
+        <div class="text-3xl md:text-4xl">✅</div>
+        <div>
+          <p class="font-extrabold text-arobe-900">Producto certificado</p>
+          <p class="text-xs text-slate-500 mt-1">ASTM E84 · Euro Class A1 · ISO 9001</p>
+        </div>
+      </div>
+      <div class="flex md:flex-col items-center md:items-start gap-4 md:gap-2">
+        <div class="text-3xl md:text-4xl">🚚</div>
+        <div>
+          <p class="font-extrabold text-arobe-900">Envíos nacionales</p>
+          <p class="text-xs text-slate-500 mt-1">Paquetería + fletera consolidada + camión dedicado</p>
+        </div>
       </div>
     </div>
   </div>

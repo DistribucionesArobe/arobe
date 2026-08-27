@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Mensaje recibido · Arobe Group{% endblock %}
+{% block robots %}noindex, nofollow{% endblock %}
+
+{% block content %}
+<section class="py-20 bg-slate-50 min-h-[60vh]">
+  <div class="max-w-2xl mx-auto px-4 text-center">
+    <div class="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full grid place-items-center text-5xl mx-auto">✓</div>
+    <h1 class="text-3xl lg:text-4xl font-extrabold text-arobe-900 mt-6">Recibimos tu mensaje, {{ lead.nombre.split(' ')[0] }}</h1>
+    <p class="text-lg text-slate-700 mt-4">
+      Te contactamos por <strong>WhatsApp o correo</strong> en las próximas <strong>24 horas hábiles</strong>.
+    </p>
+    <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 mt-6 inline-block">
+      <p class="text-xs uppercase tracking-widest text-amber-700 font-bold">Folio</p>
+      <p class="text-2xl font-black text-arobe-900 font-mono">#{{ lead.id }}</p>
+    </div>
+    <div class="flex flex-wrap justify-center gap-3 mt-8">
+      <a href="{{ url_for('web.catalogo') }}" class="bg-arobe-900 hover:bg-arobe-800 text-white font-bold px-6 py-3 rounded-lg">Ver catálogo</a>
+      <a href="https://wa.me/{{ config.WA_PHONE }}?text=Hola%2C+envié+solicitud+folio+{{ lead.id }}" target="_blank" rel="noopener" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-6 py-3 rounded-lg">💬 Escríbenos ya</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

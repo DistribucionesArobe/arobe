@@ -7,8 +7,11 @@ from flask import Blueprint, render_template, abort, request, redirect, url_for,
 
 from data import products as catalog
 from data import blog as blog_data
-from models import db, DistributorLead
-from lib.emailer import send_distributor_confirmation, send_distributor_admin
+from models import db, DistributorLead, ContactLead
+from lib.emailer import (
+    send_distributor_confirmation, send_distributor_admin,
+    send_contact_confirmation, send_contact_admin,
+)
 
 log = logging.getLogger("web")
 
@@ -252,7 +255,52 @@ def blog_post(slug):
 
 @web_bp.get("/contacto")
 def contacto():
-    return render_template("coming_soon.html", titulo="Contacto", paso="1.5")
+    tipo = request.args.get("tipo", "").strip() or "general"
+    return render_template("contact.html", page="contacto", tipo_default=tipo)
+
+
+@web_bp.post("/contacto/enviar")
+def contacto_enviar():
+    # Honeypot
+    if request.form.get("website"):
+        return redirect(url_for("web.contacto"))
+
+    nombre = request.form.get("nombre", "").strip()
+    empresa = request.form.get("empresa", "").strip()
+    email = request.form.get("email", "").strip()
+    telefono = request.form.get("telefono", "").strip()
+    ciudad = request.form.get("ciudad", "").strip()
+    producto = request.form.get("producto_interes", "").strip()
+    mensaje = request.form.get("mensaje", "").strip()
+    tipo = request.form.get("tipo", "general").strip() or "general"
+
+    if not (nombre and email and telefono):
+        flash("Faltan datos obligatorios (nombre, email, teléfono)", "error")
+        return redirect(url_for("web.contacto"))
+
+    lead = ContactLead(
+        nombre=nombre, empresa=empresa or None,
+        email=email, telefono=telefono,
+        ciudad=ciudad or None,
+        producto_interes=producto or None,
+        mensaje=mensaje or None,
+        tipo=tipo,
+        ip=request.headers.get("X-Forwarded-For", request.remote_addr or "")[:60],
+    )
+    db.session.add(lead)
+    db.session.commit()
+    log.info("Nuevo contacto: %s (%s) tipo=%s id=%s", nombre, email, tipo, lead.id)
+
+    try:
+        ok, _ = send_contact_confirmation(lead)
+        if ok: lead.email_customer_sent = True
+        ok, _ = send_contact_admin(lead)
+        if ok: lead.email_admin_sent = True
+        db.session.commit()
+    except Exception as e:
+        log.warning("Error enviando emails contacto: %s", e)
+
+    return render_template("contact_thanks.html", page="contacto-gracias", lead=lead)
 
 
 # ============================================================

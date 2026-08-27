@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block title %}Contacto · Solicita lista de precios o muestra | Arobe Group{% endblock %}
+{% block description %}Contáctanos para lista de precios, muestra de producto o cotización. Distribuidor de plafones SusPan y aislantes Insulglass en Ciudad Victoria, Tamaulipas. WhatsApp +52 81 3078 3171.{% endblock %}
+
+{% block content %}
+<section class="bg-arobe-900 text-white py-14">
+  <div class="max-w-5xl mx-auto px-4">
+    <p class="text-xs uppercase tracking-widest text-amber-400 font-bold mb-2">Contacto</p>
+    <h1 class="text-4xl lg:text-5xl font-extrabold">Escríbenos y te respondemos hoy</h1>
+    <p class="text-lg text-slate-300 mt-4 max-w-2xl">
+      Distribuidor mexicano de plafones SusPan y aislantes Insulglass. Envíos desde
+      Ciudad Victoria a toda la República. Factura CFDI 4.0.
+    </p>
+  </div>
+</section>
+
+<section class="py-12 bg-slate-50">
+  <div class="max-w-5xl mx-auto px-4 grid lg:grid-cols-5 gap-8">
+
+    <!-- Info + WhatsApp directo -->
+    <aside class="lg:col-span-2 space-y-6">
+
+      <a href="https://wa.me/{{ config.WA_PHONE }}?text=Hola%2C+quiero+cotizar" target="_blank" rel="noopener" class="block bg-emerald-500 hover:bg-emerald-600 text-white rounded-2xl p-6 transition">
+        <div class="text-4xl">💬</div>
+        <h3 class="font-extrabold text-xl mt-3">Respuesta inmediata por WhatsApp</h3>
+        <p class="text-sm opacity-90 mt-2">Es la forma más rápida. Lunes a sábado 9-18h.</p>
+        <p class="font-bold mt-3">+52 81 3078 3171 →</p>
+      </a>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-6">
+        <h3 class="font-extrabold text-arobe-900">Correo</h3>
+        <p class="text-sm text-slate-600 mt-1">Respuesta en 24h hábiles</p>
+        <a href="mailto:{{ config.EMAIL_VENTAS }}" class="text-arobe-900 font-semibold mt-2 inline-block hover:text-amber-600">{{ config.EMAIL_VENTAS }}</a>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-6">
+        <h3 class="font-extrabold text-arobe-900">Ubicación</h3>
+        <p class="text-sm text-slate-600 mt-1">Almacén e importación</p>
+        <p class="text-arobe-900 font-semibold mt-2">Ciudad Victoria, Tamaulipas</p>
+        <p class="text-xs text-slate-500 mt-1">Envíos desde CP 87020 a toda la República</p>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-6">
+        <h3 class="font-extrabold text-arobe-900">Datos fiscales</h3>
+        <p class="text-sm text-arobe-900 mt-2"><strong>Distribuciones Arobe</strong> S.A.S. de C.V.</p>
+        <p class="text-xs text-slate-500 mt-1">RFC disponible para facturación al momento del pedido · CFDI 4.0</p>
+      </div>
+    </aside>
+
+    <!-- Formulario -->
+    <div class="lg:col-span-3">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for cat, msg in messages %}
+          <div class="mb-4 px-4 py-3 rounded-lg {% if cat == 'error' %}bg-rose-50 text-rose-800 border border-rose-200{% else %}bg-emerald-50 text-emerald-800 border border-emerald-200{% endif %}">{{ msg }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <form method="post" action="{{ url_for('web.contacto_enviar') }}" class="bg-white border border-slate-200 rounded-2xl p-6 lg:p-8">
+        <h2 class="font-extrabold text-arobe-900 text-xl mb-1">Envíanos un mensaje</h2>
+        <p class="text-sm text-slate-600 mb-5">Solo lo esencial. Respondemos en 24h hábiles.</p>
+
+        <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">¿Qué necesitas? *</label>
+            <div class="grid grid-cols-2 gap-2">
+              {% set tipos = [
+                ('lista_precios', '📋 Lista de precios'),
+                ('muestra', '📦 Solicitar muestra'),
+                ('cotizacion', '💰 Cotización'),
+                ('general', '💬 Otra consulta')
+              ] %}
+              {% for value, label in tipos %}
+              <label class="cursor-pointer">
+                <input type="radio" name="tipo" value="{{ value }}" {% if tipo_default == value or (tipo_default == 'general' and loop.last) %}checked{% endif %} class="peer sr-only">
+                <div class="border-2 border-slate-200 rounded-lg p-3 text-sm text-center font-semibold text-slate-700 peer-checked:border-amber-400 peer-checked:bg-amber-50 peer-checked:text-arobe-900 hover:border-slate-300 transition">
+                  {{ label }}
+                </div>
+              </label>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="grid sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Nombre *</label>
+              <input type="text" name="nombre" required class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Empresa</label>
+              <input type="text" name="empresa" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none" placeholder="Ferretería / constructora">
+            </div>
+          </div>
+
+          <div class="grid sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Email *</label>
+              <input type="email" name="email" required class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">WhatsApp *</label>
+              <input type="tel" name="telefono" required class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none" placeholder="+52 ...">
+            </div>
+          </div>
+
+          <div class="grid sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Ciudad</label>
+              <input type="text" name="ciudad" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-1">Producto de interés</label>
+              <input type="text" name="producto_interes" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none" placeholder="MBI, plafones, glasswool...">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Mensaje (opcional)</label>
+            <textarea name="mensaje" rows="3" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none" placeholder="Cantidad aproximada, aplicación, tiempo requerido..."></textarea>
+          </div>
+        </div>
+
+        <button type="submit" class="w-full bg-arobe-900 hover:bg-arobe-800 text-white font-extrabold py-3 rounded-xl mt-6 text-lg">Enviar</button>
+        <p class="text-xs text-slate-500 text-center mt-2">Nunca compartimos tus datos con terceros.</p>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

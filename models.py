@@ -181,3 +181,28 @@ class DistributorLead(db.Model):
             "status": self.status,
             "created_at": self.created_at.isoformat() if self.created_at else None,
         }
+
+
+# ============================================================
+# ContactLead — mensajes del formulario público de contacto
+# ============================================================
+class ContactLead(db.Model):
+    __tablename__ = "contact_leads"
+
+    id = Column(String(12), primary_key=True, default=_gen_id)
+
+    nombre = Column(String(200), nullable=False)
+    empresa = Column(String(200), nullable=True)
+    email = Column(String(200), nullable=False, index=True)
+    telefono = Column(String(40), nullable=False)
+    ciudad = Column(String(120), nullable=True)
+    producto_interes = Column(String(200), nullable=True)
+    mensaje = Column(Text, nullable=True)
+    tipo = Column(String(40), default="general", nullable=False)  # general, lista_precios, muestra, cotizacion
+
+    status = Column(String(20), default="nuevo", nullable=False, index=True)
+    created_at = Column(DateTime(timezone=True), default=_now, nullable=False, index=True)
+    ip = Column(String(60), nullable=True)
+
+    email_customer_sent = Column(Boolean, default=False, nullable=False)
+    email_admin_sent = Column(Boolean, default=False, nullable=False)
