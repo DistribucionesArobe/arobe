@@ -44,16 +44,42 @@
 </script>
 {% endif %}
 
-<!-- Structured Data: Organization -->
+<!-- Structured Data: Organization + LocalBusiness -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "Organization",
+  "@type": ["Organization", "LocalBusiness"],
   "name": "Arobe Group",
-  "alternateName": "Distribuciones Arobe",
+  "alternateName": "Distribuciones Arobe S.A.S. de C.V.",
   "url": "https://arobegroup.com",
   "logo": "https://arobegroup.com{{ url_for('static', filename='img/favicon.svg') }}",
-  "description": "Distribuidor mexicano de materiales para construcción ligera. Casa de las marcas SusPan (paneles) e Insulglass (aislamiento).",
+  "image": "https://arobegroup.com{{ url_for('static', filename='img/og-default.png') }}",
+  "description": "Distribuidor mexicano de materiales para construcción ligera. Casa de las marcas SusPan (plafones y paneles) e Insulglass (aislamiento térmico y acústico). Almacén en Ciudad Victoria, Tamaulipas.",
+  "priceRange": "$$",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Av. Familia Rotaria 510, Col. Adolfo López Mateos",
+    "addressLocality": "Ciudad Victoria",
+    "addressRegion": "Tamaulipas",
+    "postalCode": "87020",
+    "addressCountry": "MX"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "23.7369",
+    "longitude": "-99.1411"
+  },
+  "openingHoursSpecification": [{
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+    "opens": "09:00",
+    "closes": "18:00"
+  }, {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": "Saturday",
+    "opens": "09:00",
+    "closes": "14:00"
+  }],
   "areaServed": {"@type": "Country", "name": "México"},
   "brand": [
     {"@type": "Brand", "name": "SusPan", "description": "Paneles suspendidos: Board, Ceilings, Decor"},
@@ -66,7 +92,8 @@
     "email": "{{ config.EMAIL_VENTAS }}",
     "areaServed": "MX",
     "availableLanguage": "Spanish"
-  }
+  },
+  "sameAs": []
 }
 </script>
 {% block structured_data %}{% endblock %}
@@ -220,6 +247,9 @@ tailwind.config = {
 
         <a href="{{ url_for('web.catalogo') }}" class="hover:text-arobe-700">Catálogo</a>
         <a href="{{ url_for('web.blog_list') }}" class="hover:text-arobe-700">Blog</a>
+        <a href="{{ url_for('quoter.form') }}" class="hover:text-arobe-700 flex items-center gap-1">
+          Cotizador <span class="bg-amber-400 text-arobe-900 text-[9px] font-black uppercase px-1 py-0.5 rounded">B2B</span>
+        </a>
         <a href="{{ url_for('web.distribuidores') }}" class="hover:text-arobe-700">Distribuidores</a>
         <a href="{{ url_for('web.contacto') }}" class="hover:text-arobe-700">Contacto</a>
       </nav>
@@ -285,9 +315,12 @@ tailwind.config = {
         </ul>
       </div>
     </div>
-    <div class="border-t border-white/10 mt-10 pt-6 flex flex-wrap justify-between items-center gap-3 text-xs text-arobe-50/60">
-      <div>© 2026 Distribuciones Arobe · arobegroup.com</div>
-      <div>SusPan® e Insulglass® son marcas registradas de Arobe Group.</div>
+    <div class="border-t border-white/10 mt-10 pt-6 flex flex-wrap justify-between items-start gap-3 text-xs text-arobe-50/60">
+      <div>
+        <p>© 2026 Distribuciones Arobe S.A.S. de C.V. · arobegroup.com</p>
+        <p class="mt-1">Av. Familia Rotaria 510, Col. Adolfo López Mateos · Ciudad Victoria, Tamaulipas · CP 87020</p>
+      </div>
+      <div class="text-right">SusPan® e Insulglass® son marcas registradas de Arobe Group.</div>
     </div>
   </div>
 </footer>
