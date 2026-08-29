@@ -3,7 +3,7 @@
 {% block title %}{{ producto.seo_title or (producto.nombre ~ ' — Arobe Group') }}{% endblock %}
 {% block description %}{{ producto.seo_description or producto.tagline }}{% endblock %}
 {% block og_type %}product{% endblock %}
-{% block og_image %}https://arobegroup.com{{ url_for('static', filename='img/products/' + producto.imagenes[0]) }}{% endblock %}
+{% block og_image %}https://arobe.mx{{ url_for('static', filename='img/products/' + producto.imagenes[0]) }}{% endblock %}
 
 {% block structured_data %}
 <script type="application/ld+json">
@@ -13,7 +13,7 @@
   "name": "{{ producto.nombre }}",
   "description": "{{ producto.descripcion|replace('\n',' ')|replace('"','\\"')|truncate(500, true) }}",
   "image": [
-    {% for img in producto.imagenes %}"https://arobegroup.com{{ url_for('static', filename='img/products/' + img) }}"{% if not loop.last %},{% endif %}{% endfor %}
+    {% for img in producto.imagenes %}"https://arobe.mx{{ url_for('static', filename='img/products/' + img) }}"{% if not loop.last %},{% endif %}{% endfor %}
   ],
   "brand": {
     "@type": "Brand",
@@ -23,7 +23,7 @@
   "category": "{{ producto.tipo }}",
   "offers": {
     "@type": "Offer",
-    "url": "https://arobegroup.com{{ url_for('web.producto', slug=producto.slug) }}",
+    "url": "https://arobe.mx{{ url_for('web.producto', slug=producto.slug) }}",
     "priceCurrency": "MXN",
     "price": "{{ producto.precio_publico }}",
     "availability": "https://schema.org/InStock",
