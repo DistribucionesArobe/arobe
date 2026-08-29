@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 
 from data import products as catalog
 from data import blog as blog_data
+from data import cities as cities_data
 
 seo_bp = Blueprint("seo", __name__)
 
@@ -57,6 +58,8 @@ def sitemap_xml():
         ("/marcas/insulglass/glasswool",   "0.6", "monthly"),
         ("/marcas/insulglass/mbi",         "0.6", "monthly"),
         ("/distribuidores",                "0.8", "weekly"),
+        ("/cotizador",                     "0.8", "weekly"),
+        ("/zonas-cobertura",               "0.8", "monthly"),
         ("/contacto",                      "0.5", "monthly"),
     ]
 
@@ -81,6 +84,18 @@ def sitemap_xml():
             "    <priority>0.8</priority>\n"
             "  </url>"
         )
+
+    # URLs dinámicas de ciudades — 2 variantes por ciudad
+    for city in cities_data.all_cities():
+        for path in [f"/plafones-acusticos-{city['slug']}", f"/aislamiento-{city['slug']}"]:
+            rows.append(
+                "  <url>\n"
+                f"    <loc>{_abs_url(path)}</loc>\n"
+                f"    <lastmod>{today}</lastmod>\n"
+                "    <changefreq>weekly</changefreq>\n"
+                "    <priority>0.75</priority>\n"
+                "  </url>"
+            )
 
     # URLs dinámicas de blog posts
     for post in blog_data.all_posts():
