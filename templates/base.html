@@ -250,6 +250,9 @@ tailwind.config = {
         <a href="{{ url_for('quoter.form') }}" class="hover:text-arobe-700 flex items-center gap-1">
           Cotizador <span class="bg-amber-400 text-arobe-900 text-[9px] font-black uppercase px-1 py-0.5 rounded">B2B</span>
         </a>
+        <a href="{{ url_for('cities.coverage') }}" class="hover:text-arobe-700 flex items-center gap-1">
+          Cobertura <span class="bg-emerald-500 text-white text-[9px] font-black uppercase px-1 py-0.5 rounded">500 km</span>
+        </a>
         <a href="{{ url_for('web.distribuidores') }}" class="hover:text-arobe-700">Distribuidores</a>
         <a href="{{ url_for('web.contacto') }}" class="hover:text-arobe-700">Contacto</a>
       </nav>
@@ -310,6 +313,7 @@ tailwind.config = {
           <li><a href="{{ url_for('web.catalogo') }}" class="hover:text-white">Catálogo</a></li>
           <li><a href="{{ url_for('web.blog_list') }}" class="hover:text-white">Blog técnico</a></li>
           <li><a href="{{ url_for('web.nosotros') }}" class="hover:text-white">Nosotros</a></li>
+          <li><a href="{{ url_for('cities.coverage') }}" class="hover:text-white">Zonas de cobertura</a></li>
           <li><a href="{{ url_for('web.distribuidores') }}" class="hover:text-white">Programa B2B</a></li>
           <li><a href="{{ url_for('web.contacto') }}" class="hover:text-white">Contacto</a></li>
         </ul>
