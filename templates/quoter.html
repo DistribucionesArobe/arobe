@@ -1,0 +1,269 @@
+{% extends "base.html" %}
+
+{% block title %}Cotizador B2B libre de flete · Distribuidores | Arobe Group{% endblock %}
+{% block description %}Simulador de cotización para distribuidores. Ingresa tu CP y calcula precio mayoreo con flete incluido (libre de flete) para plafones SusPan, aislantes Insulglass y GlassBo. Sin login requerido.{% endblock %}
+
+{% block content %}
+<section class="bg-arobe-900 text-white py-14">
+  <div class="max-w-5xl mx-auto px-4">
+    <div class="inline-flex items-center gap-2 bg-amber-400 text-arobe-900 text-xs font-bold px-3 py-1.5 rounded-full mb-4 uppercase tracking-widest">
+      Cotizador B2B · Sin cuenta requerida
+    </div>
+    <h1 class="text-4xl lg:text-5xl font-extrabold leading-tight">Calcula tu precio distribuidor <span class="text-amber-400">libre de flete</span></h1>
+    <p class="text-lg text-slate-300 mt-4 max-w-3xl">
+      Ingresa tu CP, la cantidad que necesitas y el producto — el sistema calcula el
+      envío hasta tu bodega y te da el <strong>precio unitario final con flete incluido</strong>.
+      Sin sorpresas ni cargos ocultos.
+    </p>
+  </div>
+</section>
+
+<section class="py-10 bg-slate-50">
+  <div class="max-w-5xl mx-auto px-4 grid lg:grid-cols-2 gap-8">
+
+    <!-- FORMULARIO -->
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 lg:p-8">
+      <h2 class="text-xl font-extrabold text-arobe-900 mb-5">Datos del pedido</h2>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">Producto *</label>
+          <select id="producto" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none">
+            <option value="">Selecciona…</option>
+            {% for p in productos %}
+            <option value="{{ p.slug }}" data-precio-publico="{{ p.precio_publico }}" data-precio-mayoreo="{{ p.precio_mayoreo }}">
+              {% if p.marca == 'suspan' %}SusPan{% else %}Insulglass{% endif %} · {{ p.nombre }} — mayoreo ${{ "{:,.0f}".format(p.precio_mayoreo) }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">Cantidad de piezas / paquetes / rollos *</label>
+          <input id="cantidad" type="number" min="1" max="9999" value="10" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">CP destino *</label>
+            <input id="zip" type="text" maxlength="5" pattern="[0-9]{5}" value="{{ request.args.get('zip', '') }}" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none" placeholder="64000">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Ciudad</label>
+            <input id="ciudad" type="text" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none" placeholder="Monterrey">
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1">Estado</label>
+          <input id="estado" type="text" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none" placeholder="Nuevo León">
+        </div>
+
+        <button id="calcular-btn" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold py-3 rounded-xl text-lg">
+          Calcular precio libre de flete
+        </button>
+        <p class="text-xs text-slate-500 text-center">Cotización estimada · sujeta a confirmación por WhatsApp</p>
+      </div>
+    </div>
+
+    <!-- RESULTADO -->
+    <div>
+      <div id="cotizacion-empty" class="bg-slate-100 border border-dashed border-slate-300 rounded-2xl p-8 text-center">
+        <div class="text-5xl mb-3">📦</div>
+        <p class="text-slate-500">Llena los datos para calcular tu cotización</p>
+      </div>
+
+      <div id="cotizacion-loading" class="hidden bg-white border border-slate-200 rounded-2xl p-8 text-center">
+        <div class="animate-spin w-8 h-8 border-4 border-amber-400 border-t-transparent rounded-full mx-auto mb-3"></div>
+        <p class="text-slate-600">Calculando flete en vivo…</p>
+      </div>
+
+      <div id="cotizacion-error" class="hidden bg-rose-50 border border-rose-200 rounded-2xl p-6 text-rose-900">
+        <p id="cotizacion-error-msg" class="font-semibold"></p>
+      </div>
+
+      <div id="cotizacion-result" class="hidden bg-white border-2 border-amber-400 rounded-2xl p-6 lg:p-8">
+        <div id="result-badge-preferente" class="hidden mb-3">
+          <span class="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
+            <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+            <span id="result-badge-text">Zona preferente</span>
+          </span>
+        </div>
+        <div id="result-badge-nacional" class="hidden mb-3">
+          <span class="inline-flex items-center gap-2 bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
+            🌐 Cobertura nacional · 3-7 días
+          </span>
+        </div>
+        <p class="text-xs uppercase tracking-widest text-amber-600 font-bold mb-2">Tu cotización</p>
+        <h3 id="result-producto-nombre" class="text-2xl font-extrabold text-arobe-900"></h3>
+        <p class="text-sm text-slate-600 mt-1">
+          <span id="result-cantidad"></span> unidades ·
+          <span id="result-destino"></span>
+        </p>
+
+        <div class="mt-6 space-y-3 text-sm">
+          <div class="flex justify-between border-b border-slate-100 pb-2">
+            <span class="text-slate-600">Precio distribuidor por unidad</span>
+            <span id="result-precio-mayoreo" class="font-semibold text-arobe-900"></span>
+          </div>
+          <div class="flex justify-between border-b border-slate-100 pb-2">
+            <span class="text-slate-600">Subtotal producto</span>
+            <span id="result-subtotal" class="font-semibold text-arobe-900"></span>
+          </div>
+          <div class="flex justify-between border-b border-slate-100 pb-2">
+            <span class="text-slate-600">Flete (<span id="result-carrier"></span>)</span>
+            <span id="result-flete" class="font-semibold text-arobe-900"></span>
+          </div>
+          <div class="flex justify-between text-xs text-slate-500 italic">
+            <span>Peso total del pedido: <span id="result-peso"></span></span>
+            <span>Entrega: <span id="result-dias"></span></span>
+          </div>
+        </div>
+
+        <!-- El highlight visual -->
+        <div class="bg-gradient-to-br from-amber-400 to-amber-500 text-arobe-900 rounded-xl p-6 mt-6">
+          <p class="text-xs font-bold uppercase tracking-widest">Precio libre de flete por unidad</p>
+          <p id="result-precio-libre-flete" class="text-4xl lg:text-5xl font-black mt-2"></p>
+          <p class="text-sm mt-2 opacity-80">Total del pedido: <strong id="result-total-pedido"></strong></p>
+          <p id="result-vs-publico" class="text-xs mt-2 opacity-90"></p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-3 mt-6">
+          <a id="result-whatsapp-btn" href="#" target="_blank" rel="noopener" class="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white text-center font-bold py-3 rounded-xl">
+            💬 Solicitar cotización oficial
+          </a>
+          <a href="{{ url_for('web.distribuidores') }}" class="flex-1 border-2 border-arobe-900 text-arobe-900 hover:bg-slate-100 text-center font-bold py-3 rounded-xl">
+            Aplicar como distribuidor
+          </a>
+        </div>
+
+        <p class="text-xs text-slate-500 mt-4 leading-relaxed">
+          Esta cotización es un cálculo automático con tarifas de mercado. El precio final
+          puede ajustarse por promociones, condiciones especiales de pago o volumen. Confirmamos
+          por WhatsApp antes de despachar.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-12 bg-white border-t border-slate-200">
+  <div class="max-w-4xl mx-auto px-4 text-center">
+    <h2 class="text-2xl font-extrabold text-arobe-900">¿Cómo funciona?</h2>
+    <p class="text-slate-600 mt-3">Sin cuentas, sin login. Solo 3 pasos.</p>
+    <div class="grid sm:grid-cols-3 gap-6 mt-8">
+      <div>
+        <div class="w-12 h-12 bg-arobe-900 text-white rounded-full grid place-items-center font-black text-xl mx-auto">1</div>
+        <h3 class="font-bold text-arobe-900 mt-3">Elige producto y cantidad</h3>
+        <p class="text-sm text-slate-600 mt-1">Todos los productos disponibles en mayoreo aparecen en la lista.</p>
+      </div>
+      <div>
+        <div class="w-12 h-12 bg-arobe-900 text-white rounded-full grid place-items-center font-black text-xl mx-auto">2</div>
+        <h3 class="font-bold text-arobe-900 mt-3">Ingresa tu CP destino</h3>
+        <p class="text-sm text-slate-600 mt-1">El sistema calcula flete real desde Victoria hasta tu bodega usando paqueterías/fleteras conectadas.</p>
+      </div>
+      <div>
+        <div class="w-12 h-12 bg-arobe-900 text-white rounded-full grid place-items-center font-black text-xl mx-auto">3</div>
+        <h3 class="font-bold text-arobe-900 mt-3">Ves tu precio final</h3>
+        <p class="text-sm text-slate-600 mt-1">Precio por unidad con flete prorrateado. Sabes exactamente cuánto pagarás.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function() {
+  const $ = (id) => document.getElementById(id);
+  const btn = $("calcular-btn");
+  const empty = $("cotizacion-empty");
+  const loading = $("cotizacion-loading");
+  const errorBox = $("cotizacion-error");
+  const errorMsg = $("cotizacion-error-msg");
+  const result = $("cotizacion-result");
+
+  const fmt = (n) => "$" + Number(n).toLocaleString("es-MX", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+  function showState(state) {
+    empty.classList.toggle("hidden", state !== "empty");
+    loading.classList.toggle("hidden", state !== "loading");
+    errorBox.classList.toggle("hidden", state !== "error");
+    result.classList.toggle("hidden", state !== "result");
+  }
+
+  btn.addEventListener("click", async () => {
+    const slug = $("producto").value;
+    const cantidad = parseInt($("cantidad").value || "0");
+    const zip = $("zip").value.replace(/\D/g,"").slice(0,5);
+    const ciudad = $("ciudad").value.trim();
+    const estado = $("estado").value.trim();
+
+    if (!slug) { showState("error"); errorMsg.textContent = "Selecciona un producto"; return; }
+    if (cantidad < 1) { showState("error"); errorMsg.textContent = "Ingresa una cantidad válida"; return; }
+    if (zip.length !== 5) { showState("error"); errorMsg.textContent = "CP debe ser de 5 dígitos"; return; }
+
+    showState("loading");
+
+    const params = new URLSearchParams({
+      slug, cantidad: String(cantidad), zip, ciudad, estado
+    });
+    try {
+      const r = await fetch("/api/cotizar?" + params.toString());
+      if (!r.ok) {
+        const err = await r.json().catch(() => ({error: "Error " + r.status}));
+        showState("error");
+        errorMsg.textContent = err.error || "Error inesperado";
+        return;
+      }
+      const data = await r.json();
+
+      // Badge de zona preferente
+      const badgePref = $("result-badge-preferente");
+      const badgeNac = $("result-badge-nacional");
+      const badgeText = $("result-badge-text");
+      badgePref.classList.add("hidden"); badgeNac.classList.add("hidden");
+      if (data.zona_preferente) {
+        badgePref.classList.remove("hidden");
+        if (data.ciudad_preferente) {
+          badgeText.textContent = `Zona preferente · ${data.ciudad_preferente.nombre} (${data.ciudad_preferente.km_desde_victoria} km) · entrega ${data.ciudad_preferente.tiempo_entrega}`;
+        } else {
+          badgeText.textContent = "Zona preferente · entrega 24-48h";
+        }
+      } else {
+        badgeNac.classList.remove("hidden");
+      }
+
+      // Llenar resultados
+      $("result-producto-nombre").textContent = data.producto.nombre;
+      $("result-cantidad").textContent = data.cantidad;
+      $("result-destino").textContent = (data.ciudad || "CP " + data.zip) + (data.estado ? ", " + data.estado : "");
+      $("result-precio-mayoreo").textContent = fmt(data.calculo.precio_mayoreo_unitario);
+      $("result-subtotal").textContent = fmt(data.calculo.subtotal_producto);
+      $("result-flete").textContent = fmt(data.calculo.flete_total);
+      $("result-carrier").textContent = data.shipping.carrier + (data.shipping.service ? " · " + data.shipping.service : "");
+      $("result-peso").textContent = data.peso_total_kg + " kg";
+      $("result-dias").textContent = (data.shipping.days ? (typeof data.shipping.days === 'number' ? data.shipping.days + " días" : data.shipping.days) : "3-5 días");
+      $("result-precio-libre-flete").textContent = fmt(data.calculo.precio_libre_flete_unitario);
+      $("result-total-pedido").textContent = fmt(data.calculo.total_pedido_libre_flete);
+      const ahorroPct = data.calculo.vs_precio_publico_ahorro_pct;
+      $("result-vs-publico").textContent = ahorroPct > 0
+        ? `Ahorro vs precio público: ${ahorroPct}% (público $${data.producto.precio_publico}/unidad)`
+        : `Precio público: $${data.producto.precio_publico}/unidad`;
+
+      // WhatsApp CTA
+      const waText = encodeURIComponent(
+        `Hola, soy distribuidor y quiero confirmar cotización de ${data.cantidad} × ${data.producto.nombre} `
+        + `a CP ${data.zip} (${data.ciudad || ''} ${data.estado || ''}) · `
+        + `precio calculado libre de flete: ${fmt(data.calculo.precio_libre_flete_unitario)}/unidad · `
+        + `total ${fmt(data.calculo.total_pedido_libre_flete)}.`
+      );
+      $("result-whatsapp-btn").href = "https://wa.me/{{ config.WA_PHONE }}?text=" + waText;
+
+      showState("result");
+    } catch (e) {
+      console.error(e);
+      showState("error");
+      errorMsg.textContent = "No pudimos calcular la cotización. Intenta de nuevo.";
+    }
+  });
+})();
+</script>
+{% endblock %}
