@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}{{ variant_title }} · Distribuidor {{ variant_marca }} | Arobe Group{% endblock %}
+{% block description %}{{ variant_marca }} · {{ variant_keyword }} en {{ city.nombre }}, {{ city.estado }}. Distribuidor con almacén en Ciudad Victoria a {{ city.km_desde_victoria }} km · entrega en {{ city.tiempo_entrega }} · precios mayoreo para ferreterías, constructoras y contratistas. Factura CFDI 4.0.{% endblock %}
+
+{% block content %}
+
+<!-- ============ HERO ============ -->
+<section class="bg-arobe-900 text-white relative overflow-hidden">
+  <div class="absolute inset-0 grid-bg opacity-10"></div>
+  <div class="relative max-w-6xl mx-auto px-4 py-14 lg:py-20">
+    <div class="inline-flex items-center gap-2 bg-emerald-500 text-white text-xs font-bold px-3 py-1.5 rounded-full mb-6 uppercase tracking-widest">
+      <span class="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+      Zona preferente · Entrega {{ city.tiempo_entrega }}
+    </div>
+    <h1 class="text-4xl lg:text-5xl font-extrabold leading-[1.1]">
+      {{ variant_title }}
+    </h1>
+    <p class="text-lg text-slate-300 mt-4 max-w-3xl">
+      Distribuidor mexicano de {{ variant_marca }} con almacén en Ciudad Victoria a solo
+      <strong class="text-amber-400">{{ city.km_desde_victoria }} km</strong> de {{ city.nombre }}.
+      Precios mayoreo para ferreterías, constructoras y contratistas.
+      Entrega en <strong class="text-amber-400">{{ city.tiempo_entrega }}</strong> con
+      factura CFDI 4.0.
+    </p>
+    <div class="flex flex-wrap gap-3 mt-8">
+      <a href="{{ url_for('quoter.form') }}?zip={{ city.cp_ejemplo }}" class="bg-amber-400 hover:bg-amber-500 text-arobe-900 font-extrabold px-6 py-3 rounded-lg">Cotiza libre de flete a {{ city.nombre }} →</a>
+      <a href="https://wa.me/{{ config.WA_PHONE }}?text=Hola%2C+necesito+{{ variant_keyword|urlencode }}+en+{{ city.nombre|urlencode }}" target="_blank" rel="noopener" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-6 py-3 rounded-lg">💬 WhatsApp</a>
+    </div>
+    <div class="flex flex-wrap gap-x-6 gap-y-2 mt-8 text-xs text-slate-400">
+      <span>✓ Metro {{ city.nombre }}: {{ city.poblacion_metro }} habitantes</span>
+      <span>✓ {{ city.industria_destacada }}</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ POR QUÉ AROBE PARA ESTA CIUDAD ============ -->
+<section class="py-14 bg-white">
+  <div class="max-w-5xl mx-auto px-4">
+    <p class="text-xs uppercase tracking-widest text-amber-600 font-bold text-center mb-2">Ventaja logística</p>
+    <h2 class="text-3xl font-extrabold text-arobe-900 text-center">¿Por qué comprar {{ variant_marca }} desde Victoria a {{ city.nombre }}?</h2>
+
+    <div class="grid md:grid-cols-3 gap-6 mt-10">
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6">
+        <div class="w-12 h-12 bg-emerald-500 text-white rounded-xl grid place-items-center text-2xl">🚚</div>
+        <h3 class="font-bold text-arobe-900 mt-4">Camión dedicado {{ city.km_desde_victoria }} km</h3>
+        <p class="text-sm text-slate-600 mt-2">
+          Nuestro camión seca de 25 toneladas cubre Ciudad Victoria → {{ city.nombre }}
+          en ida-vuelta el mismo día. Flete económico y sin escalas.
+        </p>
+      </div>
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6">
+        <div class="w-12 h-12 bg-amber-400 text-arobe-900 rounded-xl grid place-items-center text-2xl">📦</div>
+        <h3 class="font-bold text-arobe-900 mt-4">Stock disponible</h3>
+        <p class="text-sm text-slate-600 mt-2">
+          Importadores directos. No dependemos de proveedor intermedio que corte
+          el stock. Salida desde nuestro almacén el mismo día que confirmas pago.
+        </p>
+      </div>
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6">
+        <div class="w-12 h-12 bg-blue-600 text-white rounded-xl grid place-items-center text-2xl">🎯</div>
+        <h3 class="font-bold text-arobe-900 mt-4">Ideal para {{ city.nombre }}</h3>
+        <p class="text-sm text-slate-600 mt-2">{{ city.industria_destacada }}. Nuestros productos {{ variant_marca }} están calibrados para las necesidades típicas de esta zona.</p>
+      </div>
+    </div>
+
+    {% if city.areas_conurbadas %}
+    <div class="bg-arobe-900 text-white rounded-2xl p-6 mt-8">
+      <p class="text-xs uppercase tracking-widest text-amber-400 font-bold mb-2">También servimos el área metropolitana</p>
+      <p class="text-lg">
+        {% for zona in city.areas_conurbadas %}<span class="inline-block bg-white/10 rounded-full px-3 py-1 mr-2 mb-2 text-sm">{{ zona }}</span>{% endfor %}
+      </p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- ============ PRODUCTOS DISPONIBLES ============ -->
+<section class="py-14 bg-slate-50 border-y border-slate-200">
+  <div class="max-w-6xl mx-auto px-4">
+    <p class="text-xs uppercase tracking-widest text-amber-600 font-bold text-center mb-2">Catálogo disponible</p>
+    <h2 class="text-3xl font-extrabold text-arobe-900 text-center">{{ variant_marca }} para {{ city.nombre }}</h2>
+    <p class="text-slate-600 text-center mt-3">Todos con precio distribuidor y envío calculado a tu CP.</p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
+      {% for p in productos %}
+      <a href="{{ url_for('web.producto', slug=p.slug) }}"
+         class="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all">
+        <div class="aspect-square bg-slate-100 overflow-hidden">
+          <img src="{{ url_for('static', filename='img/products/' + p.imagenes[0]) }}"
+               alt="{{ p.seo_image_alt or p.nombre }} en {{ city.nombre }}"
+               loading="lazy"
+               class="w-full h-full object-cover group-hover:scale-105 transition-transform"
+               onerror="this.style.display='none'">
+        </div>
+        <div class="p-5">
+          {% if p.marca == 'suspan' %}
+            <span class="inline-block text-[10px] font-bold tracking-widest uppercase bg-amber-400 text-black px-2 py-0.5 rounded">SusPan</span>
+          {% else %}
+            <span class="inline-block text-[10px] font-bold tracking-widest uppercase bg-blue-600 text-white px-2 py-0.5 rounded">Insulglass</span>
+          {% endif %}
+          <h3 class="text-lg font-bold text-arobe-900 mt-2 group-hover:text-amber-600">{{ p.nombre }}</h3>
+          <p class="text-sm text-slate-600 mt-1 line-clamp-2">{{ p.tagline }}</p>
+          <p class="text-xl font-extrabold text-arobe-900 mt-3">${{ "{:,.0f}".format(p.precio_publico) }}<span class="text-xs font-normal text-slate-500"> MXN</span></p>
+          <p class="text-xs text-emerald-600 font-semibold mt-1">Cotiza libre de flete a {{ city.nombre }} →</p>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+
+    <p class="text-center text-slate-500 text-sm mt-8">
+      También manejamos {% if variant == 'plafones' %}<a href="{{ url_for('cities.aislamiento_ciudad', slug=city.slug) }}" class="text-amber-600 font-semibold hover:underline">aislamiento Insulglass en {{ city.nombre }}</a>{% else %}<a href="{{ url_for('cities.plafones_ciudad', slug=city.slug) }}" class="text-amber-600 font-semibold hover:underline">plafones SusPan en {{ city.nombre }}</a>{% endif %}
+    </p>
+  </div>
+</section>
+
+<!-- ============ APLICACIONES TÍPICAS EN LA CIUDAD ============ -->
+<section class="py-14 bg-white">
+  <div class="max-w-3xl mx-auto px-4">
+    <p class="text-xs uppercase tracking-widest text-amber-600 font-bold text-center mb-2">Aplicaciones frecuentes</p>
+    <h2 class="text-3xl font-extrabold text-arobe-900 text-center">Lo que compran en {{ city.nombre }}</h2>
+    <div class="mt-8 space-y-3">
+      {% for gancho in city.productos_gancho %}
+      <div class="flex items-start gap-3 bg-slate-50 border border-slate-200 rounded-xl p-4">
+        <span class="text-amber-500 text-2xl leading-none">✓</span>
+        <p class="text-slate-700 font-semibold">{{ gancho }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA FINAL ============ -->
+<section class="py-14 bg-arobe-900 text-white">
+  <div class="max-w-3xl mx-auto px-4 text-center">
+    <h2 class="text-3xl font-extrabold">¿Ferretería o constructora en {{ city.nombre }}?</h2>
+    <p class="text-slate-300 mt-3 text-lg">
+      Solicita lista de precios distribuidor y muestra de {{ variant_marca }} para tu proyecto.
+      Sin cuota mensual, sin compromiso anual.
+    </p>
+    <div class="flex flex-wrap justify-center gap-3 mt-7">
+      <a href="{{ url_for('web.contacto', tipo='lista_precios') }}" class="bg-amber-400 hover:bg-amber-500 text-arobe-900 font-extrabold px-6 py-3 rounded-lg">📋 Recibir lista de precios</a>
+      <a href="{{ url_for('quoter.form') }}?zip={{ city.cp_ejemplo }}" class="border-2 border-white/40 text-white hover:bg-white/10 font-bold px-6 py-3 rounded-lg">Cotizador libre de flete</a>
+      <a href="https://wa.me/{{ config.WA_PHONE }}?text=Hola%2C+necesito+{{ variant_keyword|urlencode }}+en+{{ city.nombre|urlencode }}" target="_blank" rel="noopener" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-6 py-3 rounded-lg">💬 WhatsApp</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
