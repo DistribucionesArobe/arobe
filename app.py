@@ -31,7 +31,7 @@ def create_app():
     # ---- Config ----
     app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-change-me-in-prod")
     app.config["COMPANY_NAME"] = "Arobe Group"
-    app.config["COMPANY_DOMAIN"] = "arobegroup.com"
+    app.config["COMPANY_DOMAIN"] = "arobe.mx"
     app.config["WA_PHONE"] = os.environ.get("WA_PHONE", "525500000000")
     app.config["EMAIL_VENTAS"] = os.environ.get("EMAIL_VENTAS", "ventas@arobegroup.com")
     # Google Analytics 4 — si está set, se inyecta el snippet en todas las páginas
