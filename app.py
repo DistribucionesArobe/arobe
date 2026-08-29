@@ -66,11 +66,15 @@ def create_app():
     from routes.checkout import checkout_bp
     from routes.seo import seo_bp
     from routes.admin import admin_bp
+    from routes.quoter import quoter_bp
+    from routes.cities import cities_bp
     app.register_blueprint(web_bp)
     app.register_blueprint(cart_bp)
     app.register_blueprint(checkout_bp)
     app.register_blueprint(seo_bp)
     app.register_blueprint(admin_bp)
+    app.register_blueprint(quoter_bp)
+    app.register_blueprint(cities_bp)
 
     # ---- Globals expuestos a Jinja ----
     @app.context_processor
