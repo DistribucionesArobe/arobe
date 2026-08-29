@@ -20,7 +20,7 @@ def _api_key():
 
 def _from():
     # Resend requiere que el dominio esté verificado.
-    # arobegroup.com ya tiene DKIM (resend._domainkey).
+    # arobe.mx ya tiene DKIM (resend._domainkey).
     return os.environ.get("EMAIL_FROM", "Arobe Group <pedidos@arobegroup.com>")
 
 
@@ -117,7 +117,7 @@ def _wrapper(title, body):
     </div>
     <div style="background:#0a1a2e;color:#9ab3d4;padding:20px;text-align:center;font-size:12px">
       <p style="margin:0">SusPan® · Insulglass® son marcas registradas de Arobe Group.</p>
-      <p style="margin:8px 0 0">© 2026 Distribuciones Arobe · arobegroup.com</p>
+      <p style="margin:8px 0 0">© 2026 Distribuciones Arobe · arobe.mx</p>
     </div>
   </div>
 </body>
@@ -196,7 +196,7 @@ def send_distributor_confirmation(lead):
 
       <h3 style="color:#0a1a2e;margin-top:32px">Mientras nos contactamos, revisa nuestro catálogo</h3>
       <p>
-        <a href="https://arobegroup.com/catalogo" style="display:inline-block;background:#0a1a2e;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:700;margin-right:8px">Ver catálogo</a>
+        <a href="https://arobe.mx/catalogo" style="display:inline-block;background:#0a1a2e;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:700;margin-right:8px">Ver catálogo</a>
         <a href="https://wa.me/{os.environ.get('WA_PHONE','528130783171')}?text=Hola%2C+soy+distribuidor+registrado+folio+{lead.id}" style="display:inline-block;background:#10b981;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:700">💬 Escríbenos por WhatsApp</a>
       </p>
 
@@ -239,7 +239,7 @@ def send_distributor_admin(lead):
       {f'<div style="background:#f8fafc;border-radius:8px;padding:12px;margin:12px 0"><strong>Notas:</strong><br>{lead.notas}</div>' if lead.notas else ''}
 
       <p style="margin-top:32px">
-        <a href="https://arobegroup.com/admin/distribuidores/{lead.id}" style="display:inline-block;background:#0a1a2e;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:700">Ver en admin</a>
+        <a href="https://arobe.mx/admin/distribuidores/{lead.id}" style="display:inline-block;background:#0a1a2e;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:700">Ver en admin</a>
       </p>
 
       <p style="margin-top:24px;font-size:13px;color:#64748b">
