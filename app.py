@@ -89,6 +89,15 @@ def create_app():
     def healthz():
         return {"ok": True}, 200
 
+    # ---- 301 redirect: arobegroup.com -> arobe.mx (SEO + branding) ----
+    from flask import request, redirect
+    @app.before_request
+    def redirect_legacy_domain():
+        host = request.host.lower().replace("www.", "")
+        if host == "arobegroup.com":
+            new_url = f"https://arobe.mx{request.full_path.rstrip('?')}"
+            return redirect(new_url, code=301)
+
     return app
 
 
