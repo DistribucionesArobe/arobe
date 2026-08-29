@@ -12,7 +12,7 @@ Y aparece en la página /zonas-cobertura como zona preferente.
 # Radio de cobertura preferente (km desde Victoria)
 RADIO_PREFERENTE_KM = 500
 
-# 7 ciudades objetivo (~10M personas en cobertura preferente)
+# 11 ciudades objetivo (~11M personas en cobertura preferente)
 CITIES = [
     {
         "slug": "monterrey",
@@ -90,6 +90,58 @@ CITIES = [
         "industria_destacada": "Aduana + logística · centros de distribución · residencial",
         "productos_gancho": ["MBI centros de distribución", "Plafones oficinas aduanales", "Glasswool oficinas"],
         "areas_conurbadas": [],
+        "tiempo_entrega": "24-48 horas",
+    },
+    {
+        "slug": "monclova",
+        "nombre": "Monclova",
+        "estado": "Coahuila",
+        "estado_slug": "coahuila",
+        "cp_ejemplo": "25700",
+        "km_desde_victoria": 400,
+        "poblacion_metro": "380 mil",
+        "industria_destacada": "Capital del acero mexicano · AHMSA · industria pesada y metalmecánica",
+        "productos_gancho": ["MBI para naves industriales y siderúrgicas", "Aislamiento térmico para procesos de alta temperatura", "Plafones oficinas administrativas"],
+        "areas_conurbadas": ["Frontera", "Castaños", "Nadadores"],
+        "tiempo_entrega": "24-48 horas",
+    },
+    {
+        "slug": "piedras-negras",
+        "nombre": "Piedras Negras",
+        "estado": "Coahuila",
+        "estado_slug": "coahuila",
+        "cp_ejemplo": "26000",
+        "km_desde_victoria": 430,
+        "poblacion_metro": "250 mil",
+        "industria_destacada": "Frontera con Eagle Pass TX · maquilas · logística binacional",
+        "productos_gancho": ["MBI para maquilas y bodegas", "Glasswool para muros interiores", "Plafones oficinas aduanales"],
+        "areas_conurbadas": ["Nava"],
+        "tiempo_entrega": "24-48 horas",
+    },
+    {
+        "slug": "ciudad-acuna",
+        "nombre": "Ciudad Acuña",
+        "estado": "Coahuila",
+        "estado_slug": "coahuila",
+        "cp_ejemplo": "26200",
+        "km_desde_victoria": 450,
+        "poblacion_metro": "140 mil",
+        "industria_destacada": "Frontera con Del Rio TX · maquilas electrónicas y automotrices",
+        "productos_gancho": ["MBI para maquilas", "Aislamiento térmico bodegas", "Plafones acústicos oficinas"],
+        "areas_conurbadas": [],
+        "tiempo_entrega": "24-48 horas",
+    },
+    {
+        "slug": "poza-rica",
+        "nombre": "Poza Rica",
+        "estado": "Veracruz",
+        "estado_slug": "veracruz",
+        "cp_ejemplo": "93230",
+        "km_desde_victoria": 350,
+        "poblacion_metro": "500 mil",
+        "industria_destacada": "Industria petrolera Pemex · clima cálido húmedo · residencial y comercial",
+        "productos_gancho": ["MBI clave por clima cálido húmedo (ahorro A/C)", "Glasswool oficinas y hoteles", "Plafones humedad-resistentes"],
+        "areas_conurbadas": ["Coatzintla", "Tihuatlán"],
         "tiempo_entrega": "24-48 horas",
     },
     {
