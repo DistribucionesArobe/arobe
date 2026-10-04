@@ -1,0 +1,82 @@
+{% extends "dealers/_base.html" %}
+
+{% block title %}Private-Label Manufacturing — Ceiling Tiles & Insulation (Mexico) | Arobe Group{% endblock %}
+{% block description %}Build your own brand of acoustic ceiling tiles, PVC panels and fiberglass insulation. Private-label manufacturing from Arobe Group's Mexican factory. Your carton, your spec sheet, our factory. 2 truckload minimum to qualify.{% endblock %}
+
+{% block content %}
+<section class="bg-arobe-900 text-white py-16">
+  <div class="max-w-5xl mx-auto px-4">
+    <div class="inline-flex items-center gap-2 bg-amber-400 text-arobe-900 text-xs font-bold px-3 py-1.5 rounded-full mb-4 uppercase tracking-widest">Private label · White label</div>
+    <h1 class="text-4xl lg:text-5xl font-extrabold leading-tight max-w-3xl">
+      Your brand on <span class="text-amber-400">our factory floor</span>.
+    </h1>
+    <p class="text-lg text-slate-300 mt-5 max-w-3xl">
+      Sell acoustic ceiling tiles, PVC panels or fiberglass insulation under your own brand — manufactured by
+      Arobe Group in Mexico. Available after a dealer purchases <b class="text-white">{{ terms.private_label_min_truckloads }} truckloads</b> of Arobe-branded product.
+    </p>
+    <div class="flex gap-3 mt-7">
+      <a href="/dealer-program#apply" class="bg-amber-400 text-arobe-900 font-extrabold px-6 py-3 rounded-lg">Apply to qualify →</a>
+    </div>
+  </div>
+</section>
+
+<section class="py-16 bg-white">
+  <div class="max-w-5xl mx-auto px-4">
+    <h2 class="text-2xl font-extrabold text-arobe-900 mb-10 text-center">What we private-label</h2>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div class="bg-slate-50 rounded-xl p-6 border border-slate-100">
+        <div class="font-bold text-arobe-900 text-lg mb-2">✓ Carton & packaging</div>
+        <p class="text-sm text-slate-700">Your brand name, logo, SKU codes and barcodes printed on master cartons and individual packaging.</p>
+      </div>
+      <div class="bg-slate-50 rounded-xl p-6 border border-slate-100">
+        <div class="font-bold text-arobe-900 text-lg mb-2">✓ Product spec sheets</div>
+        <p class="text-sm text-slate-700">White-label PDF spec sheets with your brand, co-authored with our engineering team. ASTM-compliant data preserved.</p>
+      </div>
+      <div class="bg-slate-50 rounded-xl p-6 border border-slate-100">
+        <div class="font-bold text-arobe-900 text-lg mb-2">✓ Marketing kit</div>
+        <p class="text-sm text-slate-700">Hi-res product photography, line-art renders, cross-section diagrams. Your brand, our product knowledge.</p>
+      </div>
+      <div class="bg-slate-50 rounded-xl p-6 border border-slate-100">
+        <div class="font-bold text-arobe-900 text-lg mb-2">✓ Product customization</div>
+        <p class="text-sm text-slate-700">Custom tile edge profiles, panel dimensions, facing selection on MBI. MOQ applies per custom SKU.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bg-slate-50 py-16">
+  <div class="max-w-5xl mx-auto px-4">
+    <h2 class="text-2xl font-extrabold text-arobe-900 mb-6">How private label works at Arobe</h2>
+    <ol class="space-y-4 text-sm">
+      <li class="bg-white rounded-xl p-5 border border-slate-100">
+        <div class="font-bold text-arobe-900">1. Qualify as a dealer</div>
+        <div class="text-slate-700">Complete {{ terms.private_label_min_truckloads }} truckloads under the Arobe brand. This validates your market, logistics and payment behavior.</div>
+      </li>
+      <li class="bg-white rounded-xl p-5 border border-slate-100">
+        <div class="font-bold text-arobe-900">2. Define the SKU list</div>
+        <div class="text-slate-700">Pick which products carry your brand (full line or sub-set). Define sizes, facings, finishes.</div>
+      </li>
+      <li class="bg-white rounded-xl p-5 border border-slate-100">
+        <div class="font-bold text-arobe-900">3. Approve artwork</div>
+        <div class="text-slate-700">Send us logo + brand guidelines. We produce carton artwork in 2 weeks. You approve.</div>
+      </li>
+      <li class="bg-white rounded-xl p-5 border border-slate-100">
+        <div class="font-bold text-arobe-900">4. First private-label production run</div>
+        <div class="text-slate-700">MOQ: 1 full truckload per private-label SKU. Lead time: 21 days (+ 7 days vs. standard SKUs).</div>
+      </li>
+      <li class="bg-white rounded-xl p-5 border border-slate-100">
+        <div class="font-bold text-arobe-900">5. Ongoing production</div>
+        <div class="text-slate-700">Monthly or quarterly reorders. We hold your custom carton stock for 6 months.</div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="bg-white py-16">
+  <div class="max-w-5xl mx-auto px-4 text-center">
+    <h2 class="text-2xl font-extrabold text-arobe-900 mb-3">Build your brand with factory-direct economics</h2>
+    <p class="text-slate-600 mb-6 max-w-2xl mx-auto">Apply to the dealer program first. Once you're a qualified dealer, we open the private-label conversation.</p>
+    <a href="/dealer-program#apply" class="inline-block bg-amber-400 hover:bg-amber-500 text-arobe-900 font-extrabold px-8 py-4 rounded-lg text-base">Apply as dealer →</a>
+  </div>
+</section>
+{% endblock %}

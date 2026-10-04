@@ -10,6 +10,9 @@
 
 <!-- Canonical -->
 <link rel="canonical" href="https://arobe.mx{{ request.path }}">
+<link rel="alternate" hreflang="es-mx" href="https://arobe.mx{{ request.path }}">
+<link rel="alternate" hreflang="en-us" href="https://arobe.mx/dealer-program">
+<link rel="alternate" hreflang="x-default" href="https://arobe.mx/">
 
 <!-- Open Graph -->
 <meta property="og:site_name" content="Arobe Group">
@@ -258,6 +261,10 @@ tailwind.config = {
       </nav>
 
       <div class="flex items-center gap-2">
+        <!-- US Dealers pill -->
+        <a href="/dealer-program" class="hidden md:inline-flex items-center gap-1.5 bg-arobe-900 hover:bg-arobe-700 text-white font-bold text-xs px-3 py-2 rounded-full transition" title="US & Canada Dealer Program (English)">
+          <span>🇺🇸</span><span>US Dealers</span>
+        </a>
         <!-- Mini carrito -->
         <a href="{{ url_for('cart.view') }}" class="relative text-arobe-900 hover:text-amber-600 px-3 py-2 rounded flex items-center gap-1.5" title="Ver carrito">
           <span class="text-xl">🛒</span>

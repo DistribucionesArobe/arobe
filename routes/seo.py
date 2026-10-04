@@ -61,6 +61,15 @@ def sitemap_xml():
         ("/cotizador",                     "0.8", "weekly"),
         ("/zonas-cobertura",               "0.8", "monthly"),
         ("/contacto",                      "0.5", "monthly"),
+        # ---- US Dealer Program (en) ----
+        ("/dealer-program",                "0.9", "weekly"),
+        ("/wholesale-truckload",           "0.8", "weekly"),
+        ("/private-label",                 "0.8", "weekly"),
+        ("/us-territories",                "0.7", "weekly"),
+        ("/spec-sheet/suspan-board-us",            "0.6", "monthly"),
+        ("/spec-sheet/suspan-ceiling-us",          "0.6", "monthly"),
+        ("/spec-sheet/insulglass-glasswool-us",    "0.6", "monthly"),
+        ("/spec-sheet/insulglass-mbi-us",          "0.6", "monthly"),
     ]
 
     rows = []

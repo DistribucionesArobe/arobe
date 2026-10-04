@@ -1,0 +1,85 @@
+{% extends "dealers/_base.html" %}
+
+{% block title %}Wholesale Truckload — Acoustic Panels & Insulation Direct from Mexican Factory | Arobe Group{% endblock %}
+{% block description %}Factory-direct wholesale truckload pricing on acoustic ceiling tiles, PVC panels and fiberglass insulation. 40 ft containers from Reynosa / Matamoros / Nuevo Laredo. For US & Canadian dealers.{% endblock %}
+
+{% block content %}
+<section class="bg-arobe-900 text-white py-16">
+  <div class="max-w-5xl mx-auto px-4">
+    <div class="inline-flex items-center gap-2 bg-amber-400 text-arobe-900 text-xs font-bold px-3 py-1.5 rounded-full mb-4 uppercase tracking-widest">Wholesale · Truckload</div>
+    <h1 class="text-4xl lg:text-5xl font-extrabold leading-tight max-w-3xl">
+      Factory-direct truckload pricing — <span class="text-amber-400">no US middlemen</span>.
+    </h1>
+    <p class="text-lg text-slate-300 mt-5 max-w-3xl">
+      Arobe Group manufactures <b class="text-white">SusPan</b> acoustic ceilings and
+      <b class="text-white">Insulglass</b> fiberglass insulation in Mexico and sells by the full
+      40 ft container to qualified dealers in the US and Canada. You pick up at the Mexican border,
+      we handle production and staging.
+    </p>
+    <div class="flex gap-3 mt-7">
+      <a href="/dealer-program#apply" class="bg-amber-400 text-arobe-900 font-extrabold px-6 py-3 rounded-lg">Apply as dealer →</a>
+      <a href="/dealer-program" class="border-2 border-white/30 text-white hover:bg-white/10 font-bold px-6 py-3 rounded-lg">See full program</a>
+    </div>
+  </div>
+</section>
+
+<section class="py-16 bg-white">
+  <div class="max-w-5xl mx-auto px-4 grid md:grid-cols-2 gap-10">
+    <div>
+      <h2 class="text-2xl font-extrabold text-arobe-900 mb-4">What goes in a truckload</h2>
+      <div class="space-y-4 text-sm">
+        <div class="bg-slate-50 rounded-xl p-5 border border-slate-100">
+          <div class="font-bold text-arobe-900 mb-1">SusPan Ceiling Tiles — 40 ft TL</div>
+          <div class="text-slate-700">≈ 20 pallets · ≈ 10,000 tiles (2 × 2 ft lay-in) · ≈ 40,000 ft² coverage</div>
+        </div>
+        <div class="bg-slate-50 rounded-xl p-5 border border-slate-100">
+          <div class="font-bold text-arobe-900 mb-1">SusPan PVC Board — 40 ft TL</div>
+          <div class="text-slate-700">≈ 24 pallets · ≈ 7,200 panels (1/2 in · 4 × 8 ft)</div>
+        </div>
+        <div class="bg-slate-50 rounded-xl p-5 border border-slate-100">
+          <div class="font-bold text-arobe-900 mb-1">Insulglass Glasswool — 40 ft TL</div>
+          <div class="text-slate-700">≈ 3,500 ft² at R-13 (depending on thickness mix)</div>
+        </div>
+        <div class="bg-slate-50 rounded-xl p-5 border border-slate-100">
+          <div class="font-bold text-arobe-900 mb-1">Insulglass MBI — 40 ft TL</div>
+          <div class="text-slate-700">≈ 40–60 rolls · ≈ 20,000–40,000 ft² coverage</div>
+        </div>
+        <div class="bg-amber-50 rounded-xl p-5 border border-amber-200">
+          <div class="font-bold text-arobe-900 mb-1">Mixed truckload — available</div>
+          <div class="text-slate-700">Combine SKUs across SusPan + Insulglass on one container. Mix is set at PO.</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <h2 class="text-2xl font-extrabold text-arobe-900 mb-4">Commercial terms</h2>
+      <dl class="space-y-3 text-sm bg-slate-900 text-slate-200 rounded-xl p-6">
+        <div class="flex justify-between gap-3"><dt class="text-slate-400">Minimum order</dt><dd class="text-white font-semibold text-right">{{ terms.min_order_label }}</dd></div>
+        <div class="flex justify-between gap-3"><dt class="text-slate-400">Incoterms</dt><dd class="text-white font-semibold text-right">FOB MX border</dd></div>
+        <div class="flex justify-between gap-3"><dt class="text-slate-400">Pickup points</dt><dd class="text-white font-semibold text-right">Reynosa · Matamoros · Nuevo Laredo</dd></div>
+        <div class="flex justify-between gap-3"><dt class="text-slate-400">Lead time</dt><dd class="text-white font-semibold text-right">{{ terms.lead_time_days }} days from deposit</dd></div>
+        <div class="flex justify-between gap-3"><dt class="text-slate-400">Payment</dt><dd class="text-white font-semibold text-right">50 % deposit / 50 % on readiness</dd></div>
+        <div class="flex justify-between gap-3"><dt class="text-slate-400">After 3 successful loads</dt><dd class="text-white font-semibold text-right">Net-30 line</dd></div>
+        <div class="flex justify-between gap-3"><dt class="text-slate-400">Currency</dt><dd class="text-white font-semibold text-right">USD · MXN</dd></div>
+        <div class="flex justify-between gap-3"><dt class="text-slate-400">Billed by</dt><dd class="text-white font-semibold text-right">Distribuciones Arobe S.A.S. de C.V.</dd></div>
+      </dl>
+      <div class="mt-6 bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded">
+        <div class="font-bold text-emerald-900">Border FOB — why it saves you money</div>
+        <p class="text-sm text-emerald-900 mt-1">
+          We don't mark up US customs, bonded trucking, or warehousing on your side. Your broker crosses
+          the load for ~$450–$900 per container. Net landed cost is <b>significantly lower</b> than
+          competing US-stocked brands.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bg-slate-50 py-16">
+  <div class="max-w-5xl mx-auto px-4 text-center">
+    <h2 class="text-2xl font-extrabold text-arobe-900 mb-3">Ready to request your first truckload quote?</h2>
+    <p class="text-slate-600 mb-6">Apply to the dealer program and we'll come back with a specific truckload price for your SKU mix and territory.</p>
+    <a href="/dealer-program#apply" class="inline-block bg-amber-400 hover:bg-amber-500 text-arobe-900 font-extrabold px-8 py-4 rounded-lg text-base">Apply now →</a>
+  </div>
+</section>
+{% endblock %}

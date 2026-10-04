@@ -1,0 +1,54 @@
+{% extends "dealers/_base.html" %}
+
+{% block title %}{{ sheet.title }} · Arobe Group{% endblock %}
+{% block description %}{{ sheet.intro }} ASTM-compliant technical data. Manufactured by Arobe Group in Mexico.{% endblock %}
+
+{% block content %}
+<section class="bg-arobe-900 text-white py-10 no-print">
+  <div class="max-w-4xl mx-auto px-4 flex items-center justify-between gap-4">
+    <div>
+      <div class="text-xs text-slate-300 uppercase tracking-widest">{{ sheet.brand }} · US Spec Sheet</div>
+      <h1 class="text-2xl md:text-3xl font-extrabold mt-1">{{ sheet.product }}</h1>
+    </div>
+    <button onclick="window.print()" class="bg-amber-400 text-arobe-900 font-bold px-4 py-2 rounded hover:bg-amber-500 text-sm whitespace-nowrap">🖨 Print / Save as PDF</button>
+  </div>
+</section>
+
+<section class="py-10 bg-white">
+  <div class="max-w-4xl mx-auto px-4">
+    <div class="bg-slate-50 border-l-4 border-arobe-700 p-5 rounded mb-8">
+      <p class="text-slate-800 text-sm">{{ sheet.intro }}</p>
+    </div>
+
+    <table class="w-full text-sm border border-slate-200">
+      <thead class="bg-arobe-900 text-white">
+        <tr><th class="text-left px-4 py-2 w-1/3">Property</th><th class="text-left px-4 py-2">Value</th></tr>
+      </thead>
+      <tbody>
+        {% for prop, val in sheet.rows %}
+        <tr class="border-t border-slate-200 {% if loop.index0 % 2 == 0 %}bg-white{% else %}bg-slate-50{% endif %}">
+          <td class="px-4 py-2 font-semibold text-slate-700">{{ prop }}</td>
+          <td class="px-4 py-2 text-slate-900">{{ val }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="mt-8 bg-amber-50 border border-amber-200 rounded-xl p-5">
+      <div class="text-xs font-bold text-amber-900 uppercase tracking-widest mb-2">Truckload reference</div>
+      <p class="text-sm text-slate-800">{{ sheet.truckload }}</p>
+    </div>
+
+    <div class="mt-6 bg-slate-900 text-slate-200 rounded-xl p-5 text-sm">
+      <div class="font-bold text-white mb-2">Manufacturer</div>
+      <div>Distribuciones Arobe S.A.S. de C.V.</div>
+      <div class="text-slate-400 text-xs">Av. Familia Rotaria 510, Col. Adolfo López Mateos · Ciudad Victoria, Tamaulipas · 87020 · Mexico</div>
+      <div class="text-slate-400 text-xs mt-1">Dealer inquiries: ventas@arobegroup.com · arobe.mx/dealer-program</div>
+    </div>
+
+    <div class="mt-8 text-center no-print">
+      <a href="/dealer-program#apply" class="inline-block bg-arobe-900 hover:bg-arobe-700 text-white font-bold px-6 py-3 rounded">Become a dealer →</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

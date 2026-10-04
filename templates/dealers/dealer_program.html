@@ -1,0 +1,283 @@
+{% extends "dealers/_base.html" %}
+
+{% block title %}Become an Arobe Dealer — Factory-direct Acoustic Panels & Insulation (US/Canada){% endblock %}
+{% block description %}Exclusive US dealer territories for Arobe Group — SusPan acoustic ceiling panels and Insulglass fiberglass insulation. Factory-direct truckload pricing, 40%+ dealer margins, FOB Reynosa / Matamoros / Nuevo Laredo. Apply today.{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section class="bg-arobe-900 text-white relative overflow-hidden">
+  <div class="absolute inset-0 stamp-tex opacity-10"></div>
+  <div class="relative max-w-6xl mx-auto px-4 py-16 lg:py-24 grid lg:grid-cols-2 gap-10 items-center">
+    <div>
+      <div class="inline-flex items-center gap-2 bg-amber-400 text-arobe-900 text-xs font-bold px-3 py-1.5 rounded-full mb-6 uppercase tracking-widest">
+        Exclusive · US & Canada
+      </div>
+      <h1 class="text-4xl lg:text-5xl font-extrabold leading-tight">
+        Become an exclusive <span class="text-amber-400">Arobe dealer</span><br>in your territory.
+      </h1>
+      <p class="text-lg text-slate-300 mt-6 max-w-xl">
+        Factory-direct <b class="text-white">SusPan</b> ceiling panels and
+        <b class="text-white">Insulglass</b> fiberglass insulation — made in Mexico,
+        picked up at the border, resold in your market with industry-leading margins.
+      </p>
+      <div class="flex flex-wrap gap-3 mt-8">
+        <a href="#apply" class="bg-amber-400 hover:bg-amber-500 text-arobe-900 font-extrabold px-6 py-3 rounded-lg text-base">Apply for your territory →</a>
+        <a href="/us-territories" class="border-2 border-white/30 text-white hover:bg-white/10 font-bold px-6 py-3 rounded-lg text-base">See available territories</a>
+      </div>
+      <p class="text-xs text-slate-400 mt-4">
+        No franchise fees · No annual commitments · {{ terms.min_quarterly_label }} minimum
+      </p>
+    </div>
+
+    <div class="bg-white/5 backdrop-blur rounded-2xl p-6 border border-white/10">
+      <div class="text-xs font-bold text-amber-400 uppercase tracking-widest mb-4">Program at a glance</div>
+      <dl class="space-y-3 text-sm">
+        <div class="flex justify-between gap-3"><dt class="text-slate-400">Minimum order</dt><dd class="text-white font-semibold text-right">{{ terms.min_order_label }}</dd></div>
+        <div class="flex justify-between gap-3"><dt class="text-slate-400">Delivery</dt><dd class="text-white font-semibold text-right">FOB Reynosa · Matamoros · Nuevo Laredo</dd></div>
+        <div class="flex justify-between gap-3"><dt class="text-slate-400">Lead time</dt><dd class="text-white font-semibold text-right">{{ terms.lead_time_days }} days</dd></div>
+        <div class="flex justify-between gap-3"><dt class="text-slate-400">Payment</dt><dd class="text-white font-semibold text-right">Deposit + balance → Net-30</dd></div>
+        <div class="flex justify-between gap-3"><dt class="text-slate-400">Currency</dt><dd class="text-white font-semibold text-right">USD or MXN</dd></div>
+        <div class="flex justify-between gap-3"><dt class="text-slate-400">Co-op marketing</dt><dd class="text-white font-semibold text-right">{{ terms.co_op_marketing_pct }} % of purchases</dd></div>
+        <div class="flex justify-between gap-3"><dt class="text-slate-400">Private label</dt><dd class="text-white font-semibold text-right">After {{ terms.private_label_min_truckloads }} truckloads</dd></div>
+        <div class="flex justify-between gap-3"><dt class="text-slate-400">Exclusivity</dt><dd class="text-white font-semibold text-right">{{ terms.exclusivity_months }} months, volume-based</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- WHY AROBE -->
+<section class="bg-white py-16">
+  <div class="max-w-6xl mx-auto px-4">
+    <h2 class="text-3xl font-extrabold text-arobe-900 mb-10 text-center">Why dealers choose Arobe</h2>
+    <div class="grid md:grid-cols-3 gap-6">
+      {% set reasons = [
+        ('💰','40 %+ dealer margins','Direct from manufacturer, no US middlemen. Beat big-box pricing while keeping dealer margins intact.'),
+        ('🚛','Border FOB pickup','We stage inventory at Reynosa, Matamoros and Nuevo Laredo. Your broker crosses, your truck picks up. No US customs on our side.'),
+        ('🏭','Full product lines','Ceilings (lay-in + tegular), PVC boards, decor panels, glasswool batts/rolls, metal-building insulation. One supplier, 40+ SKUs.'),
+        ('🎨','Private-label ready','Qualify after 2 truckloads. Your brand on carton, your spec sheet, our factory.'),
+        ('📄','ASTM-compliant','All products meet US standards (ASTM E84 Class A, C665, C991, E136). Spec sheets ready for your submittals.'),
+        ('🤝','Bilingual support','English and Spanish technical support. Zoom training for your sales team. Co-op marketing dollars.'),
+      ] %}
+      {% for emoji, title, body in reasons %}
+      <div class="bg-slate-50 rounded-xl p-6 border border-slate-100 hover:border-amber-300 transition">
+        <div class="text-3xl mb-2">{{ emoji }}</div>
+        <div class="font-bold text-arobe-900 text-lg mb-1">{{ title }}</div>
+        <div class="text-sm text-slate-600">{{ body }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCT LINES -->
+<section class="bg-slate-50 py-16">
+  <div class="max-w-6xl mx-auto px-4">
+    <h2 class="text-3xl font-extrabold text-arobe-900 mb-10 text-center">Two brands, full coverage</h2>
+    <div class="grid md:grid-cols-2 gap-6">
+
+      <!-- SusPan card -->
+      <div class="bg-white rounded-2xl p-8 border-t-4 border-suspan-500 shadow-sm">
+        <div class="inline-block bg-suspan-500 text-suspan-ink text-xs font-black px-3 py-1 rounded uppercase tracking-widest mb-4">SusPan</div>
+        <h3 class="text-2xl font-extrabold text-arobe-900 mb-2">Acoustic ceilings · PVC boards · decor</h3>
+        <p class="text-sm text-slate-600 mb-4">Lay-in and tegular acoustic ceiling tiles, PVC foam board for walls and soffits, and decorative panels (woodgrain, marble, 3D).</p>
+        <ul class="text-sm space-y-1 text-slate-700 mb-5">
+          <li>• NRC 0.55–0.70 acoustic tiles · ASTM E84 Class A</li>
+          <li>• PVC board 1/4"–3/4" · moisture-proof, flame-retardant</li>
+          <li>• Humidity-resistant up to 95 % RH (ideal for Gulf Coast)</li>
+        </ul>
+        <div class="flex flex-wrap gap-2">
+          <a href="/spec-sheet/suspan-board-us" class="text-xs bg-arobe-900 text-white px-3 py-2 rounded font-semibold hover:bg-arobe-700">Board spec sheet</a>
+          <a href="/spec-sheet/suspan-ceiling-us" class="text-xs bg-arobe-900 text-white px-3 py-2 rounded font-semibold hover:bg-arobe-700">Ceiling tiles spec</a>
+        </div>
+      </div>
+
+      <!-- Insulglass card -->
+      <div class="bg-white rounded-2xl p-8 border-t-4 border-insul-500 shadow-sm">
+        <div class="inline-block bg-insul-500 text-white text-xs font-black px-3 py-1 rounded uppercase tracking-widest mb-4">Insulglass</div>
+        <h3 class="text-2xl font-extrabold text-arobe-900 mb-2">Fiberglass insulation · Metal-building insulation</h3>
+        <p class="text-sm text-slate-600 mb-4">Glasswool batts and rolls (R-11 to R-30) and faced MBI blankets for pre-engineered metal buildings. ASTM C665 / C991.</p>
+        <ul class="text-sm space-y-1 text-slate-700 mb-5">
+          <li>• R-11, R-13, R-19, R-30 · unfaced, Kraft, FSK</li>
+          <li>• MBI with WMP-VR facing (vapor retarder ≤ 0.02 perm)</li>
+          <li>• Non-combustible per ASTM E136</li>
+        </ul>
+        <div class="flex flex-wrap gap-2">
+          <a href="/spec-sheet/insulglass-glasswool-us" class="text-xs bg-arobe-900 text-white px-3 py-2 rounded font-semibold hover:bg-arobe-700">Glasswool spec sheet</a>
+          <a href="/spec-sheet/insulglass-mbi-us" class="text-xs bg-arobe-900 text-white px-3 py-2 rounded font-semibold hover:bg-arobe-700">MBI spec sheet</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TERRITORIES PREVIEW -->
+<section class="bg-white py-16">
+  <div class="max-w-6xl mx-auto px-4">
+    <h2 class="text-3xl font-extrabold text-arobe-900 mb-3 text-center">Available territories — border Texas (Tier 1)</h2>
+    <p class="text-center text-slate-600 mb-8">Fastest FOB pickup. First-come exclusivity.</p>
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+      {% for m in metros %}
+      <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-5">
+        <div class="text-xs font-bold text-emerald-700 uppercase tracking-widest mb-1">Available</div>
+        <div class="font-extrabold text-arobe-900 text-lg">{{ m.metro }}</div>
+        <div class="text-xs text-slate-600">{{ m.state_full }} · pop. {{ m.population }}</div>
+        <div class="text-xs text-slate-700 mt-3"><b>FOB:</b> {{ m.border_crossing }}<br><b>Distance:</b> {{ m.distance_from_fob_mi }} mi</div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-8">
+      <a href="/us-territories" class="inline-block bg-arobe-900 text-white font-bold px-6 py-3 rounded-lg hover:bg-arobe-700">See all US territories →</a>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="bg-slate-900 text-white py-16">
+  <div class="max-w-6xl mx-auto px-4">
+    <h2 class="text-3xl font-extrabold mb-10 text-center">From application to first truckload</h2>
+    <div class="grid md:grid-cols-5 gap-4">
+      {% set steps = [
+        ('1','Apply','Fill the form below. We respond within 2 business days.'),
+        ('2','Qualify','30-min Zoom. Territory check, volume plan, products of interest.'),
+        ('3','Sample kit','Free kit shipped to your warehouse (DHL). You see & touch the product.'),
+        ('4','First PO','Deposit 50 %. We stage your truckload at the FOB point.'),
+        ('5','Pickup','Your broker crosses, your truck picks up. You start selling.'),
+      ] %}
+      {% for n, title, body in steps %}
+      <div class="bg-white/5 rounded-xl p-5 border border-white/10">
+        <div class="w-10 h-10 bg-amber-400 text-arobe-900 grid place-items-center font-black rounded-full mb-3">{{ n }}</div>
+        <div class="font-bold mb-1">{{ title }}</div>
+        <div class="text-sm text-slate-300">{{ body }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- APPLY FORM -->
+<section id="apply" class="bg-amber-50 py-16 border-t-4 border-amber-400">
+  <div class="max-w-3xl mx-auto px-4">
+    <div class="text-center mb-10">
+      <div class="inline-flex items-center gap-2 bg-arobe-900 text-amber-400 text-xs font-bold px-3 py-1.5 rounded-full mb-4 uppercase tracking-widest">Dealer application</div>
+      <h2 class="text-3xl font-extrabold text-arobe-900">Apply for your territory</h2>
+      <p class="text-slate-700 mt-2">We respond within 2 business days. Serious applicants only — minimum {{ terms.min_quarterly_label }}.</p>
+    </div>
+
+    {% with msgs = get_flashed_messages(with_categories=true) %}
+      {% for cat, msg in msgs %}
+        <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded mb-6">{{ msg }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <form method="post" action="/dealer-program/apply" class="bg-white rounded-2xl shadow-sm p-6 md:p-8 space-y-5">
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <label class="block">
+          <span class="text-xs font-bold text-slate-600 uppercase tracking-widest">Company name *</span>
+          <input name="company" required class="mt-1 w-full border border-slate-300 rounded px-3 py-2 focus:ring-2 focus:ring-amber-400 outline-none">
+        </label>
+        <label class="block">
+          <span class="text-xs font-bold text-slate-600 uppercase tracking-widest">Years in business</span>
+          <input name="years" class="mt-1 w-full border border-slate-300 rounded px-3 py-2 focus:ring-2 focus:ring-amber-400 outline-none">
+        </label>
+      </div>
+
+      <label class="block">
+        <span class="text-xs font-bold text-slate-600 uppercase tracking-widest">Website</span>
+        <input name="website" type="url" placeholder="https://" class="mt-1 w-full border border-slate-300 rounded px-3 py-2 focus:ring-2 focus:ring-amber-400 outline-none">
+      </label>
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <label class="block">
+          <span class="text-xs font-bold text-slate-600 uppercase tracking-widest">Current product lines</span>
+          <input name="product_lines" placeholder="e.g. drywall, lumber, insulation" class="mt-1 w-full border border-slate-300 rounded px-3 py-2 focus:ring-2 focus:ring-amber-400 outline-none">
+        </label>
+        <label class="block">
+          <span class="text-xs font-bold text-slate-600 uppercase tracking-widest">Current suppliers</span>
+          <input name="current_suppliers" placeholder="e.g. CertainTeed, Owens Corning" class="mt-1 w-full border border-slate-300 rounded px-3 py-2 focus:ring-2 focus:ring-amber-400 outline-none">
+        </label>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <label class="block">
+          <span class="text-xs font-bold text-slate-600 uppercase tracking-widest">Territory of interest *</span>
+          <select name="territory" required class="mt-1 w-full border border-slate-300 rounded px-3 py-2 focus:ring-2 focus:ring-amber-400 outline-none bg-white">
+            <option value="">— Select —</option>
+            {% for m in metros %}<option value="{{ m.metro }}, {{ m.state }}">{{ m.metro }}, {{ m.state }}</option>{% endfor %}
+            <option value="Other / multiple TX metros">Other / multiple TX metros</option>
+            <option value="Other state">Other US state</option>
+            <option value="Canada">Canada</option>
+          </select>
+        </label>
+        <label class="block">
+          <span class="text-xs font-bold text-slate-600 uppercase tracking-widest">Volume estimate (truckloads/month)</span>
+          <select name="volume_tl" class="mt-1 w-full border border-slate-300 rounded px-3 py-2 focus:ring-2 focus:ring-amber-400 outline-none bg-white">
+            <option value="">— Select —</option>
+            <option>1 TL / quarter (program minimum)</option>
+            <option>1 TL / month</option>
+            <option>2–3 TL / month</option>
+            <option>4+ TL / month</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <label class="block">
+          <span class="text-xs font-bold text-slate-600 uppercase tracking-widest">Warehouse (sq ft)</span>
+          <input name="warehouse" placeholder="e.g. 10,000 sq ft" class="mt-1 w-full border border-slate-300 rounded px-3 py-2 focus:ring-2 focus:ring-amber-400 outline-none">
+        </label>
+        <label class="block">
+          <span class="text-xs font-bold text-slate-600 uppercase tracking-widest">Fleet / cross-border logistics</span>
+          <select name="fleet" class="mt-1 w-full border border-slate-300 rounded px-3 py-2 focus:ring-2 focus:ring-amber-400 outline-none bg-white">
+            <option value="">— Select —</option>
+            <option>Own trucks</option>
+            <option>Preferred freight broker</option>
+            <option>Need help with broker</option>
+          </select>
+        </label>
+      </div>
+
+      <label class="flex items-start gap-3 bg-slate-50 p-4 rounded">
+        <input type="checkbox" name="private_label" value="yes" class="mt-1">
+        <span class="text-sm text-slate-700"><b>I'm interested in private-label manufacturing</b> (requires {{ terms.private_label_min_truckloads }}+ truckloads under Arobe brand first)</span>
+      </label>
+
+      <hr class="border-slate-200">
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <label class="block">
+          <span class="text-xs font-bold text-slate-600 uppercase tracking-widest">Your name *</span>
+          <input name="contact_name" required class="mt-1 w-full border border-slate-300 rounded px-3 py-2 focus:ring-2 focus:ring-amber-400 outline-none">
+        </label>
+        <label class="block">
+          <span class="text-xs font-bold text-slate-600 uppercase tracking-widest">Role</span>
+          <input name="contact_role" placeholder="Owner / Purchasing / GM" class="mt-1 w-full border border-slate-300 rounded px-3 py-2 focus:ring-2 focus:ring-amber-400 outline-none">
+        </label>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <label class="block">
+          <span class="text-xs font-bold text-slate-600 uppercase tracking-widest">Phone</span>
+          <input name="contact_phone" type="tel" class="mt-1 w-full border border-slate-300 rounded px-3 py-2 focus:ring-2 focus:ring-amber-400 outline-none">
+        </label>
+        <label class="block">
+          <span class="text-xs font-bold text-slate-600 uppercase tracking-widest">Email *</span>
+          <input name="contact_email" type="email" required class="mt-1 w-full border border-slate-300 rounded px-3 py-2 focus:ring-2 focus:ring-amber-400 outline-none">
+        </label>
+      </div>
+
+      <label class="block">
+        <span class="text-xs font-bold text-slate-600 uppercase tracking-widest">Tell us about your market (optional)</span>
+        <textarea name="message" rows="4" class="mt-1 w-full border border-slate-300 rounded px-3 py-2 focus:ring-2 focus:ring-amber-400 outline-none" placeholder="Who are your customers? What's your go-to-market? Any pain with current suppliers?"></textarea>
+      </label>
+
+      <button type="submit" class="w-full bg-arobe-900 hover:bg-arobe-700 text-white font-extrabold py-4 rounded-lg text-base">
+        Submit application →
+      </button>
+      <p class="text-xs text-slate-500 text-center">By submitting, you consent to Arobe Group contacting you about this program. No spam, no third-party sharing.</p>
+    </form>
+  </div>
+</section>
+
+{% endblock %}

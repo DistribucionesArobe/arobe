@@ -1,0 +1,75 @@
+{% extends "dealers/_base.html" %}
+
+{% block title %}US & Canada Dealer Territories — Arobe Group{% endblock %}
+{% block description %}Open US dealer territories for SusPan and Insulglass. Exclusive by metro area. Border Texas tier 1 available for immediate assignment. Apply before your market is taken.{% endblock %}
+
+{% block content %}
+
+<section class="bg-arobe-900 text-white py-14">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="inline-flex items-center gap-2 bg-amber-400 text-arobe-900 text-xs font-bold px-3 py-1.5 rounded-full mb-4 uppercase tracking-widest">Territories</div>
+    <h1 class="text-4xl font-extrabold">Available US & Canada territories</h1>
+    <p class="text-slate-300 mt-3 max-w-3xl">Exclusive by metro area. First qualified dealer claims the territory. Tier 1 = closest to our FOB points (fastest delivery, best margins). Status updates monthly.</p>
+  </div>
+</section>
+
+<section class="py-10 bg-white">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="flex gap-3 mb-6 text-xs">
+      <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span>Available</div>
+      <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span>Reserved / later phase</div>
+      <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-slate-400 inline-block"></span>Assigned</div>
+    </div>
+
+    {% for tier in [1,2,3] %}
+      {% set tier_metros = metros | selectattr('tier', 'equalto', tier) | list %}
+      {% if tier_metros %}
+      <div class="mb-10">
+        <h2 class="text-xl font-extrabold text-arobe-900 mb-1">
+          Tier {{ tier }} —
+          {% if tier == 1 %}Border Texas (FOB direct pickup){% endif %}
+          {% if tier == 2 %}Texas inland (2–5 hrs from FOB){% endif %}
+          {% if tier == 3 %}Phase 2 / 3 expansion{% endif %}
+        </h2>
+        <p class="text-sm text-slate-600 mb-5">
+          {% if tier == 1 %}Fastest delivery · best unit economics · immediate assignment.{% endif %}
+          {% if tier == 2 %}Available with proven volume commitment. Freight cost offset by larger markets.{% endif %}
+          {% if tier == 3 %}Reserved for strategic partners. Open on request after proven performance in tiers 1–2.{% endif %}
+        </p>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {% for m in tier_metros %}
+          {% set color = 'emerald' if m.status == 'available' else ('amber' if m.status == 'reserved' else 'slate') %}
+          <div class="bg-{{ color }}-50 border border-{{ color }}-200 rounded-xl p-5">
+            <div class="flex justify-between items-start mb-2">
+              <div class="text-xs font-bold text-{{ color }}-700 uppercase tracking-widest">{{ m.status }}</div>
+              <div class="text-xs font-bold text-slate-500">{{ m.state }}</div>
+            </div>
+            <div class="font-extrabold text-arobe-900 text-lg leading-tight">{{ m.metro }}</div>
+            <div class="text-xs text-slate-600">pop. {{ m.population }}</div>
+            <div class="mt-3 text-xs text-slate-700 space-y-0.5">
+              <div><b>FOB point:</b> {{ m.border_crossing }}</div>
+              <div><b>Distance from FOB:</b> {{ m.distance_from_fob_mi }} mi</div>
+            </div>
+            <div class="text-xs text-slate-600 mt-3 italic">{{ m.notes }}</div>
+            {% if m.status == 'available' %}
+            <a href="/dealer-program#apply" class="mt-4 inline-block bg-arobe-900 text-white text-xs font-bold px-3 py-2 rounded hover:bg-arobe-700">Apply for this territory →</a>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>
+
+<section class="bg-amber-50 py-14 border-t-4 border-amber-400">
+  <div class="max-w-3xl mx-auto px-4 text-center">
+    <h2 class="text-2xl font-extrabold text-arobe-900 mb-3">Don't see your market?</h2>
+    <p class="text-slate-700 mb-6">We're open to Canada and other US metros outside this list. Apply with your territory in the notes.</p>
+    <a href="/dealer-program#apply" class="inline-block bg-arobe-900 hover:bg-arobe-700 text-white font-extrabold px-8 py-4 rounded-lg">Apply with your market →</a>
+  </div>
+</section>
+
+{% endblock %}

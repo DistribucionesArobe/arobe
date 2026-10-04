@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Arobe Dealer Program — Wholesale ceiling panels & insulation, made in Mexico{% endblock %}</title>
+<meta name="description" content="{% block description %}Arobe Group — Mexican manufacturer of SusPan acoustic ceiling panels and Insulglass fiberglass insulation. Factory-direct truckload pricing for US dealers. FOB Reynosa / Matamoros / Nuevo Laredo.{% endblock %}">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://arobe.mx{{ request.path }}">
+<link rel="alternate" hreflang="en-us" href="https://arobe.mx{{ request.path }}">
+<link rel="alternate" hreflang="es-mx" href="https://arobe.mx/">
+<link rel="alternate" hreflang="x-default" href="https://arobe.mx/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Arobe Group">
+<meta property="og:title" content="{{ self.title() }}">
+<meta property="og:description" content="{{ self.description() }}">
+<meta property="og:url" content="https://arobe.mx{{ request.path }}">
+<meta property="og:locale" content="en_US">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = { theme: { extend: { colors: {
+  arobe: { 50:'#f4f6fb', 100:'#e5eaf4', 500:'#4a73b8', 700:'#2a4d8a', 900:'#15284d' },
+  insul: { 500:'#0ea5e9', 600:'#0284c7' },
+  suspan:{ 500:'#f59e0b', 600:'#d97706', ink:'#4a2e05' },
+}}}}
+</script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  .stamp-tex { background-image: radial-gradient(rgba(255,255,255,.08) 1px, transparent 1px); background-size: 14px 14px; }
+  @media print {
+    .no-print { display: none !important; }
+    body { background: white !important; }
+  }
+</style>
+
+<!-- Schema.org: Manufacturer -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Manufacturer",
+  "name": "Distribuciones Arobe S.A.S. de C.V.",
+  "alternateName": "Arobe Group",
+  "url": "https://arobe.mx",
+  "logo": "https://arobe.mx/static/img/logo.png",
+  "foundingDate": "2022",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Av. Familia Rotaria 510, Col. Adolfo López Mateos",
+    "addressLocality": "Ciudad Victoria",
+    "addressRegion": "Tamaulipas",
+    "postalCode": "87020",
+    "addressCountry": "MX"
+  },
+  "brand": [
+    {"@type": "Brand", "name": "SusPan"},
+    {"@type": "Brand", "name": "Insulglass"}
+  ],
+  "areaServed": [
+    {"@type": "Country", "name": "Mexico"},
+    {"@type": "Country", "name": "United States"}
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "Dealer inquiries (US / Canada)",
+    "availableLanguage": ["English", "Spanish"],
+    "email": "ventas@arobegroup.com"
+  }
+}
+</script>
+</head>
+
+<body class="bg-slate-50 text-slate-800 antialiased">
+
+<!-- Sober header (no cart, no retail nav) -->
+<header class="sticky top-0 z-40 bg-arobe-900 text-white border-b border-arobe-700 no-print">
+  <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
+    <a href="/dealer-program" class="flex items-center gap-2.5">
+      <div class="w-8 h-8 bg-amber-400 text-arobe-900 grid place-items-center font-black text-base rounded">A</div>
+      <div class="leading-tight">
+        <div class="font-extrabold tracking-tight text-sm">AROBE <span class="text-amber-400">GROUP</span></div>
+        <div class="text-[9px] text-slate-300 uppercase tracking-[0.15em]">US Dealer Program</div>
+      </div>
+    </a>
+    <nav class="hidden md:flex items-center gap-6 text-sm font-semibold">
+      <a href="/dealer-program" class="hover:text-amber-400 {% if page == 'dealer-program' %}text-amber-400{% endif %}">Program</a>
+      <a href="/wholesale-truckload" class="hover:text-amber-400 {% if page == 'wholesale-truckload' %}text-amber-400{% endif %}">Wholesale</a>
+      <a href="/private-label" class="hover:text-amber-400 {% if page == 'private-label' %}text-amber-400{% endif %}">Private Label</a>
+      <a href="/us-territories" class="hover:text-amber-400 {% if page == 'us-territories' %}text-amber-400{% endif %}">Territories</a>
+      <a href="/dealer-login" class="hover:text-amber-400">Login</a>
+    </nav>
+    <div class="flex items-center gap-3">
+      <a href="/dealer-program#apply" class="bg-amber-400 hover:bg-amber-500 text-arobe-900 font-extrabold px-3 py-1.5 rounded text-xs md:text-sm">Apply</a>
+      <a href="/" class="text-xs text-slate-300 hover:text-white hidden md:inline" title="Spanish site">← arobe.mx (ES)</a>
+    </div>
+  </div>
+</header>
+
+{% block content %}{% endblock %}
+
+<!-- Footer -->
+<footer class="bg-arobe-900 text-slate-300 mt-16 no-print">
+  <div class="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-4 gap-8 text-sm">
+    <div>
+      <div class="font-extrabold text-white text-base">AROBE GROUP</div>
+      <div class="text-xs mt-1 text-slate-400">Distribuciones Arobe S.A.S. de C.V.<br>Ciudad Victoria, Tamaulipas, Mexico</div>
+      <div class="text-xs mt-3 text-slate-400">RFC: DAR220709MC3</div>
+    </div>
+    <div>
+      <div class="font-bold text-white mb-2">Dealer Program</div>
+      <ul class="space-y-1">
+        <li><a href="/dealer-program" class="hover:text-amber-400">Overview</a></li>
+        <li><a href="/wholesale-truckload" class="hover:text-amber-400">Wholesale / Truckload</a></li>
+        <li><a href="/private-label" class="hover:text-amber-400">Private Label</a></li>
+        <li><a href="/us-territories" class="hover:text-amber-400">Available Territories</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="font-bold text-white mb-2">Spec Sheets</div>
+      <ul class="space-y-1">
+        <li><a href="/spec-sheet/suspan-board-us" class="hover:text-amber-400">SusPan Board</a></li>
+        <li><a href="/spec-sheet/suspan-ceiling-us" class="hover:text-amber-400">SusPan Ceiling Tiles</a></li>
+        <li><a href="/spec-sheet/insulglass-glasswool-us" class="hover:text-amber-400">Insulglass Glasswool</a></li>
+        <li><a href="/spec-sheet/insulglass-mbi-us" class="hover:text-amber-400">Insulglass MBI</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="font-bold text-white mb-2">Dealer Contact</div>
+      <ul class="space-y-1">
+        <li><a href="mailto:ventas@arobegroup.com" class="hover:text-amber-400">ventas@arobegroup.com</a></li>
+        <li class="text-xs text-slate-400 mt-2">English & Spanish support<br>Mon–Fri 8am–6pm CT</li>
+        <li class="pt-3"><a href="/" class="text-xs underline">Mexico retail site (Spanish) →</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="border-t border-arobe-700 py-4 text-xs text-center text-slate-400">
+    &copy; {{ 2026 }} Distribuciones Arobe S.A.S. de C.V. — Made in Mexico. Sold worldwide.
+  </div>
+</footer>
+
+</body>
+</html>
