@@ -41,6 +41,7 @@ tailwind.config = { theme: { extend: {
   "name": "Arobe Labs",
   "legalName": "Distribuciones Arobe S.A.S. de C.V.",
   "url": "https://arobe.mx/labs",
+  "logo": "https://arobe.mx/static/img/arobe-labs-logo.png",
   "parentOrganization": {
     "@type": "Organization",
     "name": "Distribuciones Arobe S.A.S. de C.V.",
@@ -99,12 +100,9 @@ tailwind.config = { theme: { extend: {
 
 <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur border-b border-slate-800">
   <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
-    <a href="/labs" class="flex items-center gap-2.5">
-      <div class="w-8 h-8 bg-gradient-to-br from-labs-500 to-labs-700 text-white grid place-items-center font-black text-sm rounded">A</div>
-      <div class="leading-tight">
-        <div class="font-extrabold tracking-tight text-sm">AROBE <span class="text-labs-500">LABS</span></div>
-        <div class="text-[9px] text-slate-400 uppercase tracking-[0.2em]">AI products · Mexico</div>
-      </div>
+    <a href="/labs" class="flex items-center gap-3">
+      <img src="/static/img/arobe-labs-logo-dark.png" alt="Arobe Labs" class="h-7 w-auto">
+      <span class="hidden md:inline text-[9px] text-slate-400 uppercase tracking-[0.2em] border-l border-slate-700 pl-3">AI products · Mexico</span>
     </a>
     <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-slate-300">
       <a href="/labs" class="hover:text-labs-500 {% if page == 'labs' %}text-labs-500{% endif %}">Portfolio</a>
