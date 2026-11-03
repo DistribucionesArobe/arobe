@@ -79,6 +79,7 @@ def sitemap_xml():
         ("/labs/arobe-mx",                         "0.7", "monthly"),
         ("/labs/aceromax-pos",                     "0.6", "monthly"),
         ("/labs/servingsince",                     "0.6", "monthly"),
+        ("/labs/acuantoesta",                      "0.7", "monthly"),
     ]
 
     rows = []
