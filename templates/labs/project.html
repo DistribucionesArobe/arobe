@@ -1,0 +1,68 @@
+{% extends "labs/_base.html" %}
+
+{% block title %}{{ p.name }} — Arobe Labs{% endblock %}
+{% block description %}{{ p.tagline }} — a production AI product by Arobe Labs. {{ p.highlight }}{% endblock %}
+
+{% block content %}
+
+<section class="py-14 border-b border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950">
+  <div class="max-w-4xl mx-auto px-4">
+    <a href="/labs" class="text-xs text-slate-500 hover:text-labs-500">← All products</a>
+    <div class="flex items-start justify-between gap-4 mt-4">
+      <div>
+        <h1 class="text-4xl md:text-5xl font-extrabold">{{ p.name }}</h1>
+        <p class="text-slate-400 text-lg mt-2 max-w-2xl">{{ p.tagline }}</p>
+      </div>
+      <div class="text-[10px] font-bold uppercase tracking-widest text-labs-500 bg-labs-900/50 px-2 py-1 rounded whitespace-nowrap">{{ p.status }}</div>
+    </div>
+    <div class="flex flex-wrap gap-4 mt-6 text-sm">
+      {% if p.url %}
+      <a href="{{ p.url }}" target="_blank" rel="noopener" class="bg-labs-600 hover:bg-labs-700 text-white font-bold px-4 py-2 rounded">Visit live site ↗</a>
+      {% endif %}
+      <div class="bg-slate-900/60 border border-slate-800 px-4 py-2 rounded"><b class="text-slate-500 text-xs uppercase tracking-widest mr-2">Category</b> <span class="text-slate-200">{{ p.category }}</span></div>
+      <div class="bg-slate-900/60 border border-slate-800 px-4 py-2 rounded"><b class="text-slate-500 text-xs uppercase tracking-widest mr-2">Vertical</b> <span class="text-slate-200">{{ p.vertical }}</span></div>
+      <div class="bg-slate-900/60 border border-slate-800 px-4 py-2 rounded"><b class="text-slate-500 text-xs uppercase tracking-widest mr-2">Since</b> <span class="text-slate-200">{{ p.year_started }}</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="py-12">
+  <div class="max-w-4xl mx-auto px-4 grid md:grid-cols-3 gap-10">
+
+    <div class="md:col-span-2 space-y-10">
+      <div>
+        <div class="text-xs text-labs-500 font-bold uppercase tracking-widest">Highlight</div>
+        <p class="text-xl text-slate-200 mt-2 leading-relaxed border-l-4 border-labs-600 pl-4 italic">{{ p.highlight }}</p>
+      </div>
+
+      <div>
+        <div class="text-xs text-labs-500 font-bold uppercase tracking-widest">Capabilities</div>
+        <ul class="mt-3 space-y-2 text-slate-300">
+          {% for c in p.capabilities %}
+          <li class="flex gap-3"><span class="text-labs-500 flex-shrink-0">▸</span><span>{{ c }}</span></li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div>
+        <div class="text-xs text-labs-500 font-bold uppercase tracking-widest">Customers</div>
+        <p class="text-slate-300 mt-2">{{ p.customers }}</p>
+      </div>
+    </div>
+
+    <aside class="space-y-6">
+      <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-5">
+        <div class="text-xs text-labs-500 font-bold uppercase tracking-widest mb-3">Stack</div>
+        <div class="flex flex-wrap gap-1.5">
+          {% for s in p.stack %}
+          <span class="text-[11px] font-mono bg-slate-800 text-slate-300 px-2 py-1 rounded">{{ s }}</span>
+          {% endfor %}
+        </div>
+      </div>
+      <a href="/labs#contact" class="block text-center bg-labs-600 hover:bg-labs-700 text-white font-bold px-4 py-3 rounded">Discuss this capability →</a>
+    </aside>
+
+  </div>
+</section>
+
+{% endblock %}

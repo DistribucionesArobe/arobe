@@ -70,6 +70,15 @@ def sitemap_xml():
         ("/spec-sheet/suspan-ceiling-us",          "0.6", "monthly"),
         ("/spec-sheet/insulglass-glasswool-us",    "0.6", "monthly"),
         ("/spec-sheet/insulglass-mbi-us",          "0.6", "monthly"),
+        # ---- Arobe Labs (en) ----
+        ("/labs",                                  "0.9", "weekly"),
+        ("/labs/partners",                         "0.8", "monthly"),
+        ("/labs/cotizaexpress",                    "0.7", "monthly"),
+        ("/labs/dondever",                         "0.7", "monthly"),
+        ("/labs/antesdefirmar",                    "0.7", "monthly"),
+        ("/labs/arobe-mx",                         "0.7", "monthly"),
+        ("/labs/aceromax-pos",                     "0.6", "monthly"),
+        ("/labs/servingsince",                     "0.6", "monthly"),
     ]
 
     rows = []

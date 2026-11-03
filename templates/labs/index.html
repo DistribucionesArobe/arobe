@@ -1,0 +1,245 @@
+{% extends "labs/_base.html" %}
+
+{% block title %}Arobe Labs — AI products shipped in Mexico{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section class="relative bg-slate-950 overflow-hidden border-b border-slate-800">
+  <div class="absolute inset-0 grid-tex opacity-30"></div>
+  <div class="absolute -top-20 -right-20 w-96 h-96 bg-labs-600 opacity-10 rounded-full blur-3xl"></div>
+  <div class="relative max-w-6xl mx-auto px-4 py-20 lg:py-28">
+    <div class="inline-flex items-center gap-2 bg-labs-900/60 border border-labs-700/50 text-labs-500 text-xs font-bold px-3 py-1.5 rounded-full mb-6 uppercase tracking-widest">
+      <span class="w-1.5 h-1.5 bg-labs-500 rounded-full animate-pulse"></span>
+      Z.ai Sovereign Partner Program · Applicant
+    </div>
+    <h1 class="text-4xl md:text-6xl font-extrabold leading-[1.05] max-w-4xl">
+      AI products <span class="text-labs-500">shipped</span>,<br>
+      not pitched.
+    </h1>
+    <p class="text-lg md:text-xl text-slate-400 mt-6 max-w-2xl">
+      Arobe Labs is the software and AI practice of <b class="text-white">Distribuciones Arobe S.A.S. de C.V.</b> —
+      a Mexican construction-materials company that also runs seven AI products in production.
+      Our customers include our own enterprise operation, Mexican consumers paying one-time fees,
+      and LATAM + US Hispanic end users at scale.
+    </p>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10 max-w-3xl">
+      <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4">
+        <div class="text-3xl font-black text-labs-500">7</div>
+        <div class="text-xs text-slate-400 mt-1 uppercase tracking-widest">Products in production</div>
+      </div>
+      <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4">
+        <div class="text-3xl font-black text-labs-500">3</div>
+        <div class="text-xs text-slate-400 mt-1 uppercase tracking-widest">LLM vendors deployed</div>
+      </div>
+      <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4">
+        <div class="text-3xl font-black text-labs-500">5</div>
+        <div class="text-xs text-slate-400 mt-1 uppercase tracking-widest">Verticals shipped</div>
+      </div>
+      <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4">
+        <div class="text-3xl font-black text-labs-500">MX+US</div>
+        <div class="text-xs text-slate-400 mt-1 uppercase tracking-widest">Distribution footprint</div>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap gap-3 mt-10">
+      <a href="#portfolio" class="bg-labs-600 hover:bg-labs-700 text-white font-extrabold px-6 py-3 rounded-lg">See the portfolio ↓</a>
+      <a href="#contact" class="border-2 border-slate-700 text-slate-200 hover:bg-slate-900 font-bold px-6 py-3 rounded-lg">Partner with us →</a>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio" class="py-20">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="flex items-end justify-between mb-10">
+      <div>
+        <div class="text-xs text-labs-500 font-bold uppercase tracking-widest">Portfolio</div>
+        <h2 class="text-3xl md:text-4xl font-extrabold mt-1">Products running in production</h2>
+      </div>
+      <div class="text-sm text-slate-500 hidden md:block">Click any card for details →</div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-5">
+      {% for p in projects %}
+      <a href="/labs/{{ p.slug }}" class="group bg-slate-900/60 border border-slate-800 hover:border-labs-600 hover:bg-slate-900 rounded-2xl p-6 transition">
+        <div class="flex items-start justify-between gap-3 mb-3">
+          <div>
+            <div class="font-extrabold text-xl text-white group-hover:text-labs-500 transition">{{ p.name }}</div>
+            <div class="text-sm text-slate-400 mt-0.5">{{ p.tagline }}</div>
+          </div>
+          <div class="text-[10px] font-bold uppercase tracking-widest text-labs-500 bg-labs-900/50 px-2 py-1 rounded whitespace-nowrap">{{ p.status }}</div>
+        </div>
+        <div class="flex flex-wrap gap-1.5 mt-4">
+          {% for s in p.stack[:5] %}
+          <span class="text-[10px] font-mono bg-slate-800 text-slate-300 px-2 py-0.5 rounded">{{ s }}</span>
+          {% endfor %}
+          {% if p.stack|length > 5 %}
+          <span class="text-[10px] font-mono text-slate-500 px-2 py-0.5">+{{ p.stack|length - 5 }}</span>
+          {% endif %}
+        </div>
+        <div class="text-xs text-slate-500 mt-4 italic border-l-2 border-labs-600 pl-3">{{ p.highlight }}</div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- CAPABILITIES -->
+<section id="capabilities" class="py-20 bg-slate-900/50 border-y border-slate-800">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="text-xs text-labs-500 font-bold uppercase tracking-widest">Capabilities</div>
+    <h2 class="text-3xl md:text-4xl font-extrabold mt-1 mb-10">What we actually ship</h2>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+      {% for c in capabilities %}
+      <div class="bg-slate-950 border border-slate-800 rounded-xl p-6">
+        <div class="text-3xl mb-3">{{ c.icon }}</div>
+        <div class="font-bold text-white text-lg mb-2">{{ c.title }}</div>
+        <div class="text-sm text-slate-400">{{ c.body }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- STACK -->
+<section id="stack" class="py-20">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="text-xs text-labs-500 font-bold uppercase tracking-widest">Technical stack</div>
+    <h2 class="text-3xl md:text-4xl font-extrabold mt-1 mb-10">Vendor-independent by design</h2>
+
+    <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 md:p-8 font-mono text-sm">
+      <table class="w-full">
+        <tbody>
+          {% for group, items in stack.items() %}
+          <tr class="border-b border-slate-800 last:border-0">
+            <td class="py-3 pr-4 text-slate-500 uppercase tracking-widest text-[11px] align-top whitespace-nowrap">{{ group }}</td>
+            <td class="py-3 text-slate-200">
+              {% for item in items %}
+                <span class="inline-block bg-slate-800 text-labs-500 px-2 py-0.5 rounded mr-1 mb-1">{{ item }}</span>
+              {% endfor %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <p class="text-sm text-slate-500 mt-5 max-w-3xl">
+      We work with multiple LLM vendors in parallel because real deployments require it: some verticals
+      favor one model's reasoning, some favor another's vision, some favor cost at scale.
+      This is why we're pursuing the <b class="text-labs-500">Z.ai Sovereign Partner Program</b> for Mexico —
+      to add GLM to a stack that already runs on Claude and GPT in production.
+    </p>
+  </div>
+</section>
+
+<!-- PARTNER PROGRAMS -->
+<section class="py-20 bg-slate-900/50 border-y border-slate-800">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="text-xs text-labs-500 font-bold uppercase tracking-widest">Partner programs</div>
+    <h2 class="text-3xl md:text-4xl font-extrabold mt-1 mb-10">Where we stand with vendors and platforms</h2>
+
+    <div class="grid md:grid-cols-2 gap-4">
+      {% for p in partners %}
+      <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 flex items-start justify-between gap-4">
+        <div>
+          <div class="font-bold text-white">{{ p.name }}</div>
+          <div class="text-sm text-slate-400 mt-1">{{ p.status }}</div>
+        </div>
+        <div class="w-3 h-3 rounded-full bg-labs-500 mt-1 flex-shrink-0"></div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="mt-8">
+      <a href="/labs/partners" class="inline-block border-2 border-slate-700 text-slate-200 hover:bg-slate-900 font-bold px-5 py-2.5 rounded">
+        Full partner-program page →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT FOUNDER -->
+<section class="py-20">
+  <div class="max-w-4xl mx-auto px-4">
+    <div class="text-xs text-labs-500 font-bold uppercase tracking-widest">About the founder</div>
+    <h2 class="text-3xl md:text-4xl font-extrabold mt-1 mb-6">Edgar Alejandro Robledo Beltrán</h2>
+    <div class="text-slate-300 text-lg space-y-4">
+      <p>
+        Director General of Distribuciones Arobe S.A.S. de C.V. · Aceromax — a construction-materials
+        import and distribution business operating from Ciudad Victoria, Tamaulipas, Mexico.
+      </p>
+      <p>
+        Mexican and Spanish national. Licenciatura in Finance and M.Sc. in Management (iMSM) from the
+        <b class="text-white">University of Illinois Gies College of Business</b>.
+        Prior experience in data analytics at <b class="text-white">Nielsen</b> (marketing mix modeling).
+      </p>
+      <p>
+        Self-taught software builder. Everything shipped by Arobe Labs — from the WhatsApp SaaS to the
+        legal-document AI to the 5,000-line sports engine — has been architected and implemented
+        hands-on, using AI pair-programming as the force multiplier.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="py-20 bg-gradient-to-br from-slate-900 to-slate-950 border-t border-slate-800">
+  <div class="max-w-3xl mx-auto px-4">
+    <div class="text-center mb-10">
+      <div class="text-xs text-labs-500 font-bold uppercase tracking-widest">Contact</div>
+      <h2 class="text-3xl md:text-4xl font-extrabold mt-1">Start a conversation</h2>
+      <p class="text-slate-400 mt-3">Partner programs, custom LLM deployments, enterprise AI engagements.</p>
+    </div>
+
+    {% with msgs = get_flashed_messages(with_categories=true) %}
+      {% for cat, msg in msgs %}
+        <div class="bg-red-900/40 border border-red-800 text-red-200 px-4 py-3 rounded mb-6">{{ msg }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <form method="post" action="/labs/contact" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 md:p-8 space-y-5">
+      <div class="grid md:grid-cols-2 gap-4">
+        <label class="block">
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Your name *</span>
+          <input name="name" required class="mt-1 w-full bg-slate-950 border border-slate-700 rounded px-3 py-2 text-white focus:ring-2 focus:ring-labs-500 outline-none">
+        </label>
+        <label class="block">
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Organization</span>
+          <input name="org" class="mt-1 w-full bg-slate-950 border border-slate-700 rounded px-3 py-2 text-white focus:ring-2 focus:ring-labs-500 outline-none">
+        </label>
+      </div>
+      <label class="block">
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Email *</span>
+        <input type="email" name="email" required class="mt-1 w-full bg-slate-950 border border-slate-700 rounded px-3 py-2 text-white focus:ring-2 focus:ring-labs-500 outline-none">
+      </label>
+      <label class="block">
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Inquiry type</span>
+        <select name="inquiry_type" class="mt-1 w-full bg-slate-950 border border-slate-700 rounded px-3 py-2 text-white focus:ring-2 focus:ring-labs-500 outline-none">
+          <option value="">— Select —</option>
+          <option>LLM vendor / partner program</option>
+          <option>Enterprise AI engagement</option>
+          <option>Custom product build</option>
+          <option>Investor / strategic</option>
+          <option>Press / analyst</option>
+          <option>Other</option>
+        </select>
+      </label>
+      <label class="block">
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Message</span>
+        <textarea name="message" rows="4" class="mt-1 w-full bg-slate-950 border border-slate-700 rounded px-3 py-2 text-white focus:ring-2 focus:ring-labs-500 outline-none"></textarea>
+      </label>
+      <button type="submit" class="w-full bg-labs-600 hover:bg-labs-700 text-white font-extrabold py-4 rounded-lg text-base">
+        Send →
+      </button>
+      <p class="text-xs text-slate-500 text-center">
+        Or write directly to <a class="underline" href="mailto:contacto@arobegroup.com">contacto@arobegroup.com</a>.
+      </p>
+    </form>
+  </div>
+</section>
+
+{% endblock %}

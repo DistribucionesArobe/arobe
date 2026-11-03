@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Arobe Labs — AI products in production across construction, legal, sports and travel{% endblock %}</title>
+<meta name="description" content="{% block description %}Arobe Labs — the software/AI practice of Distribuciones Arobe S.A.S. de C.V. (Mexico). Seven AI products in production. Multi-LLM stack (Claude, GPT, Z.ai GLM). Z.ai Sovereign Partner Program applicant.{% endblock %}">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://arobe.mx{{ request.path }}">
+<link rel="alternate" hreflang="en" href="https://arobe.mx{{ request.path }}">
+<link rel="alternate" hreflang="es-mx" href="https://arobe.mx/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Arobe Labs">
+<meta property="og:title" content="{{ self.title() }}">
+<meta property="og:description" content="{{ self.description() }}">
+<meta property="og:url" content="https://arobe.mx{{ request.path }}">
+<meta property="og:locale" content="en_US">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = { theme: { extend: {
+  colors: {
+    arobe: { 50:'#f4f6fb', 100:'#e5eaf4', 500:'#4a73b8', 700:'#2a4d8a', 900:'#15284d' },
+    labs:  { 500:'#8b5cf6', 600:'#7c3aed', 700:'#6d28d9', 900:'#2e1065' },
+  },
+  fontFamily: { mono: ['ui-monospace','SFMono-Regular','Menlo','monospace'] },
+}}}
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  .grid-tex { background-image: radial-gradient(rgba(255,255,255,.08) 1px, transparent 1px); background-size: 18px 18px; }
+  .glow { box-shadow: 0 0 60px rgba(139,92,246,.25); }
+</style>
+
+<!-- Schema.org -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Arobe Labs",
+  "legalName": "Distribuciones Arobe S.A.S. de C.V.",
+  "url": "https://arobe.mx/labs",
+  "parentOrganization": {
+    "@type": "Organization",
+    "name": "Distribuciones Arobe S.A.S. de C.V.",
+    "url": "https://arobe.mx"
+  },
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Av. Familia Rotaria 510",
+    "addressLocality": "Ciudad Victoria",
+    "addressRegion": "Tamaulipas",
+    "postalCode": "87020",
+    "addressCountry": "MX"
+  },
+  "founder": {
+    "@type": "Person",
+    "name": "Edgar Alejandro Robledo Beltrán",
+    "jobTitle": "Director General",
+    "alumniOf": [
+      {"@type":"EducationalOrganization","name":"University of Illinois Gies College of Business"},
+      {"@type":"EducationalOrganization","name":"Maur Hill-Mount Academy"}
+    ]
+  },
+  "sameAs": [
+    "https://arobe.mx",
+    "https://dondever.app",
+    "https://cotizaexpress.com",
+    "https://antesdefirmar.mx",
+    "https://servingsince.com"
+  ],
+  "areaServed": [
+    {"@type":"Country","name":"Mexico"},
+    {"@type":"Country","name":"United States"},
+    {"@type":"Place","name":"Latin America"}
+  ],
+  "knowsAbout": [
+    "Large Language Models",
+    "Retrieval-Augmented Generation",
+    "Document AI",
+    "WhatsApp Business Cloud API",
+    "Programmatic SEO",
+    "Multi-tenant SaaS",
+    "Mexican CFDI 4.0 invoicing"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "Partnerships and AI engagements",
+    "availableLanguage": ["English","Spanish"],
+    "email": "contacto@arobegroup.com"
+  }
+}
+</script>
+</head>
+
+<body class="bg-slate-950 text-slate-100 antialiased font-sans">
+
+<header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur border-b border-slate-800">
+  <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
+    <a href="/labs" class="flex items-center gap-2.5">
+      <div class="w-8 h-8 bg-gradient-to-br from-labs-500 to-labs-700 text-white grid place-items-center font-black text-sm rounded">A</div>
+      <div class="leading-tight">
+        <div class="font-extrabold tracking-tight text-sm">AROBE <span class="text-labs-500">LABS</span></div>
+        <div class="text-[9px] text-slate-400 uppercase tracking-[0.2em]">AI products · Mexico</div>
+      </div>
+    </a>
+    <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-slate-300">
+      <a href="/labs" class="hover:text-labs-500 {% if page == 'labs' %}text-labs-500{% endif %}">Portfolio</a>
+      <a href="/labs#capabilities" class="hover:text-labs-500">Capabilities</a>
+      <a href="/labs#stack" class="hover:text-labs-500">Stack</a>
+      <a href="/labs/partners" class="hover:text-labs-500 {% if page == 'labs-partners' %}text-labs-500{% endif %}">Partners</a>
+      <a href="/labs#contact" class="hover:text-labs-500">Contact</a>
+    </nav>
+    <div class="flex items-center gap-3">
+      <a href="/labs#contact" class="bg-labs-600 hover:bg-labs-700 text-white font-extrabold px-3 py-1.5 rounded text-xs md:text-sm">Partner with us</a>
+      <a href="/" class="text-xs text-slate-400 hover:text-white hidden md:inline" title="Main e-commerce site (Spanish)">← arobe.mx</a>
+    </div>
+  </div>
+</header>
+
+{% block content %}{% endblock %}
+
+<footer class="bg-slate-900 border-t border-slate-800 mt-20">
+  <div class="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-4 gap-8 text-sm text-slate-400">
+    <div>
+      <div class="font-extrabold text-white text-base">AROBE <span class="text-labs-500">LABS</span></div>
+      <div class="text-xs mt-1">Software and AI practice of<br>Distribuciones Arobe S.A.S. de C.V.</div>
+      <div class="text-xs mt-3">Ciudad Victoria, Tamaulipas, Mexico</div>
+      <div class="text-xs mt-1">RFC: DAR220709MC3</div>
+    </div>
+    <div>
+      <div class="font-bold text-white mb-2">Products</div>
+      <ul class="space-y-1">
+        <li><a href="/labs/cotizaexpress" class="hover:text-labs-500">CotizaExpress</a></li>
+        <li><a href="/labs/dondever" class="hover:text-labs-500">DondeVer</a></li>
+        <li><a href="/labs/antesdefirmar" class="hover:text-labs-500">AntesDeFirmar</a></li>
+        <li><a href="/labs/arobe-mx" class="hover:text-labs-500">Arobe.mx</a></li>
+        <li><a href="/labs/servingsince" class="hover:text-labs-500">Serving Since</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="font-bold text-white mb-2">For partners</div>
+      <ul class="space-y-1">
+        <li><a href="/labs/partners" class="hover:text-labs-500">Partner programs</a></li>
+        <li><a href="/labs#capabilities" class="hover:text-labs-500">Capabilities</a></li>
+        <li><a href="/labs#stack" class="hover:text-labs-500">Technical stack</a></li>
+        <li><a href="/labs#contact" class="hover:text-labs-500">Start a conversation</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="font-bold text-white mb-2">Contact</div>
+      <ul class="space-y-1">
+        <li><a href="mailto:contacto@arobegroup.com" class="hover:text-labs-500">contacto@arobegroup.com</a></li>
+        <li class="text-xs mt-2">English · Spanish<br>Mon–Fri 9am–7pm CT</li>
+      </ul>
+    </div>
+  </div>
+  <div class="border-t border-slate-800 py-4 text-xs text-center text-slate-500">
+    &copy; 2026 Distribuciones Arobe S.A.S. de C.V. — Software and AI products engineered in Mexico.
+  </div>
+</footer>
+
+</body>
+</html>

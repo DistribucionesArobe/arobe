@@ -1,0 +1,202 @@
+"""
+Arobe Labs — AI product portfolio
+Used in /labs (English) section of arobe.mx for partner-program credentials
+(Z.ai Sovereign Partner Program, Anthropic Partner, OpenAI Partner, etc.).
+"""
+
+PROJECTS = [
+    {
+        "slug": "cotizaexpress",
+        "name": "CotizaExpress",
+        "tagline": "WhatsApp-native AI quoting SaaS for hardware stores",
+        "url": "https://cotizaexpress.com",
+        "status": "Production",
+        "year_started": 2026,
+        "category": "Vertical SaaS · B2B",
+        "vertical": "Construction / hardware retail",
+        "customers": "Multi-tenant; AceroMax (390 SKUs) and Arobe as production tenants",
+        "stack": ["FastAPI", "PostgreSQL + pgvector", "Meta WhatsApp Cloud API", "Twilio fallback", "Stripe", "Claude", "Next.js dashboard"],
+        "capabilities": [
+            "Semantic product search with synonym normalization",
+            "Jargon normalization layer (regional construction slang)",
+            "PDF quote generation with tenant branding",
+            "Three-tier subscription with Stripe",
+            "Multi-tenant isolation",
+            "Construction materials calculator module",
+        ],
+        "highlight": "Running real traffic on Meta Cloud API with 390-product semantic catalog in production.",
+    },
+    {
+        "slug": "dondever",
+        "name": "DondeVer",
+        "tagline": "Programmatic SEO sports streaming guide for LATAM + US Hispanic",
+        "url": "https://dondever.app",
+        "status": "Production · growing",
+        "year_started": 2024,
+        "category": "Consumer web · SEO programmatic",
+        "vertical": "Sports media",
+        "customers": "LATAM + US Hispanic end users",
+        "stack": ["FastAPI", "PostgreSQL async (asyncpg)", "Jinja2", "Pillow (OG images)", "PWA", "ESPN API", "TheSportsDB", "The Odds API"],
+        "capabilities": [
+            "5,600+ lines of core code, 70+ routes, 47 active leagues",
+            "Programmatic SEO (sitemap, Schema.org SportsEvent, OG images, hreflang)",
+            "Smart affiliate redirect with geo-targeting (/go/{key})",
+            "Multi-channel distribution: Twitter/X bot, TikTok, Instagram, WhatsApp broadcast, email, push",
+            "AdSense monetization active + 13 streaming affiliates + 7 betting/VPN affiliates",
+            "PWA to bypass app-store restrictions on betting content",
+        ],
+        "highlight": "The project that validated SEO programmatic can beat paid acquisition — 1/3 of traffic from a single team (Dodgers).",
+    },
+    {
+        "slug": "antesdefirmar",
+        "name": "AntesDeFirmar",
+        "tagline": "Document AI for Mexican labor-law finiquitos — review before you sign",
+        "url": "https://antesdefirmar.mx",
+        "status": "Live · optimizing acquisition",
+        "year_started": 2026,
+        "category": "Vertical AI · Consumer legal",
+        "vertical": "Labor law / HR",
+        "customers": "End consumers (employees being laid off)",
+        "stack": ["Next.js", "Vercel → Render", "Mercado Pago (card + OXXO)", "Claude Vision API", "PostHog"],
+        "capabilities": [
+            "Photo-first flow: upload finiquito PDF/image",
+            "Claude vision extraction of line items",
+            "Legal rule engine comparing extracted amounts vs. statutory minimums",
+            "One-time MXN $199 paywall",
+            "Expansion roadmap: IMSS pension calculator, AFORE unemployment withdrawal, rental contracts",
+        ],
+        "highlight": "Vertical LLM product with real paywall, measuring product-market fit with a disciplined kill-criteria experiment.",
+    },
+    {
+        "slug": "arobe-mx",
+        "name": "Arobe.mx",
+        "tagline": "AI-authored B2B e-commerce for a construction-materials distributor",
+        "url": "https://arobe.mx",
+        "status": "Production",
+        "year_started": 2026,
+        "category": "Full-stack e-commerce · B2B + B2C",
+        "vertical": "Construction materials distribution",
+        "customers": "Contractors, hardware stores, builders across 11 Mexican cities",
+        "stack": ["Flask", "PostgreSQL", "Jinja2", "Tailwind", "Mercado Pago", "Resend", "Skydropx", "Render"],
+        "capabilities": [
+            "Full catalog with 40+ SKUs across SusPan and Insulglass brands",
+            "Automated CFDI 4.0 invoicing",
+            "11-city coverage logic with FOB-pricing and ZIP-code routing",
+            "14 programmatic SEO landing pages (ciudad × línea)",
+            "US Dealer Program with 11 metro areas, FOB border terms, Schema.org Manufacturer",
+            "hreflang es-mx / en-us separation",
+            "Printable spec sheets in ASTM/US units",
+        ],
+        "highlight": "Entire codebase built with AI pair-programming; 15 shipped feature phases in 3 months with zero prior Python background.",
+    },
+    {
+        "slug": "aceromax-pos",
+        "name": "AceroMax POS",
+        "tagline": "Point-of-sale and CFDI invoicing for a hardware wholesaler",
+        "url": None,
+        "status": "Internal production",
+        "year_started": 2025,
+        "category": "Internal enterprise software",
+        "vertical": "Hardware / construction retail",
+        "customers": "AceroMax (owner-operated)",
+        "stack": ["Python", "PostgreSQL", "Docker on Render", "CFDI 4.0 integrations"],
+        "capabilities": [
+            "Full POS with inventory",
+            "CFDI 4.0 auto-invoicing",
+            "USG concessionaire SKU handling",
+            "Cross-system data feeding to CotizaExpress tenant",
+        ],
+        "highlight": "In-house enterprise system running day-to-day operations of a real construction-materials wholesaler.",
+    },
+    {
+        "slug": "servingsince",
+        "name": "Serving Since",
+        "tagline": "Discovery product for century-old restaurants and taverns",
+        "url": "https://servingsince.com",
+        "status": "MVP · Boston, New Orleans, San Francisco",
+        "year_started": 2026,
+        "category": "Consumer discovery",
+        "vertical": "Travel + food heritage",
+        "customers": "Travelers and local history enthusiasts",
+        "stack": ["FastAPI", "Jinja2", "PostgreSQL", "YAML-as-source", "Render", "Stripe", "Viator affiliates", "Stay22"],
+        "capabilities": [
+            "YAML-first content ops (no CMS)",
+            "Age-tier taxonomy (50+ / 75+ / 100+)",
+            "Automated public-signal verification pipeline (unpublish on conflict)",
+            "One-time $9 city kit sold via Stripe",
+            "Kindle ebook distribution channel on Amazon",
+            "Automated weekly SEO review via GitHub Action",
+        ],
+        "highlight": "Content-ops product with 'unknown is a valid value' as design principle — zero-manual-verification scaling.",
+    },
+    {
+        "slug": "matchbot",
+        "name": "MatchBot",
+        "tagline": "Experimental matching bot",
+        "url": None,
+        "status": "Prototype",
+        "year_started": 2025,
+        "category": "Bot / messaging",
+        "vertical": "Experimental",
+        "customers": "N/A",
+        "stack": ["Python"],
+        "capabilities": ["Matching engine prototype"],
+        "highlight": "Early experimentation that fed into later production products.",
+    },
+]
+
+
+CAPABILITIES = [
+    {
+        "icon": "💬",
+        "title": "Conversational AI on WhatsApp",
+        "body": "Production deployments on Meta WhatsApp Cloud API with multi-tenant isolation, embedded signup flow, template management, and billing-aware broadcast.",
+    },
+    {
+        "icon": "🔍",
+        "title": "Retrieval-Augmented Generation",
+        "body": "pgvector-based semantic search over domain catalogs with synonym normalization, jargon layers and hybrid retrieval. Shipped at hardware-retail scale.",
+    },
+    {
+        "icon": "📄",
+        "title": "Document AI (Vision)",
+        "body": "Claude vision pipelines extracting structured data from scanned PDFs, images and photo-captured documents. Deployed in Mexican labor-law product.",
+    },
+    {
+        "icon": "🏷️",
+        "title": "Programmatic SEO at scale",
+        "body": "Templated landing-page generation with hreflang, Schema.org, dynamic sitemaps and OG images. Shipped in sports (DondeVer), construction (Arobe), travel (Serving Since).",
+    },
+    {
+        "icon": "🧮",
+        "title": "Vertical calculators & rule engines",
+        "body": "Mexican CFDI 4.0 invoicing, construction materials calculators, labor-law rule engines, IMSS pension estimators — vertical logic layered on top of LLMs.",
+    },
+    {
+        "icon": "🌎",
+        "title": "LATAM + US Hispanic distribution",
+        "body": "Spanish-first products with English counterparts; experience targeting Mexico, border Texas, RGV, Houston, San Antonio with real paid-media and SEO tests.",
+    },
+]
+
+
+STACK_SUMMARY = {
+    "LLMs in production": ["Claude (Anthropic)", "GPT (OpenAI)", "Z.ai GLM (evaluating)"],
+    "Backend": ["FastAPI", "Flask", "PostgreSQL + pgvector", "Next.js API routes"],
+    "Hosting": ["Render (primary)", "Vercel (secondary)"],
+    "Payments": ["Mercado Pago (MX)", "Stripe (US)"],
+    "Messaging": ["Meta WhatsApp Cloud API", "Twilio", "Resend (email)"],
+    "Analytics": ["Google Analytics 4", "Google Search Console", "PostHog"],
+    "Logistics": ["Skydropx (MX)"],
+    "Content ops": ["YAML sources", "Automated SEO review via GitHub Actions"],
+}
+
+
+PARTNER_PROGRAMS = [
+    {"name": "Z.ai Sovereign Partner Program (ZSP)", "status": "Applicant · Mexico region"},
+    {"name": "Anthropic Partner Program", "status": "Production Claude customer · partnership exploration"},
+    {"name": "Meta Business Partners", "status": "Live Cloud API tenant (CotizaExpress)"},
+    {"name": "Mercado Pago Developers", "status": "Live"},
+    {"name": "Stripe Partners", "status": "Live"},
+    {"name": "Admitad / Viator / Stay22 affiliates", "status": "Live (DondeVer, Serving Since)"},
+]

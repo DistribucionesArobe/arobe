@@ -1,0 +1,64 @@
+{% extends "labs/_base.html" %}
+
+{% block title %}Partner programs — Arobe Labs{% endblock %}
+{% block description %}Vendor and platform partnerships Arobe Labs operates with — Z.ai, Anthropic, Meta, Mercado Pago, Stripe. Mexico-based regional implementation partner.{% endblock %}
+
+{% block content %}
+
+<section class="py-16 border-b border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950">
+  <div class="max-w-4xl mx-auto px-4">
+    <a href="/labs" class="text-xs text-slate-500 hover:text-labs-500">← Back to Labs</a>
+    <div class="text-xs text-labs-500 font-bold uppercase tracking-widest mt-4">Partner programs</div>
+    <h1 class="text-4xl md:text-5xl font-extrabold mt-2">Where we stand with vendors and platforms</h1>
+    <p class="text-slate-400 text-lg mt-4 max-w-3xl">
+      We operate as a vendor-independent AI implementation partner from Mexico. We prefer multi-vendor stacks
+      — our customers deserve the best model for the job, not a loyalty tax. The programs below are where
+      we're already active or in formal evaluation.
+    </p>
+  </div>
+</section>
+
+<section class="py-16">
+  <div class="max-w-4xl mx-auto px-4 space-y-5">
+    {% for p in partners %}
+    <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-6 flex items-start justify-between gap-6">
+      <div>
+        <div class="font-extrabold text-white text-xl">{{ p.name }}</div>
+        <div class="text-slate-400 mt-2">{{ p.status }}</div>
+      </div>
+      <div class="w-3 h-3 rounded-full bg-labs-500 mt-2 flex-shrink-0"></div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="py-16 bg-slate-900/50 border-y border-slate-800">
+  <div class="max-w-4xl mx-auto px-4">
+    <div class="text-xs text-labs-500 font-bold uppercase tracking-widest">For LLM vendors evaluating Arobe Labs</div>
+    <h2 class="text-3xl font-extrabold mt-1 mb-6">What we bring to a regional partnership</h2>
+    <div class="grid md:grid-cols-2 gap-5 text-sm">
+      <div class="bg-slate-950 border border-slate-800 rounded-xl p-5">
+        <div class="font-bold text-white text-base mb-2">Deployment capability</div>
+        <div class="text-slate-400">Seven live products across five verticals; experience with multi-tenant SaaS, document AI, RAG, programmatic SEO, and vertical calculators.</div>
+      </div>
+      <div class="bg-slate-950 border border-slate-800 rounded-xl p-5">
+        <div class="font-bold text-white text-base mb-2">Mexico-first distribution</div>
+        <div class="text-slate-400">Based in Ciudad Victoria, Tamaulipas; native coverage of the Mexican SME and construction markets, plus US-Hispanic go-to-market experience.</div>
+      </div>
+      <div class="bg-slate-950 border border-slate-800 rounded-xl p-5">
+        <div class="font-bold text-white text-base mb-2">Enterprise customer base</div>
+        <div class="text-slate-400">An operating construction-materials distributor (Aceromax / Arobe Group) acts as our first production tenant and reference customer.</div>
+      </div>
+      <div class="bg-slate-950 border border-slate-800 rounded-xl p-5">
+        <div class="font-bold text-white text-base mb-2">Portable, sovereign-ready infrastructure</div>
+        <div class="text-slate-400">Our stack (FastAPI, Flask, PostgreSQL, Render) is model-agnostic and portable to on-prem or private-cloud deployments without rewrites.</div>
+      </div>
+    </div>
+
+    <div class="mt-10 text-center">
+      <a href="/labs#contact" class="inline-block bg-labs-600 hover:bg-labs-700 text-white font-extrabold px-6 py-3 rounded">Start a partner conversation →</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
