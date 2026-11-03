@@ -202,7 +202,7 @@ CAPABILITIES = [
 
 
 STACK_SUMMARY = {
-    "LLMs in production": ["Claude (Anthropic)", "GPT (OpenAI)", "Z.ai GLM (evaluating)"],
+    "LLMs in production": ["Claude (Anthropic)", "GPT (OpenAI)"],
     "Backend": ["FastAPI", "Flask", "PostgreSQL + pgvector", "Next.js API routes"],
     "Hosting": ["Render (primary)", "Vercel (secondary)"],
     "Payments": ["Mercado Pago (MX)", "Stripe (US)"],
@@ -214,10 +214,10 @@ STACK_SUMMARY = {
 
 
 PARTNER_PROGRAMS = [
-    {"name": "Z.ai Sovereign Partner Program (ZSP)", "status": "Applicant · Mexico region"},
-    {"name": "Anthropic Partner Program", "status": "Production Claude customer · partnership exploration"},
+    {"name": "Anthropic (Claude)", "status": "Production customer · partnership exploration"},
     {"name": "Meta Business Partners", "status": "Live Cloud API tenant (CotizaExpress)"},
-    {"name": "Mercado Pago Developers", "status": "Live"},
-    {"name": "Stripe Partners", "status": "Live"},
+    {"name": "Mercado Pago Developers", "status": "Live · payments integration"},
+    {"name": "Stripe Partners", "status": "Live · subscription + one-time billing"},
     {"name": "Admitad / Viator / Stay22 affiliates", "status": "Live (DondeVer, Serving Since)"},
+    {"name": "Google (Analytics 4, Search Console, AdSense)", "status": "Live · AdSense approved Sep 2026"},
 ]
