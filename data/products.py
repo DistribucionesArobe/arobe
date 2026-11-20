@@ -156,7 +156,8 @@ PRODUCTS = [
             "acústico 1.22 × 2.44 m para plafón suspendido y revestimientos"
         ),
         "imagenes": [
-            "acuspan-1.jpg",   # placeholder, usar la ficha técnica como imagen inicial
+            "acuspan-1.jpg",   # foto real producto
+            "acuspan-2.jpg",   # ficha técnica (specs visuales)
         ],
         "descripcion": (
             "SusPan Acuspan es un panel de yeso (tablaroca) con perforaciones circulares "
