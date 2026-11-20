@@ -17,6 +17,218 @@ Precio mayoreo se calcula automático si queda en None.
 # --- Catálogo ---
 PRODUCTS = [
     # =========================================================
+    # SUSPAN BOARD — Paneles resistentes
+    # =========================================================
+    {
+        "slug": "glassbo",
+        "nombre": "GlassBo",
+        "marca": "suspan",
+        "linea": "board",
+        "tipo": "Panel resistente al agua con cara de fibra de vidrio",
+        "tagline": "Alternativa mexicana a Glassrey y Securock · resistente a humedad e impacto",
+        "precio_publico": 695,
+        "precio_mayoreo": 539,          # FIJO, no calculado (30% margen sobre costo $414.39)
+        "costo_interno": 414.39,        # NO se muestra al cliente, solo para reportes
+        "presentacion": "Pieza individual · paleta 40 piezas",
+        "dimensiones": "1.22 m × 2.44 m × 1/2\" (12.7 mm)",
+        "rendimiento_m2": 2.98,          # 1.22 × 2.44
+        "peso_kg": 20,                    # peso por pieza
+        "no_paqueteria": True,            # formato grande, requiere fletera
+        "seo_title": "GlassBo · Panel resistente al agua alternativa a Glassrey y Securock | SusPan",
+        "seo_description": (
+            "GlassBo by SusPan · panel de tablaroca con cara de fibra de vidrio "
+            "resistente al agua e impacto · 1.22 × 2.44 m × 1/2\" · alternativa mexicana "
+            "más económica a Glassrey y Securock para baños, cocinas, spas y áreas "
+            "exteriores protegidas."
+        ),
+        "seo_image_alt": (
+            "Panel GlassBo SusPan · tablaroca resistente al agua con cara de fibra de "
+            "vidrio 1.22 × 2.44 m para áreas húmedas y exteriores"
+        ),
+        "imagenes": [
+            "glassbo-1.jpg",   # placeholder, subir foto real después
+        ],
+        "descripcion": (
+            "GlassBo es un panel de tablaroca de alta resistencia diseñado para áreas "
+            "húmedas y aplicaciones donde el panel convencional falla. Núcleo de yeso "
+            "reforzado con cara y reverso de fibra de vidrio (no papel), lo que "
+            "elimina el riesgo de crecimiento de moho y le da resistencia adicional "
+            "a impactos, humedad ambiental y temperatura. Alternativa mexicana más "
+            "económica a productos importados como Glassrey (Georgia-Pacific) y "
+            "Securock (USG), con las mismas propiedades técnicas."
+        ),
+        "specs": {
+            "espesor": "1/2\" (12.7 mm)",
+            "dimensiones": "1.22 m × 2.44 m",
+            "peso_por_pieza": "20 kg",
+            "presentacion": "Pieza individual · paleta de 40 piezas",
+            "cara": "Fibra de vidrio (no papel)",
+            "nucleo": "Yeso reforzado",
+            "clasificacion_fuego": "Clase A",
+            "resistencia_moho": "Sin crecimiento (ASTM D3273 puntuación 10)",
+            "humedad_max": "100% HR (apto para áreas totalmente húmedas)",
+            "astm_e84": "Clase A · llama < 25 · humo < 50",
+            "aplicacion": "Muros y plafones interiores en áreas húmedas o exteriores protegidos",
+        },
+        "usos": [
+            "Sustituir tablaroca convencional en baños, cocinas comerciales y spas",
+            "Cielorasos exteriores protegidos (bajo aleros, marquesinas)",
+            "Muros divisorios en áreas de proceso alimentario",
+            "Sustrato para acabados de mosaico, pasta epóxica o pintura vinílica",
+            "Aplicaciones que exigen resistencia a impacto (áreas deportivas, escuelas)",
+        ],
+        "aplicaciones": [
+            "Baños y regaderas (residencial y comercial)",
+            "Cocinas comerciales e industriales",
+            "Spas, gimnasios, albercas techadas",
+            "Cuartos de lavado y lavanderías",
+            "Exteriores protegidos (fachadas bajo alero)",
+            "Escuelas y áreas deportivas",
+            "Hospitales y áreas clínicas",
+        ],
+        "destacado": True,
+        "faqs": [
+            {
+                "q": "¿En qué se diferencia GlassBo de la tablaroca convencional?",
+                "a": (
+                    "La tablaroca convencional tiene cara y reverso de papel — la humedad "
+                    "hace que el papel se pandee, se manche y desarrolle moho. GlassBo "
+                    "usa fibra de vidrio en ambas caras, lo que le da resistencia total a "
+                    "humedad (100% HR), a impactos y evita crecimiento de moho."
+                ),
+            },
+            {
+                "q": "¿Cómo se compara con Glassrey y Securock?",
+                "a": (
+                    "Especificaciones equivalentes: mismo formato 1.22 × 2.44 m, mismo "
+                    "espesor 1/2\", misma resistencia a agua y moho, misma Clase A al fuego. "
+                    "La diferencia es precio — GlassBo cuesta significativamente menos por "
+                    "ser producto de importación directa sin intermediarios de marca."
+                ),
+            },
+            {
+                "q": "¿Puedo colocarlo directamente en zona de regadera?",
+                "a": (
+                    "Sí, GlassBo está diseñado para eso. Después de instalado se recomienda "
+                    "aplicar membrana impermeabilizante y acabado (mosaico, azulejo, "
+                    "porcelana). La combinación panel + impermeabilizante es la solución "
+                    "estándar para regaderas."
+                ),
+            },
+            {
+                "q": "¿Cuántas piezas necesito por m²?",
+                "a": (
+                    "Cada pieza cubre 2.98 m². Para calcular tu proyecto: divide el área "
+                    "total en m² entre 2.98 y suma 10% para recortes. Ejemplo: baño de "
+                    "20 m² requiere 20 / 2.98 = 6.71 piezas → 8 piezas con margen."
+                ),
+            },
+        ],
+    },
+
+    # =========================================================
+    # SUSPAN ACUSPAN — Panel de yeso acústico perforado (board)
+    # =========================================================
+    {
+        "slug": "acuspan",
+        "nombre": "SusPan Acuspan",
+        "marca": "suspan",
+        "linea": "board",
+        "tipo": "Panel de yeso acústico perforado con velo",
+        "tagline": "Tablero de yeso perforado + velo acústico · confort acústico para oficinas, escuelas y hospitales",
+        "precio_publico": 500,
+        "precio_mayoreo": None,            # auto 15% off = 425
+        "presentacion": "Pieza individual",
+        "dimensiones": "1.22 m × 2.44 m (4' × 8')",
+        "rendimiento_m2": 2.98,            # 1.22 × 2.44
+        "peso_kg": 22,                      # tablero de yeso ~7.4 kg/m² × 2.98 m²
+        "no_paqueteria": True,             # formato grande 2.44 m, requiere fletera
+        "seo_title": "SusPan Acuspan · Panel de yeso acústico perforado 1.22×2.44 m | SusPan",
+        "seo_description": (
+            "SusPan Acuspan · panel de yeso (tablaroca) perforado con velo acústico "
+            "en cara posterior · formato 1.22 × 2.44 m · perforación circular Ø 7 mm "
+            "a 25 mm · borde rebajado (TE) · absorbe el sonido y reduce la reverberación "
+            "en oficinas, escuelas, hospitales y salas de reunión. Listo para pintar. "
+            "Factura CFDI 4.0."
+        ),
+        "seo_image_alt": (
+            "Panel acústico SusPan Acuspan · tablero de yeso perforado con velo "
+            "acústico 1.22 × 2.44 m para plafón suspendido y revestimientos"
+        ),
+        "imagenes": [
+            "acuspan-1.jpg",   # placeholder, usar la ficha técnica como imagen inicial
+        ],
+        "descripcion": (
+            "SusPan Acuspan es un panel de yeso (tablaroca) con perforaciones circulares "
+            "regulares en la cara vista y un velo acústico negro adherido a la cara "
+            "posterior. La combinación de perforación + velo + cámara de aire detrás del "
+            "panel absorbe el sonido y reduce la reverberación, mejorando la inteligibilidad "
+            "y el confort acústico. Está diseñado para sistemas de plafón suspendido y "
+            "revestimientos interiores con acabado arquitectónico limpio y moderno. "
+            "Compatible con los sistemas de construcción ligera habituales y listo para "
+            "recibir pintura."
+        ),
+        "specs": {
+            "material":            "Tablero de yeso (tablaroca)",
+            "perforacion":         "Circular",
+            "diametro":            "7 mm",
+            "distancia_centros":   "25 mm (2.5 cm)",
+            "tipo_borde":          "Rebajado (TE)",
+            "velo_acustico":       "Sí, en cara posterior",
+            "acabado":             "Listo para pintar",
+            "aplicaciones":        "Oficinas, escuelas, hospitales, comercios, salas de reunión, proyectos institucionales",
+        },
+        "ficha_tecnica": "acuspan-ficha-tecnica.pdf",
+        "faqs": [
+            {
+                "q": "¿Qué hace diferente a Acuspan de una tablaroca normal?",
+                "a": (
+                    "La tablaroca tradicional refleja el sonido. Acuspan tiene perforaciones "
+                    "circulares que dejan pasar las ondas sonoras hacia la cara posterior, "
+                    "donde un velo acústico negro las absorbe. El resultado es un cuarto más "
+                    "silencioso y con mejor inteligibilidad del habla, sin perder el aspecto "
+                    "limpio de un plafón de yeso."
+                ),
+            },
+            {
+                "q": "¿Dónde se usa principalmente?",
+                "a": (
+                    "En oficinas corporativas, escuelas y universidades, hospitales y clínicas, "
+                    "comercios y plazas comerciales, salas de reunión, auditorios pequeños y "
+                    "proyectos institucionales. Cualquier espacio donde se busque bajar la "
+                    "reverberación sin sacrificar la estética arquitectónica."
+                ),
+            },
+            {
+                "q": "¿Se instala igual que la tablaroca?",
+                "a": (
+                    "Sí. El borde rebajado (TE) permite tratar las juntas con cinta y compuesto "
+                    "igual que una tablaroca convencional. Se puede fijar a canaletas en sistema "
+                    "de plafón suspendido o directamente a bastidor en muro. Después de instalado "
+                    "se pinta como cualquier panel de yeso."
+                ),
+            },
+            {
+                "q": "¿Cuántas piezas necesito por m²?",
+                "a": (
+                    "Cada pieza cubre 2.98 m² (1.22 × 2.44 m). Para tu proyecto divide el área "
+                    "entre 2.98 y suma 10% para recortes. Ejemplo: sala de juntas de 30 m² = "
+                    "30 / 2.98 ≈ 10.07 piezas → 12 piezas con margen."
+                ),
+            },
+            {
+                "q": "¿La pintura afecta el desempeño acústico?",
+                "a": (
+                    "Se recomienda usar pintura vinílica aplicada en capas delgadas con rodillo, "
+                    "sin saturar las perforaciones. Una aplicación cuidadosa mantiene la "
+                    "absorción acústica. Evita pinturas elastoméricas o aplicaciones muy "
+                    "gruesas que puedan tapar los orificios."
+                ),
+            },
+        ],
+    },
+
+    # =========================================================
     # SUSPAN — Colección Astrónomos (plafones acústicos)
     # =========================================================
     {
