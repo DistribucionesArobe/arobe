@@ -554,6 +554,122 @@ PRODUCTS = [
         "destacado": False,
     },
 
+    {
+        "slug": "kepler-black-3001",
+        "nombre": "Kepler Black 3001",
+        "marca": "suspan",
+        "linea": "ceilings",
+        "tipo": "Plafón acústico premium negro · Colección Astrónomos",
+        "tagline": "Plafón negro 61×61 cm · estética arquitectónica moderna · ideal para bares, restaurantes, auditorios y cinemas",
+        "precio_publico": 1500,
+        "precio_mayoreo": None,            # auto 15% off = 1275
+        "presentacion": "Paquete de 10 piezas",
+        "dimensiones": "0.61 × 0.61 m por pieza",
+        "rendimiento_m2": 3.72,
+        "peso_kg": 16,
+        "no_paqueteria": False,            # 61×61 cabe en paquetería estándar
+        "seo_title": "Plafón acústico negro Kepler Black 3001 · 61×61 cm | SusPan",
+        "seo_description": (
+            "Plafón acústico negro Kepler Black 3001 de la Colección Astrónomos · "
+            "cuadrado 61×61 cm · textura basáltica profunda · ideal para bares, "
+            "restaurantes, salas de cine, auditorios y oficinas con diseño oscuro. "
+            "Compatible con suspensión T 15/16\". Precio público $1,500 MXN. "
+            "Envíos a toda la República, factura CFDI 4.0."
+        ),
+        "seo_image_alt": (
+            "Plafón acústico negro SusPan Kepler Black 3001 · textura basáltica · "
+            "61×61 cm · Colección Astrónomos"
+        ),
+        "imagenes": [
+            "kepler-black-3001-1.jpg",
+        ],
+        "ficha_tecnica": "kepler-ficha-tecnica.pdf",
+        "descripcion": (
+            "Kepler Black 3001 es la variante negra del plafón acústico Kepler, "
+            "con textura basáltica profunda y acabado mate que absorbe la luz. "
+            "Diseñado para espacios donde el techo oscuro es parte del lenguaje "
+            "arquitectónico: bares, restaurantes de ambiente, salas de cine, "
+            "auditorios, estudios de grabación, lofts industriales y oficinas con "
+            "diseño contemporáneo. Mantiene el mismo desempeño acústico que la "
+            "versión blanca (NRC 0.50) pero aporta la estética visual que las "
+            "lámparas y los acentos luminosos necesitan para destacar."
+        ),
+        "specs": {
+            "tipo_orilla": "Tegular (Orilla de sombra)",
+            "tamano_panel": "0.61 × 0.61 m (2' × 2')",
+            "espesor": "5/8\" (15 mm)",
+            "color": "Negro mate texturizado",
+            "clasificacion_fuego": "Clase A",
+            "nrc": "0.50",
+            "cac_min": "30",
+            "lr": "0.04 (baja reflexión — amplifica contrastes de iluminación dirigida)",
+            "suspension": "Perfil T 15/16\"",
+            "emisiones_voc": "Bajo",
+            "resistencia_moho": "Estándar",
+            "contenido_reciclado": "20-30%",
+            "peso": "0.70-0.95 lb/ft² (3.4-4.6 kg/m²)",
+            "resistencia_termica": "R-1.4",
+            "humedad_max": "90% HR",
+            "astm_e1264": "Tipo III, Forma 2, Patrón C",
+            "astm_e84": "Clase A",
+            "garantia": "10 años en aplicaciones comerciales",
+        },
+        "usos": [
+            "Techo acústico con lenguaje arquitectónico oscuro",
+            "Esconde luminarias y ductos — el techo desaparece visualmente",
+            "Clasificación Clase A — apto para espacios institucionales",
+            "Mejora acústica del espacio (NRC 0.50)",
+        ],
+        "aplicaciones": [
+            "Bares y restaurantes",
+            "Salas de cine y auditorios",
+            "Estudios de grabación y salas de ensayo",
+            "Lofts, coworkings industriales",
+            "Oficinas con diseño contemporáneo",
+            "Showrooms y galerías",
+        ],
+        "faqs": [
+            {
+                "q": "¿Es diferente al Kepler 0504 blanco?",
+                "a": (
+                    "Mismas dimensiones, mismo formato Tegular, mismo desempeño "
+                    "acústico (NRC 0.50) y la misma Clase A al fuego. La diferencia "
+                    "es el acabado: color negro mate con textura basáltica profunda, "
+                    "pensado para proyectos donde el techo oscuro es parte del diseño."
+                ),
+            },
+            {
+                "q": "¿Por qué elegir un plafón negro?",
+                "a": (
+                    "El techo negro hace que luminarias, ductos y señalética desaparezcan "
+                    "visualmente. Es la elección estándar para cines, auditorios, estudios "
+                    "y espacios donde la iluminación debe ser el protagonista. También "
+                    "lo usan bares y restaurantes de ambiente para crear sensación de "
+                    "intimidad sin sacrificar altura."
+                ),
+            },
+            {
+                "q": "¿Cómo se ve la suspensión? ¿También hay perfil negro?",
+                "a": (
+                    "Sí, recomendamos combinarlo con suspensión T 15/16\" en acabado "
+                    "negro para que el sistema completo luzca uniforme. Si usas perfil "
+                    "blanco estándar quedará visible como una rejilla sobre el techo "
+                    "negro — algunos proyectos lo buscan como efecto visual, otros no."
+                ),
+            },
+            {
+                "q": "¿Cuántas piezas necesito?",
+                "a": (
+                    "Cada paquete trae 10 piezas y cubre 3.72 m². Para tu proyecto "
+                    "divide el área total en m² entre 3.72 y suma 10% para recortes. "
+                    "Ejemplo: restaurante de 80 m² = 80 / 3.72 ≈ 21.5 paquetes, "
+                    "redondea a 24 paquetes con margen."
+                ),
+            },
+        ],
+        "destacado": True,
+    },
+
     # =========================================================
     # INSULGLASS — Aislantes térmicos y acústicos
     # =========================================================
