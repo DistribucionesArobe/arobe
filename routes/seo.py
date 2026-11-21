@@ -93,14 +93,27 @@ def sitemap_xml():
             "  </url>"
         )
 
-    # URLs dinámicas de productos
+    # URLs dinámicas de productos (con image sitemap namespace para SEO en Google Images)
     for p in catalog.all_products():
+        image_tags = ""
+        for img in (p.get("imagenes") or [])[:5]:   # Google permite hasta 1000 imágenes por URL
+            img_url = _abs_url(f"/static/img/products/{img}")
+            caption = (p.get("seo_image_alt") or p.get("nombre") or "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+            title   = (p.get("nombre") or "").replace("&", "&amp;")
+            image_tags += (
+                "    <image:image>\n"
+                f"      <image:loc>{img_url}</image:loc>\n"
+                f"      <image:title>{title}</image:title>\n"
+                f"      <image:caption>{caption}</image:caption>\n"
+                "    </image:image>\n"
+            )
         rows.append(
             "  <url>\n"
             f"    <loc>{_abs_url('/producto/' + p['slug'])}</loc>\n"
             f"    <lastmod>{today}</lastmod>\n"
             "    <changefreq>weekly</changefreq>\n"
             "    <priority>0.8</priority>\n"
+            + image_tags +
             "  </url>"
         )
 
@@ -130,7 +143,8 @@ def sitemap_xml():
 
     body = (
         '<?xml version="1.0" encoding="UTF-8"?>\n'
-        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n'
+        '        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n'
         + "\n".join(rows)
         + "\n</urlset>\n"
     )

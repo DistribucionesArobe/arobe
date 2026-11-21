@@ -4,8 +4,23 @@
 {% block description %}{{ producto.seo_description or producto.tagline }}{% endblock %}
 {% block og_type %}product{% endblock %}
 {% block og_image %}https://arobe.mx{{ url_for('static', filename='img/products/' + producto.imagenes[0]) }}{% endblock %}
+{% block extra_head %}
+{% if producto.keywords %}
+<meta name="keywords" content="{{ producto.keywords|join(', ') }}">
+{% endif %}
+<!-- Product-specific Open Graph (price + availability for rich previews) -->
+<meta property="product:price:amount" content="{{ producto.precio_publico }}">
+<meta property="product:price:currency" content="MXN">
+<meta property="product:availability" content="in stock">
+<meta property="product:condition" content="new">
+<meta property="product:brand" content="{% if producto.marca == 'suspan' %}SusPan{% else %}Insulglass{% endif %}">
+<meta property="product:retailer_item_id" content="{{ producto.slug }}">
+<meta name="twitter:label1" content="Precio"><meta name="twitter:data1" content="${{ '{:,.0f}'.format(producto.precio_publico) }} MXN">
+<meta name="twitter:label2" content="Marca"><meta name="twitter:data2" content="{% if producto.marca == 'suspan' %}SusPan{% else %}Insulglass{% endif %}">
+{% endblock %}
 
 {% block structured_data %}
+<!-- Product Schema (enriched) -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -19,20 +34,82 @@
     "@type": "Brand",
     "name": "{% if producto.marca == 'suspan' %}SusPan{% else %}Insulglass{% endif %}"
   },
+  "manufacturer": {
+    "@type": "Organization",
+    "name": "Distribuciones Arobe S.A.S. de C.V.",
+    "url": "https://arobe.mx"
+  },
   "sku": "{{ producto.slug }}",
+  "mpn": "{{ producto.slug|upper }}",
   "category": "{{ producto.tipo }}",
+  "material": "{{ producto.specs.material if producto.specs and producto.specs.material else producto.tipo }}",
+  {% if producto.specs and producto.specs.color %}"color": "{{ producto.specs.color }}",{% endif %}
+  {% if producto.peso_kg %}"weight": {"@type":"QuantitativeValue","value":"{{ producto.peso_kg }}","unitCode":"KGM"},{% endif %}
+  "additionalProperty": [
+    {% set props = [] %}
+    {% if producto.dimensiones %}{% set _ = props.append({"name":"Dimensiones","value":producto.dimensiones}) %}{% endif %}
+    {% if producto.rendimiento_m2 %}{% set _ = props.append({"name":"Rendimiento por pieza","value":(producto.rendimiento_m2|string + ' m²')}) %}{% endif %}
+    {% if producto.presentacion %}{% set _ = props.append({"name":"Presentación","value":producto.presentacion}) %}{% endif %}
+    {% if producto.specs %}
+      {% if producto.specs.nrc %}{% set _ = props.append({"name":"NRC","value":producto.specs.nrc}) %}{% endif %}
+      {% if producto.specs.clasificacion_fuego %}{% set _ = props.append({"name":"Clase al fuego","value":producto.specs.clasificacion_fuego}) %}{% endif %}
+      {% if producto.specs.espesor %}{% set _ = props.append({"name":"Espesor","value":producto.specs.espesor}) %}{% endif %}
+      {% if producto.specs.astm_e1264 %}{% set _ = props.append({"name":"ASTM E1264","value":producto.specs.astm_e1264}) %}{% endif %}
+      {% if producto.specs.astm_e84 %}{% set _ = props.append({"name":"ASTM E84","value":producto.specs.astm_e84}) %}{% endif %}
+      {% if producto.specs.garantia %}{% set _ = props.append({"name":"Garantía","value":producto.specs.garantia}) %}{% endif %}
+    {% endif %}
+    {% for p in props %}
+    {"@type":"PropertyValue","name":"{{ p.name }}","value":"{{ p.value }}"}{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ],
   "offers": {
     "@type": "Offer",
     "url": "https://arobe.mx{{ url_for('web.producto', slug=producto.slug) }}",
     "priceCurrency": "MXN",
     "price": "{{ producto.precio_publico }}",
+    "priceValidUntil": "2027-12-31",
     "availability": "https://schema.org/InStock",
     "itemCondition": "https://schema.org/NewCondition",
+    "hasMerchantReturnPolicy": {
+      "@type": "MerchantReturnPolicy",
+      "applicableCountry": "MX",
+      "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+      "merchantReturnDays": 7,
+      "returnMethod": "https://schema.org/ReturnByMail",
+      "returnFees": "https://schema.org/ReturnFeesCustomerResponsibility"
+    },
+    "shippingDetails": {
+      "@type": "OfferShippingDetails",
+      "shippingDestination": {
+        "@type": "DefinedRegion",
+        "addressCountry": "MX"
+      },
+      "deliveryTime": {
+        "@type": "ShippingDeliveryTime",
+        "handlingTime": {"@type":"QuantitativeValue","minValue":1,"maxValue":2,"unitCode":"DAY"},
+        "transitTime":  {"@type":"QuantitativeValue","minValue":1,"maxValue":5,"unitCode":"DAY"}
+      }
+    },
     "seller": {
       "@type": "Organization",
-      "name": "Arobe Group"
+      "name": "Arobe Group",
+      "url": "https://arobe.mx"
     }
   }
+}
+</script>
+<!-- Breadcrumb Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Inicio","item":"https://arobe.mx/"},
+    {"@type":"ListItem","position":2,"name":"Catálogo","item":"https://arobe.mx/catalogo"},
+    {"@type":"ListItem","position":3,"name":"{% if producto.marca == 'suspan' %}SusPan{% else %}Insulglass{% endif %}","item":"https://arobe.mx/marcas/{{ producto.marca }}"},
+    {% if producto.linea %}{"@type":"ListItem","position":4,"name":"{{ producto.linea|capitalize }}","item":"https://arobe.mx/marcas/{{ producto.marca }}/{{ producto.linea }}"},{% endif %}
+    {"@type":"ListItem","position":{% if producto.linea %}5{% else %}4{% endif %},"name":"{{ producto.nombre }}","item":"https://arobe.mx{{ url_for('web.producto', slug=producto.slug) }}"}
+  ]
 }
 </script>
 {% if producto.faqs %}
@@ -272,6 +349,29 @@
       </table>
     </div>
     {% endif %}
+  </div>
+</section>
+{% endif %}
+
+{# ============ Términos de búsqueda / SEO keywords visibles ============ #}
+{% if producto.keywords %}
+<section class="py-10 bg-slate-50 border-t border-slate-100">
+  <div class="max-w-5xl mx-auto px-4">
+    <p class="text-xs uppercase tracking-widest text-amber-600 font-bold mb-2">También conocido como</p>
+    <h2 class="text-xl lg:text-2xl font-extrabold text-arobe-900 mb-4">
+      Si buscabas alguno de estos, llegaste al producto correcto
+    </h2>
+    <div class="flex flex-wrap gap-2">
+      {% for kw in producto.keywords %}
+      <span class="inline-block bg-white border border-slate-200 text-slate-700 text-xs px-3 py-1.5 rounded-full">{{ kw }}</span>
+      {% endfor %}
+    </div>
+    <p class="text-xs text-slate-500 mt-4">
+      {{ producto.nombre }} se usa comúnmente para estos proyectos.
+      ¿No encuentras el término exacto? Escríbenos por
+      <a class="text-arobe-700 underline" href="https://wa.me/{{ config.WA_PHONE }}?text=Hola%2C+busco+{{ producto.nombre|urlencode }}">WhatsApp</a>
+      y te confirmamos si es lo que necesitas.
+    </p>
   </div>
 </section>
 {% endif %}
