@@ -561,7 +561,7 @@ PRODUCTS = [
         "linea": "ceilings",
         "tipo": "Plafón acústico premium negro · Colección Astrónomos",
         "tagline": "Plafón negro 61×61 cm · estética arquitectónica moderna · ideal para bares, restaurantes, auditorios y cinemas",
-        "precio_publico": 1500,
+        "precio_publico": 1300,
         "precio_mayoreo": None,            # auto 15% off = 1275
         "presentacion": "Paquete de 10 piezas",
         "dimensiones": "0.61 × 0.61 m por pieza",
@@ -573,7 +573,7 @@ PRODUCTS = [
             "Plafón acústico negro Kepler Black 3001 de la Colección Astrónomos · "
             "cuadrado 61×61 cm · textura basáltica profunda · ideal para bares, "
             "restaurantes, salas de cine, auditorios y oficinas con diseño oscuro. "
-            "Compatible con suspensión T 15/16\". Precio público $1,500 MXN. "
+            "Compatible con suspensión T 15/16\". Precio público $1,300 MXN. "
             "Envíos a toda la República, factura CFDI 4.0."
         ),
         "seo_image_alt": (
