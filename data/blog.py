@@ -726,6 +726,594 @@ pega más sol). El ahorro es proporcional al área aislada.</p>
         ],
         "related_products": ["mbi-techos"],
     },
+
+    # ============================================================
+    # 6. Panel acústico perforado para oficinas y escuelas (targets Acuspan)
+    # ============================================================
+    {
+        "slug": "panel-acustico-perforado-oficinas-escuelas-hospitales",
+        "title": "Panel acústico perforado: cuándo usarlo en oficinas, escuelas y hospitales",
+        "seo_title": "Panel acústico perforado · Guía de uso en oficinas y escuelas | Arobe",
+        "seo_description": (
+            "¿Oficina ruidosa, aula con eco, hospital que necesita tranquilidad? "
+            "Guía práctica para elegir panel acústico perforado con velo: dónde "
+            "instalarlo, cómo calcularlo, errores comunes y comparación con "
+            "paneles de lana mineral tradicionales."
+        ),
+        "keywords": [
+            "panel acústico perforado", "panel acústico para oficina",
+            "panel acústico para escuela", "panel acústico para hospital",
+            "tablaroca acústica", "panel yeso velo acústico",
+            "tratamiento acústico oficina", "reducir reverberación oficina",
+            "insonorización sala de juntas", "panel absorbente sonido",
+            "panel acústico 1.22 x 2.44",
+        ],
+        "published": "2026-11-21",
+        "updated": "2026-11-21",
+        "category": "Guías técnicas",
+        "cover_image": "acuspan-1.jpg",
+        "excerpt": (
+            "El panel acústico perforado con velo es la solución técnica para "
+            "oficinas, escuelas y hospitales donde el eco mata la productividad. "
+            "Te explicamos cuándo elegirlo, cómo calcular cuánto necesitas y "
+            "qué errores evitar."
+        ),
+        "body_html": """
+<p class="lead">Si estás leyendo esto probablemente tienes un problema concreto:
+una oficina donde se escuchan las conversaciones del equipo de al lado, un aula
+donde los niños del fondo no entienden a la maestra, o un hospital donde el ruido
+de los pasillos estresa a pacientes y personal. La solución técnica se llama
+<strong>panel acústico perforado con velo</strong> — y en esta guía te explicamos
+cuándo usarlo, cómo calcular cuánto necesitas, y qué errores evitar.</p>
+
+<h2>¿Qué es un panel acústico perforado?</h2>
+
+<p>Es un tablero de yeso (tablaroca) con dos elementos clave:</p>
+
+<ol>
+  <li><strong>Perforaciones circulares</strong> regulares en la cara vista
+      (típicamente 7 mm de diámetro, espaciadas cada 25 mm). Las perforaciones
+      dejan pasar las ondas sonoras hacia dentro.</li>
+  <li><strong>Velo acústico negro</strong> adherido a la cara posterior. El
+      velo es un material fibroso que absorbe las ondas sonoras una vez que
+      cruzan las perforaciones.</li>
+</ol>
+
+<p>Instalado como plafón suspendido o revestimiento, el panel transforma el
+techo o muro en un <em>absorbedor</em> de sonido. Un panel liso rebota el
+sonido hacia abajo; un panel perforado con velo lo atrapa.</p>
+
+<h2>¿Dónde SÍ conviene?</h2>
+
+<h3>1. Oficinas con techo alto o concreto aparente</h3>
+<p>Los techos altos y las superficies duras (concreto, cristal, pisos de madera)
+rebotan el sonido. En una sala de juntas de 30 m² con techo de 3 m sin tratamiento,
+el eco puede hacer imposible una videollamada seria. Con panel acústico perforado
+cubriendo 60–80 % del techo, la reverberación baja a niveles profesionales.</p>
+
+<h3>2. Aulas escolares</h3>
+<p>La inteligibilidad del habla es el factor #1 del aprendizaje. Un aula con
+reverberación alta hace que los niños del fondo entiendan solo el 60-70 % de lo
+que dice la maestra. Panel acústico perforado en el techo sube ese porcentaje a
+más del 90 %. Es la razón por la que la norma ANSI/ASA S12.60 (referencia
+internacional para diseño acústico escolar) exige absorbedores en aulas.</p>
+
+<h3>3. Hospitales y clínicas</h3>
+<p>El ruido en hospitales está documentado como factor de estrés para pacientes y
+burnout para enfermería. Áreas de espera, pasillos, consultorios y salas de
+procedimientos se benefician del tratamiento acústico. Además, el panel con velo
+tolera hasta 95 % de humedad relativa — compatible con la higiene y las limpiezas
+frecuentes de ambiente médico.</p>
+
+<h3>4. Salas de reunión, auditorios pequeños, bibliotecas</h3>
+<p>Cualquier espacio donde la gente habla, lee o estudia y necesita bajar el ruido
+sin perder la estética arquitectónica.</p>
+
+<h2>¿Dónde NO conviene?</h2>
+
+<ul>
+  <li><strong>Baños, cocinas industriales, lavanderías, exteriores:</strong> ahí
+      la humedad y los vapores son demasiado agresivos. Para esos casos usa un
+      <a href="/producto/glassbo">panel resistente al agua tipo GlassBo</a>.</li>
+  <li><strong>Naves industriales:</strong> para eso existe
+      <a href="/marcas/insulglass/mbi">MBI</a>, que es un sistema distinto.</li>
+  <li><strong>Espacios donde necesitas el sonido reflejado</strong> (salas de música,
+      estudios de grabación mal diseñados): en esos casos un acústico profesional
+      debe diseñar la mezcla de superficies absorbentes y reflectantes.</li>
+</ul>
+
+<h2>Cómo calcular cuánto panel necesitas</h2>
+
+<p>La regla práctica profesional es cubrir entre <strong>60 % y 80 % del área del
+techo</strong> en espacios de uso general. Para cálculos más precisos (coeficiente
+de absorción, tiempo de reverberación objetivo T60), se requiere un acústico.
+Para una estimación rápida:</p>
+
+<ol>
+  <li>Mide el área del techo en metros cuadrados.</li>
+  <li>Multiplica por 0.7 (70 %).</li>
+  <li>Divide entre el rendimiento de cada pieza. Para <a href="/producto/acuspan">SusPan
+      Acuspan</a> cada pieza cubre 2.98 m² (1.22 × 2.44 m).</li>
+  <li>Suma 10 % para recortes y mermas.</li>
+</ol>
+
+<p><strong>Ejemplo:</strong> sala de juntas de 30 m². 30 × 0.7 = 21 m² a cubrir.
+21 / 2.98 = 7.05 piezas. Redondeando y sumando 10 % = <strong>8 piezas</strong>
+de Acuspan.</p>
+
+<h2>Errores comunes al instalar panel acústico perforado</h2>
+
+<h3>1. Taparle el velo con pintura gruesa</h3>
+<p>El panel se vende "listo para pintar", pero el acabado importa. Usa pintura
+vinílica aplicada en capa delgada con rodillo. Pinturas elastoméricas o aplicaciones
+gruesas tapan los orificios y el panel pierde desempeño acústico. Si lo pintaste
+mal y ya no absorbe, no hay forma barata de recuperarlo.</p>
+
+<h3>2. No dejar cámara de aire detrás</h3>
+<p>El panel acústico funciona porque el sonido pasa por las perforaciones y se
+disipa en el aire + velo detrás del panel. Si lo pegas directo a un muro macizo
+sin cámara, el desempeño baja drásticamente. En plafón suspendido esto no es
+problema (el plenum hace de cámara), pero en revestimientos sobre muro planea
+una estructura con separación de 50 mm mínimo.</p>
+
+<h3>3. Cubrir solo 20–30 % del techo y esperar milagros</h3>
+<p>El tratamiento acústico es como el aislamiento térmico: cubrir una fracción
+pequeña da resultados modestos. Si buscas un cambio notable, cubre mínimo 60 %
+del techo.</p>
+
+<h3>4. Combinarlo con alfombra muerta y cortinas</h3>
+<p>No es un error estrictamente, pero el panel acústico perforado se diseña
+asumiendo que el piso rebota algo de sonido. Si pones alfombra espesa + cortinas +
+panel en techo, puedes acabar con un espacio "muerto" donde la voz se apaga y
+las reuniones se sienten extrañas. El balance es importante.</p>
+
+<h2>Comparación rápida: panel acústico perforado vs plafón de lana mineral</h2>
+
+<table class="w-full text-sm border-collapse my-6">
+  <thead>
+    <tr class="border-b-2 border-slate-200">
+      <th class="text-left py-2 pr-4">Característica</th>
+      <th class="text-left py-2 pr-4">Panel perforado yeso + velo</th>
+      <th class="text-left py-2">Plafón lana mineral</th>
+    </tr>
+  </thead>
+  <tbody class="text-slate-700">
+    <tr class="border-b border-slate-100"><td class="py-2 pr-4">Formato típico</td><td class="py-2 pr-4">1.22 × 2.44 m (gran formato)</td><td class="py-2">0.61 × 0.61 m o 1.22 × 0.61 m (modular)</td></tr>
+    <tr class="border-b border-slate-100"><td class="py-2 pr-4">Acabado</td><td class="py-2 pr-4">Continuo, se pinta, aspecto arquitectónico</td><td class="py-2">Modular, textura visible (fisurada o micro)</td></tr>
+    <tr class="border-b border-slate-100"><td class="py-2 pr-4">Instalación</td><td class="py-2 pr-4">Bastidor + tratamiento de juntas (como tablaroca)</td><td class="py-2">Suspensión T 15/16" (lay-in)</td></tr>
+    <tr class="border-b border-slate-100"><td class="py-2 pr-4">Acceso al plenum</td><td class="py-2 pr-4">Difícil (hay que cortar panel)</td><td class="py-2">Fácil (levantas tiles)</td></tr>
+    <tr class="border-b border-slate-100"><td class="py-2 pr-4">Mejor para</td><td class="py-2 pr-4">Diseño arquitectónico, espacios formales</td><td class="py-2">Oficinas estándar con ductos accesibles</td></tr>
+  </tbody>
+</table>
+
+<h2>Precio y entrega en México</h2>
+
+<p>El panel <a href="/producto/acuspan">SusPan Acuspan</a> tiene precio público de
+<strong>$500 MXN por pieza</strong> (1.22 × 2.44 m, 2.98 m²), equivalente a
+<strong>$167.79 por m²</strong>. Precio distribuidor $425 ($142.62 por m²).
+Pedido mínimo: 1 pieza. Envío a toda la República. Factura CFDI 4.0 automática.</p>
+
+<p>Si tu proyecto es grande (más de 50 m²), pide cotización con flete calculado a
+tu CP para obtener mejor precio. <a href="/cotizador">Cotizador en línea aquí</a>.</p>
+""",
+        "faqs": [
+            {
+                "q": "¿El panel acústico perforado también aísla del ruido exterior?",
+                "a": "Parcialmente. Absorbe el sonido que rebota dentro del cuarto (baja reverberación), pero para bloquear ruido que VIENE de afuera (vecino ruidoso, calle, otra oficina) necesitas combinarlo con aislamiento acústico en los muros divisorios. Usualmente un sistema de doble tablaroca con lana mineral entre bastidores."
+            },
+            {
+                "q": "¿Puedo colgarlo sobre el plafón reticulado que ya tengo?",
+                "a": "No es ideal. El panel perforado está diseñado como plafón continuo con bastidor propio. Si ya tienes plafón reticulado, lo mejor es cambiar a plafones acústicos modulares (como SusPan Kepler o Galilei de la Colección Astrónomos) que caben en la misma suspensión."
+            },
+            {
+                "q": "¿Es compatible con plafón decorativo o se ve como panel industrial?",
+                "a": "Se ve limpio y moderno. Las perforaciones Ø 7 mm cada 25 mm forman un patrón regular y discreto. Pintado en color claro parece un plafón de yeso convencional a 2 metros de distancia — la perforación es visible pero elegante."
+            },
+            {
+                "q": "¿Resiste humedad?",
+                "a": "Hasta 95 % HR sostenido a 40°C, lo que incluye casi cualquier ambiente comercial o institucional. Para baños con regadera directa o cocinas con mucho vapor, mejor usar GlassBo (panel de fibra de vidrio resistente al agua)."
+            },
+            {
+                "q": "¿Qué pasa si se moja?",
+                "a": "Si se moja superficialmente puede manchar o pandearse ligeramente. Si tienes gotera arriba del plafón y no la arreglas, eventualmente el panel se daña. Es importante arreglar la gotera, no cambiar el plafón."
+            }
+        ],
+        "related_products": ["acuspan", "glassbo"],
+    },
+
+    # ============================================================
+    # 7. Plafón negro para restaurante/bar/cine (targets Kepler Black)
+    # ============================================================
+    {
+        "slug": "plafon-negro-para-restaurante-bar-cine-auditorio",
+        "title": "Plafón negro: cuándo usarlo en restaurantes, bares, cines y auditorios",
+        "seo_title": "Plafón negro para restaurante, bar y auditorio · Guía interiorismo | Arobe",
+        "seo_description": (
+            "¿Por qué los restaurantes de ambiente, cines, auditorios y bares usan "
+            "plafón negro? Guía de interiorismo: cuándo conviene, cómo combinar la "
+            "iluminación, qué suspensión usar y comparación con el plafón blanco."
+        ),
+        "keywords": [
+            "plafón negro", "plafón negro para restaurante", "plafón negro bar",
+            "plafón acústico cine", "plafón para auditorio",
+            "techo negro acústico", "plafón diseño industrial",
+            "plafón loft", "plafón estudio de grabación",
+            "techo acústico oscuro", "Kepler Black 3001", "plafón 60x60 negro",
+            "plafón tegular negro",
+        ],
+        "published": "2026-11-21",
+        "updated": "2026-11-21",
+        "category": "Interiorismo",
+        "cover_image": "kepler-black-3001-1.jpg",
+        "excerpt": (
+            "El plafón negro no es solo estética — es una decisión técnica sobre "
+            "iluminación, acústica y branding. Te explicamos cuándo usarlo, cómo "
+            "elegir la suspensión correcta y qué ambientes mejora."
+        ),
+        "body_html": """
+<p class="lead">¿Alguna vez notaste que en los restaurantes elegantes, los cines,
+los auditorios y los bares de ambiente el techo es negro? No es casualidad. El
+plafón negro resuelve tres problemas de diseño al mismo tiempo: iluminación
+controlada, acústica profesional y branding arquitectónico. En esta guía te
+explicamos cuándo usarlo y cómo hacerlo bien.</p>
+
+<h2>Por qué el techo negro cambia el espacio</h2>
+
+<h3>1. Las luminarias desaparecen visualmente</h3>
+<p>Cuando tienes techo blanco, cada ducto, cada rejilla de aire acondicionado,
+cada señalética y cada cable se ve como una mancha gris o blanca sobre el blanco.
+El ojo humano es sensibilísimo a esos contrastes. Con techo negro, todos esos
+elementos desaparecen — el ojo solo ve las luminarias dirigidas hacia abajo, que
+se convierten en el protagonista.</p>
+
+<p>Esto es exactamente lo que buscan los diseñadores de iluminación en cines,
+auditorios y galerías: que veas el objeto iluminado, no el techo.</p>
+
+<h3>2. Sensación de altura infinita</h3>
+<p>Un techo negro bien iluminado "desaparece" en la vista nocturna, dando sensación
+de espacio indefinido. En restaurantes y bares esto crea la atmósfera íntima sin
+sacrificar altura real. En cines y auditorios refuerza el efecto de "estar en el
+espacio del espectáculo".</p>
+
+<h3>3. Acústica sin estética industrial</h3>
+<p>Tradicionalmente, un techo con tratamiento acústico se veía como un techo blanco
+modular tipo oficina. El plafón acústico negro te da el mismo
+<strong>NRC 0.50</strong> (reducción de reverberación) pero con estética de
+interiorismo premium. No sacrificas acústica por diseño.</p>
+
+<h2>Casos de uso ideales</h2>
+
+<h3>Restaurantes de ambiente</h3>
+<p>Un restaurante con techo blanco, mesas blancas y paredes blancas se siente
+institucional, de cafetería. El techo negro crea intimidad, baja la percepción
+de ruido (porque reduce la reverberación) y hace que las lámparas colgantes se
+vean como esculturas flotantes.</p>
+
+<h3>Bares, cantinas, speakeasies</h3>
+<p>El techo negro es prácticamente obligatorio en el género "bar de ambiente". El
+ladrillo visto, la madera oscura y el metal se complementan con un techo negro
+que absorbe la luz y refuerza el carácter artesanal.</p>
+
+<h3>Salas de cine (incluye cines en casa)</h3>
+<p>En cualquier espacio donde se proyecta imagen, el techo blanco rebota la luz
+de la pantalla y lava los negros. Un techo negro mejora el contraste de la imagen
+proyectada. Es la razón por la que las salas de cine profesionales tienen techo
+negro desde hace 100 años.</p>
+
+<h3>Auditorios y teatros</h3>
+<p>Mismo principio que el cine, más una capa acústica: el auditorio requiere
+tiempo de reverberación controlado (T60 ≤ 1.2 segundos para voz, 1.5-2 para
+música). El plafón acústico negro resuelve ambos requisitos.</p>
+
+<h3>Estudios de grabación y salas de ensayo</h3>
+<p>Aunque los estudios profesionales usan materiales especializados, para salas
+de ensayo o estudios de bajo presupuesto, el plafón acústico negro es una
+solución accesible y estética.</p>
+
+<h3>Lofts y coworkings industriales</h3>
+<p>El lenguaje "industrial chic" (ladrillo, acero, cables vistos) se complementa
+con techo negro que esconde ductos y tuberías. Para espacios de trabajo, además,
+baja la reverberación — importante en coworkings donde la gente hace llamadas.</p>
+
+<h3>Showrooms, galerías y espacios de retail premium</h3>
+<p>Cuando el producto es la estrella (joyería, arte, autos, moda), el techo blanco
+compite con el producto. El techo negro desaparece y deja que la iluminación
+dirigida haga el trabajo.</p>
+
+<h2>Cómo elegir la suspensión</h2>
+
+<p>El plafón acústico modular usa perfil T de 15/16" (24 mm). Tienes dos opciones
+visuales:</p>
+
+<ul>
+  <li><strong>Suspensión blanca (estándar):</strong> se ve como una rejilla blanca
+      sobre el techo negro. Algunos proyectos lo buscan como efecto visual (grid
+      industrial expuesto). Otros lo ven como "roto" el techo negro.</li>
+  <li><strong>Suspensión negra (opcional):</strong> toda la rejilla metálica
+      pintada en negro mate. El sistema completo se ve uniforme — lo recomendamos
+      para proyectos donde el techo negro es un acabado premium y la rejilla
+      visible sería distracción.</li>
+</ul>
+
+<p>Para la mayoría de restaurantes, bares y cines recomendamos <strong>suspensión
+negra</strong>. Cuesta un poco más (10-20 %) pero el acabado vale la pena.</p>
+
+<h2>Iluminación: no es igual que con techo blanco</h2>
+
+<p>El techo blanco rebota entre 70 y 80 % de la luz que recibe. El techo negro
+rebota menos del 10 %. Eso significa que <strong>necesitas más luminarias o
+luminarias más potentes</strong> para lograr el mismo nivel de iluminación.</p>
+
+<p>Regla práctica: en un espacio con techo negro, multiplica por 1.3 la potencia
+de iluminación que calcularías para techo blanco. O usa luminarias de haz dirigido
+(spots, downlights) en lugar de luz difusa — el ambiente queda más dramático y
+cumple el propósito estético.</p>
+
+<h2>Comparativa: Kepler 0504 (blanco) vs Kepler Black 3001 (negro)</h2>
+
+<table class="w-full text-sm border-collapse my-6">
+  <thead>
+    <tr class="border-b-2 border-slate-200">
+      <th class="text-left py-2 pr-4">Característica</th>
+      <th class="text-left py-2 pr-4">Kepler 0504 (blanco)</th>
+      <th class="text-left py-2">Kepler Black 3001 (negro)</th>
+    </tr>
+  </thead>
+  <tbody class="text-slate-700">
+    <tr class="border-b border-slate-100"><td class="py-2 pr-4">Dimensiones</td><td class="py-2 pr-4">0.61 × 0.61 m</td><td class="py-2">0.61 × 0.61 m</td></tr>
+    <tr class="border-b border-slate-100"><td class="py-2 pr-4">NRC (acústica)</td><td class="py-2 pr-4">0.50</td><td class="py-2">0.50</td></tr>
+    <tr class="border-b border-slate-100"><td class="py-2 pr-4">Clase al fuego</td><td class="py-2 pr-4">Clase A</td><td class="py-2">Clase A</td></tr>
+    <tr class="border-b border-slate-100"><td class="py-2 pr-4">Reflexión lumínica (LR)</td><td class="py-2 pr-4">0.82 (alta)</td><td class="py-2">0.04 (muy baja)</td></tr>
+    <tr class="border-b border-slate-100"><td class="py-2 pr-4">Mejor para</td><td class="py-2 pr-4">Oficinas, escuelas, hospitales, retail estándar</td><td class="py-2">Restaurantes, bares, cines, auditorios, lofts</td></tr>
+    <tr class="border-b border-slate-100"><td class="py-2 pr-4">Precio público</td><td class="py-2 pr-4">$950 MXN</td><td class="py-2">$1,300 MXN</td></tr>
+  </tbody>
+</table>
+
+<p>Ambos son <a href="/marcas/suspan/ceilings">parte de la Colección Astrónomos
+SusPan</a>, fabricados con la misma lana mineral. La única diferencia es color
+y acabado de superficie.</p>
+
+<h2>Errores comunes de diseño con plafón negro</h2>
+
+<ol>
+  <li><strong>Mezclar piezas rotas con piezas nuevas.</strong> El acabado negro
+      mate marca cualquier reposición mal pareada. Compra 5-10 % extra desde el
+      primer pedido para reposiciones futuras.</li>
+  <li><strong>Subir la iluminación general sin pensar.</strong> El propósito del
+      techo negro es intimidad y contraste. Si lo iluminas como una oficina, pierde
+      la razón de ser. Usa luz dirigida.</li>
+  <li><strong>Olvidar la señalética de seguridad.</strong> Las salidas de emergencia,
+      detectores de humo, rociadores etc. deben seguir siendo visibles. Planea con
+      el acústico, el electricista y el consultor de seguridad.</li>
+  <li><strong>Combinar con suspensión blanca sin saber.</strong> Si vas a usar el
+      efecto grid-visible, hazlo deliberado. Si vas por acabado premium, pide
+      suspensión negra desde el inicio.</li>
+</ol>
+
+<h2>Precio y entrega en México</h2>
+
+<p>El plafón <a href="/producto/kepler-black-3001">SusPan Kepler Black 3001</a>
+tiene precio público de <strong>$1,300 MXN por paquete de 10 piezas</strong>
+(0.61 × 0.61 m c/u, paquete cubre 3.72 m²), equivalente a <strong>$349.46 por m²</strong>.
+Precio distribuidor $1,105 por paquete ($297.04 por m²).
+Pedido mínimo: 1 paquete. Envío a toda la República. Factura CFDI 4.0 automática.</p>
+
+<p>Para proyectos de restaurante, bar, cine o auditorio arriba de 50 m² pide
+cotización con suspensión negra opcional. <a href="/cotizador">Cotizador en línea aquí</a>.</p>
+""",
+        "faqs": [
+            {
+                "q": "¿El plafón negro se ve sucio más rápido que el blanco?",
+                "a": "No necesariamente. El negro mate con textura esconde mejor el polvo que el blanco (donde cualquier mancha se nota). Lo que SÍ se nota más son huellas de manos — por eso en zonas bajas (bares, cocinas abiertas) a veces se prefiere el negro solo en el techo alto."
+            },
+            {
+                "q": "¿Requiere suspensión especial o la misma T 15/16\"?",
+                "a": "La misma suspensión T 15/16\" (24 mm). Lo que cambia opcionalmente es el ACABADO de la suspensión: estándar blanca, o versión pintada en negro para proyectos donde se busca acabado uniforme."
+            },
+            {
+                "q": "¿Se puede combinar con panel acústico blanco en diferentes zonas del mismo espacio?",
+                "a": "Sí, y es una técnica común. Por ejemplo: techo negro sobre la zona de comensales de un restaurante, techo blanco sobre la zona de cocina abierta. O techo negro en la sala de cine y blanco en los pasillos de acceso. El cambio de color marca las zonas visualmente."
+            },
+            {
+                "q": "¿Puedo poner luminarias lineales colgando o solo embutidas?",
+                "a": "Ambas funcionan. Las luminarias lineales colgantes (pendants) se ven espectaculares sobre techo negro porque el cable desaparece visualmente y la lámpara flota. Las luminarias embutidas spots dirigidos son clásicas de cines y galerías. La elección depende del diseño."
+            },
+            {
+                "q": "¿Qué pasa si quiero cambiar de negro a blanco después?",
+                "a": "Tendrías que reemplazar los tiles — no se pueden pintar los acústicos con cualquier pintura porque tapa los poros y pierden NRC. Si es muy probable que cambies de concepto en 2-3 años, considera plafones blancos neutros desde el inicio."
+            }
+        ],
+        "related_products": ["kepler-black-3001", "kepler-0504"],
+    },
+
+    # ============================================================
+    # 8. Cómo insonorizar departamento (evergreen, alta intención residencial)
+    # ============================================================
+    {
+        "slug": "como-insonorizar-departamento-vecinos-ruidosos",
+        "title": "Cómo insonorizar un departamento (vecinos ruidosos, calle, tráfico)",
+        "seo_title": "Cómo insonorizar un departamento · Guía paso a paso | Arobe",
+        "seo_description": (
+            "Vecinos ruidosos, tráfico, perros ladrando: te explicamos qué funciona "
+            "y qué NO para insonorizar un departamento. Qué materiales usar, cómo "
+            "aislar muros, techos y pisos, y cuánto cuesta en México."
+            ),
+        "keywords": [
+            "insonorizar departamento", "aislar ruido vecinos",
+            "insonorización pared", "aislamiento acústico residencial",
+            "cómo quitar ruido vecinos", "aislar muro divisorio",
+            "insonorizar cuarto", "aislante acústico muro",
+            "lana mineral para muro", "reducir ruido calle departamento",
+            "aislar piso departamento", "aislante acústico México",
+        ],
+        "published": "2026-11-21",
+        "updated": "2026-11-21",
+        "category": "Guías prácticas",
+        "cover_image": "aislamiento-acustico-1.jpg",
+        "excerpt": (
+            "Insonorizar un departamento se puede, pero no con esponjas de huevo "
+            "ni espumas de internet. Te explicamos qué sí funciona y qué no, con "
+            "presupuestos reales para casos típicos."
+        ),
+        "body_html": """
+<p class="lead">Si estás buscando cómo insonorizar un departamento probablemente
+ya estás harto del ruido. Antes de comprar lo primero que viste en Mercado Libre,
+esta guía te va a ahorrar tiempo y dinero. Hablaremos de lo que SÍ funciona
+(sistemas basados en masa + amortiguación + absorción), lo que NO funciona
+(espumas de huevo, cortinas pesadas) y presupuestos reales para casos típicos.</p>
+
+<h2>Antes que nada: ¿qué tipo de ruido te molesta?</h2>
+
+<p>Hay dos tipos de ruido y requieren estrategias distintas:</p>
+
+<h3>Ruido aéreo</h3>
+<p>Música, voces, TV, ladridos, sirenas. Viaja por el aire y se cuela por cualquier
+hueco (ventanas, puertas, enchufes). La solución es <strong>masa + absorción</strong>:
+mientras más pesado el muro y más absorbente su interior, menos pasa el sonido.</p>
+
+<h3>Ruido de impacto</h3>
+<p>Pasos arriba, mueble arrastrándose, martillazos, tacones, pelota. Viaja por la
+estructura del edificio. Es mucho más difícil de bloquear sin intervenir el piso
+del vecino (que no te deja hacer). La estrategia es <strong>amortiguación</strong>:
+materiales que absorben la vibración antes de que se transmita a tu techo.</p>
+
+<p>Dependiendo de cuál sea tu caso, la inversión y las técnicas cambian.</p>
+
+<h2>Lo que NO funciona (aunque te lo vendan)</h2>
+
+<ul>
+  <li><strong>Espumas de huevo (cartón):</strong> no bloquean nada. En estudios
+      de grabación se usan para controlar reverberación DENTRO del cuarto, no
+      para evitar que el sonido salga. Para el vecino no sirven.</li>
+  <li><strong>Espumas acústicas delgadas (menos de 5 cm):</strong> mismo problema.
+      Útiles para reducir eco en una sala, no para bloquear.</li>
+  <li><strong>Cortinas "blackout acústicas":</strong> ayudan solo contra ruido
+      tenue por ventana, y mínimo. No resuelven ruido de vecino.</li>
+  <li><strong>Pintura "acústica":</strong> no existe un recubrimiento de pintura
+      que bloquee ruido. Es marketing.</li>
+  <li><strong>Tapetes delgados:</strong> amortiguan apenas pisadas suaves.</li>
+</ul>
+
+<h2>Lo que SÍ funciona</h2>
+
+<h3>Para ruido aéreo del vecino de al lado</h3>
+
+<p>La solución estándar es construir un <strong>segundo muro desacoplado</strong>
+pegado al existente, con los siguientes elementos (de afuera a adentro):</p>
+
+<ol>
+  <li>Muro original (tabique, block, concreto).</li>
+  <li>Estructura de canaleta metálica (46 o 64 mm) separada 10-20 mm del muro
+      original — importante que NO se toquen.</li>
+  <li><strong>Lana mineral o lana de vidrio</strong> (<a href="/producto/aislamiento-acustico">Insulglass
+      Glasswool</a>) rellenando la cámara de aire. Densidad mínima 48 kg/m³.</li>
+  <li>Doble capa de tablaroca de 1/2" fijada a la estructura. La doble capa agrega
+      masa sin tener que usar panel más caro.</li>
+  <li>(Opcional premium) membrana viscoelástica (SoundLayer, Mass Loaded Vinyl)
+      entre las dos capas de tablaroca. Agrega aislamiento adicional.</li>
+  <li>Juntas selladas con sellador acústico (no silicón normal).</li>
+</ol>
+
+<p>Este sistema reduce el ruido típicamente <strong>15-25 dB</strong> — suficiente
+para que una conversación del vecino se vuelva un murmullo apenas perceptible.</p>
+
+<h3>Para ruido de calle o tráfico</h3>
+
+<p>La ventana suele ser el eslabón más débil. Opciones de mayor a menor efectividad:</p>
+
+<ul>
+  <li><strong>Ventana doble vidrio con cámara de aire ≥ 12 mm.</strong> Si tu edificio
+      es antiguo con ventana sencilla, cambiarlas por doble vidrio reduce ruido
+      exterior 10-20 dB.</li>
+  <li><strong>Segunda ventana interior</strong> (lo que algunos llaman "contrareo"):
+      instalas otra ventana de aluminio o PVC por dentro del hueco, dejando cámara
+      de aire de 10 cm. Efecto similar al doble vidrio integrado pero más barato
+      si no puedes cambiar la ventana del edificio.</li>
+  <li><strong>Sellado de juntas</strong> entre ventana y muro con sellador acústico.
+      Un hueco de 1 mm puede dejar pasar más ruido que 10 m² de muro bien aislado.</li>
+</ul>
+
+<h3>Para ruido de impacto del vecino de arriba</h3>
+
+<p>Aquí las malas noticias: sin intervenir el piso del vecino (poniendo tapete grueso
+o underlayment acústico abajo del piso) tu capacidad de solución está limitada. Lo
+que puedes hacer desde tu lado:</p>
+
+<ol>
+  <li><strong>Plafón suspendido con cámara de aire + aislante.</strong> Baja tu
+      techo 10-15 cm, crea cámara con lana mineral densa, y cuelga plafón acústico.
+      El sistema desacopla la vibración del techo original. Reduce ruido de impacto
+      <strong>5-15 dB</strong> dependiendo de materiales y espesor de cámara.</li>
+  <li><strong>Hablar con el vecino</strong> (en serio). A veces un diálogo
+      respetuoso + sugerir que ponga tapete en su sala resuelve más que la mejor
+      construcción. Y es gratis.</li>
+</ol>
+
+<h2>Presupuestos reales para casos típicos</h2>
+
+<h3>Caso 1: Aislar un solo muro medianero (10 m² de muro)</h3>
+<ul>
+  <li>Canaleta + perfiles metálicos: $800 MXN</li>
+  <li>Lana mineral/glasswool (<a href="/producto/aislamiento-acustico">Insulglass</a>):
+      $1,100 MXN</li>
+  <li>Doble capa tablaroca 1/2": $1,800 MXN</li>
+  <li>Sellador acústico + masilla + tornillería: $400 MXN</li>
+  <li>Mano de obra: $4,500 MXN (3 días cuadrilla de 2)</li>
+  <li><strong>Total aproximado: $8,600 MXN</strong></li>
+</ul>
+
+<h3>Caso 2: Insonorizar un cuarto completo de 4×4 m (recámara)</h3>
+<ul>
+  <li>4 muros × $8,600 = $34,400</li>
+  <li>Plafón suspendido con aislante: $7,500</li>
+  <li>Cambio de puerta (puerta hueca → puerta sólida con burletes): $4,200</li>
+  <li><strong>Total aproximado: $46,000 MXN</strong></li>
+</ul>
+
+<h3>Caso 3: Solo tratar ruido de ventana a la calle</h3>
+<ul>
+  <li>Doble ventana interior aluminio con vidrio 6 mm (1.5 × 1.2 m): $6,800</li>
+  <li>Sellado profesional: $300</li>
+  <li><strong>Total aproximado: $7,100 MXN</strong></li>
+</ul>
+
+<p><em>Precios referenciales para CDMX/Monterrey, noviembre 2026. Pueden variar
+regionalmente.</em></p>
+
+<h2>¿Cuánto material necesito para aislar X m²?</h2>
+
+<p>La lana de vidrio <a href="/producto/aislamiento-acustico">Insulglass Glasswool</a>
+viene en presentaciones de rollo. Para muro con cámara de 10 cm de espesor,
+cada m² de muro consume aproximadamente 1 m² de rollo. Para un proyecto profesional
+pide siempre 15% extra por cortes y mermas.</p>
+
+<p>Si quieres ayuda para calcular tu proyecto completo, usa nuestro
+<a href="/cotizador">cotizador en línea</a> o escríbenos por WhatsApp.</p>
+""",
+        "faqs": [
+            {
+                "q": "¿Puedo hacer la insonorización yo mismo o necesito un profesional?",
+                "a": "Si tienes experiencia con tablaroca, puedes hacer muros simples tú mismo. Para plafones suspendidos o sistemas de doble muro desacoplado mejor contratar un instalador especializado — un pequeño error (muro que toca el original, hueco sin sellar) arruina 80% del desempeño acústico."
+            },
+            {
+                "q": "¿La insonorización afecta el aire acondicionado o calentamiento?",
+                "a": "Positivamente. La misma lana mineral/lana de vidrio que aísla ruido también aísla térmicamente. Un muro insonorizado ahorra energía de A/C en el verano y calefacción en invierno."
+            },
+            {
+                "q": "¿Es diferente para edificio de concreto vs edificio de block/tabique?",
+                "a": "Sí. El concreto tiene más masa inicial, así que ya bloquea más ruido base. Normalmente necesitas sistemas menos agresivos. El tabique y block huecos son los peores aislantes; ahí vale la pena el sistema completo. En edificios antiguos de madera, el ruido viaja más por estructura, y la intervención debe incluir el piso."
+            },
+            {
+                "q": "¿La lana de vidrio es segura para salud?",
+                "a": "Sí. Las lanas de vidrio modernas (formuladas después del año 2000) no están clasificadas como carcinógenas. Durante la instalación usa guantes, mangas largas y mascarilla P2 porque las fibras pican si entran en contacto con la piel. Una vez instalada detrás del muro/plafón no hay exposición."
+            },
+            {
+                "q": "¿Cuánto tiempo tarda la obra en un departamento habitado?",
+                "a": "Para aislar un solo muro: 2-3 días laborales con cuadrilla de 2. Para un cuarto completo: 5-7 días. Para un departamento entero: 2-3 semanas. Durante la obra el espacio queda inhabitable (polvo, muebles movidos), planea ausencias o renta temporal."
+            }
+        ],
+        "related_products": ["aislamiento-acustico", "acuspan"],
+    },
 ]
 
 

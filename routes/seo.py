@@ -1,8 +1,10 @@
 """
-SEO endpoints — Fase 6.
+SEO endpoints — Fase 6 + 17.
   - /robots.txt
-  - /sitemap.xml  (dinámico desde el catálogo)
+  - /sitemap.xml            (dinámico desde catálogo, imágenes incluidas)
+  - /feeds/google-shopping.xml   (feed RSS 2.0 para Google Merchant Center)
 """
+import html as _html
 from flask import Blueprint, Response, url_for, request, current_app
 from datetime import datetime, timezone
 
@@ -147,5 +149,95 @@ def sitemap_xml():
         '        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n'
         + "\n".join(rows)
         + "\n</urlset>\n"
+    )
+    return Response(body, mimetype="application/xml")
+
+
+# ----------------------------------------------------------------
+# Google Merchant Center product feed (RSS 2.0 with g:* extensions)
+# Submit this URL inside Merchant Center → Productos → Feeds → Añadir feed
+#   URL: https://arobe.mx/feeds/google-shopping.xml
+# ----------------------------------------------------------------
+def _esc(text):
+    """XML-safe text."""
+    if text is None:
+        return ""
+    return _html.escape(str(text), quote=True)
+
+
+@seo_bp.get("/feeds/google-shopping.xml")
+def google_shopping_feed():
+    items = []
+    for p in catalog.all_products():
+        # SKIP products that lack critical fields
+        if not p.get("precio_publico") or not p.get("imagenes"):
+            continue
+
+        slug          = p["slug"]
+        nombre        = p.get("nombre", slug)
+        tagline       = p.get("tagline", "")
+        descripcion   = (p.get("descripcion") or tagline or nombre).replace("\n", " ")
+        precio        = f"{float(p['precio_publico']):.2f} MXN"
+        imagen        = _abs_url(f"/static/img/products/{p['imagenes'][0]}")
+        link          = _abs_url(f"/producto/{slug}")
+        marca         = "SusPan" if p.get("marca") == "suspan" else "Insulglass"
+        tipo          = p.get("tipo", "")
+        peso_kg       = p.get("peso_kg")
+        dimensiones   = p.get("dimensiones", "")
+
+        # Additional images
+        additional_images = ""
+        for extra_img in (p.get("imagenes") or [])[1:5]:  # Google acepta hasta 10
+            additional_images += f"    <g:additional_image_link>{_abs_url('/static/img/products/' + extra_img)}</g:additional_image_link>\n"
+
+        # Google product category: 632 = Hardware/Building Materials (genérico seguro)
+        # Para plafones specifically mejor: 500080 (Building & Hardware > Building Materials)
+        gpc = "500080"
+        product_type = (
+            f"Materiales de Construcción &gt; Construcción Ligera &gt; {marca}"
+            + (f" &gt; {tipo}" if tipo else "")
+        )
+
+        # Custom labels useful for later ad targeting
+        custom_label_0 = marca
+        custom_label_1 = p.get("linea", "general")
+        custom_label_2 = "destacado" if p.get("destacado") else "estandar"
+
+        items.append(f"""  <item>
+    <g:id>{_esc(slug)}</g:id>
+    <g:title>{_esc(nombre + ' — ' + marca)}</g:title>
+    <g:description>{_esc(descripcion[:5000])}</g:description>
+    <g:link>{_esc(link)}</g:link>
+    <g:image_link>{_esc(imagen)}</g:image_link>
+{additional_images}    <g:availability>in_stock</g:availability>
+    <g:price>{_esc(precio)}</g:price>
+    <g:condition>new</g:condition>
+    <g:brand>{_esc(marca)}</g:brand>
+    <g:mpn>{_esc(slug.upper())}</g:mpn>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:product_type>{product_type}</g:product_type>
+    <g:google_product_category>{gpc}</g:google_product_category>
+    <g:shipping>
+      <g:country>MX</g:country>
+      <g:service>Flete estándar</g:service>
+      <g:price>0.00 MXN</g:price>
+    </g:shipping>
+    <g:shipping_weight>{peso_kg or 1} kg</g:shipping_weight>
+    {'<g:size>' + _esc(dimensiones) + '</g:size>' if dimensiones else ''}
+    <g:custom_label_0>{_esc(custom_label_0)}</g:custom_label_0>
+    <g:custom_label_1>{_esc(custom_label_1)}</g:custom_label_1>
+    <g:custom_label_2>{_esc(custom_label_2)}</g:custom_label_2>
+  </item>""")
+
+    body = (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">\n'
+        '  <channel>\n'
+        '    <title>Arobe Group — Materiales de construcción ligera</title>\n'
+        f'    <link>{_abs_url("/")}</link>\n'
+        '    <description>Catálogo SusPan + Insulglass · entrega México</description>\n'
+        + "\n".join(items) + "\n"
+        '  </channel>\n'
+        '</rss>\n'
     )
     return Response(body, mimetype="application/xml")
