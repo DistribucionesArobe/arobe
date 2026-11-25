@@ -82,6 +82,11 @@ def sitemap_xml():
         ("/labs/aceromax-pos",                     "0.6", "monthly"),
         ("/labs/servingsince",                     "0.6", "monthly"),
         ("/labs/acuantoesta",                      "0.7", "monthly"),
+        # ---- Fase 18 · Landings obra industrial ----
+        ("/aislamiento-naves",                     "0.9", "weekly"),
+        ("/plafon-industrial",                     "0.9", "weekly"),
+        ("/aislamiento-muros",                     "0.9", "weekly"),
+        ("/pvc-areas-sanitarias",                  "0.9", "weekly"),
     ]
 
     rows = []

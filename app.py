@@ -70,6 +70,7 @@ def create_app():
     from routes.cities import cities_bp
     from routes.dealers import dealers_bp
     from routes.labs import labs_bp
+    from routes.industrial import industrial_bp
     app.register_blueprint(web_bp)
     app.register_blueprint(cart_bp)
     app.register_blueprint(checkout_bp)
@@ -79,6 +80,7 @@ def create_app():
     app.register_blueprint(cities_bp)
     app.register_blueprint(dealers_bp)
     app.register_blueprint(labs_bp)
+    app.register_blueprint(industrial_bp)
 
     # ---- Globals expuestos a Jinja ----
     @app.context_processor

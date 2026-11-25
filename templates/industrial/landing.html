@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ seo_title }}</title>
+<meta name="description" content="{{ seo_description }}">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://arobe.mx{{ request.path }}{% if ciudad_slug %}?ciudad={{ ciudad_slug }}{% endif %}">
+<meta name="keywords" content="{{ landing.seo_keywords|join(', ') }}">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{ seo_title }}">
+<meta property="og:description" content="{{ seo_description }}">
+<meta property="og:url" content="https://arobe.mx{{ request.path }}">
+<meta property="og:locale" content="es_MX">
+<meta property="og:image" content="https://arobe.mx{{ url_for('static', filename='img/' + landing.hero_image) }}">
+<meta name="twitter:card" content="summary_large_image">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = { theme: { extend: { colors: {
+  arobe: { 50:'#f4f6fb', 100:'#e5eaf4', 500:'#4a73b8', 700:'#2a4d8a', 900:'#15284d' },
+  insul: { 500:'#0ea5e9', 600:'#0284c7' },
+  suspan:{ 500:'#f59e0b', 600:'#d97706', ink:'#4a2e05' },
+}}}}
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  .wa-float { box-shadow: 0 10px 25px rgba(16,185,129,.35); }
+  @keyframes pulse-ring { 0%{transform:scale(1);opacity:.6} 100%{transform:scale(1.3);opacity:0} }
+  .wa-float::before{content:'';position:absolute;inset:0;border-radius:9999px;background:#10b981;animation:pulse-ring 1.8s infinite}
+</style>
+
+<!-- Schema.org: Product + LocalBusiness -->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Product",
+  "name":"{{ landing.nombre }}",
+  "description":"{{ seo_description|replace('"','\\"') }}",
+  "brand":{"@type":"Brand","name":"{{ landing.marca }}"},
+  "manufacturer":{"@type":"Organization","name":"Distribuciones Arobe S.A.S. de C.V."},
+  "category":"{{ landing.tipo }}",
+  "image":"https://arobe.mx{{ url_for('static', filename='img/' + landing.hero_image) }}",
+  "offers":{
+    "@type":"AggregateOffer",
+    "priceCurrency":"MXN",
+    "availability":"https://schema.org/InStock",
+    "seller":{"@type":"Organization","name":"Arobe Group","url":"https://arobe.mx"}
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"LocalBusiness",
+  "name":"Arobe Group · Distribuciones Arobe S.A.S. de C.V.",
+  "url":"https://arobe.mx{{ request.path }}",
+  "image":"https://arobe.mx{{ url_for('static', filename='img/' + landing.hero_image) }}",
+  "telephone":"+52{{ config.WA_PHONE[2:] }}",
+  "priceRange":"$$",
+  "address":{"@type":"PostalAddress","addressRegion":"Tamaulipas","addressCountry":"MX"},
+  "areaServed":[
+    {% for chip in coverage_chips %}{"@type":"City","name":"{{ chip }}"}{% if not loop.last %},{% endif %}{% endfor %}
+  ]
+}
+</script>
+
+<!-- ============ GTAG / Google Ads conversion tracking ============ -->
+<!-- TODO: Reemplazar [AW-XXXXXXXXX] con tu ID real de Google Ads antes de lanzar campañas -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-XXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-XXXXXXXXX');
+  // Contexto global para los eventos de conversión
+  window.__arobeLanding = {
+    producto: {{ landing.producto|tojson }},
+    ciudad:   {{ (ciudad.nombre or 'generica')|tojson }},
+    landing:  {{ request.path|tojson }}
+  };
+</script>
+<script src="{{ url_for('static', filename='js/gtag-industrial.js') }}" defer></script>
+</head>
+
+<body class="bg-white text-slate-900 antialiased">
+
+<!-- ============ HEADER MINIMAL ============ -->
+<header class="bg-white border-b border-slate-200">
+  <div class="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
+    <a href="/" class="flex items-center gap-2">
+      <div class="w-8 h-8 bg-arobe-900 text-white grid place-items-center font-black rounded">A</div>
+      <span class="font-extrabold text-arobe-900 tracking-tight">AROBE <span class="text-arobe-500">GROUP</span></span>
+    </a>
+    <a href="https://wa.me/{{ config.WA_PHONE }}?text={{ wa_message|urlencode }}"
+       target="_blank" rel="noopener"
+       onclick="arobeTrackLead('whatsapp_header')"
+       class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm px-4 py-2 rounded-lg flex items-center gap-2">
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 3.5A11 11 0 0 0 3.6 17.3L2 22l4.8-1.6A11 11 0 0 0 20.5 3.5zm-8.5 17a9 9 0 0 1-4.6-1.3l-.3-.2-2.8 1 .9-2.9-.2-.3A9 9 0 1 1 12 20.5zm5-6.8c-.3-.2-1.6-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-1-.5-1.9-1.1-2.7-2.3-.2-.4.2-.4.6-1.3.1-.1 0-.3 0-.4 0-.1-.6-1.4-.8-2-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.3-.9.9-.9 2.1 0 1.2.9 2.4 1 2.6.1.1 1.7 2.7 4.2 3.8 1.6.7 2.2.7 3 .6.5-.1 1.6-.6 1.8-1.3.2-.6.2-1.2.1-1.3-.1-.1-.3-.2-.6-.3z"/></svg>
+      <span class="hidden sm:inline">WhatsApp</span>
+    </a>
+  </div>
+</header>
+
+<!-- ============ HERO MINIMAL ============ -->
+<section class="relative">
+  <div class="absolute inset-0">
+    <img src="{{ url_for('static', filename='img/' + landing.hero_image) }}"
+         alt="{{ landing.pretitulo }}"
+         class="w-full h-full object-cover" loading="eager">
+    <div class="absolute inset-0 bg-gradient-to-r from-arobe-900/95 via-arobe-900/85 to-arobe-900/40"></div>
+  </div>
+  <div class="relative max-w-5xl mx-auto px-4 py-16 md:py-24">
+    <p class="text-xs text-amber-300 font-bold uppercase tracking-widest mb-3">AROBE GROUP · {{ landing.marca }}</p>
+    <h1 class="text-3xl md:text-5xl font-extrabold text-white leading-tight max-w-3xl">
+      {{ landing.pretitulo }}
+      {% if ciudad.nombre %}<span class="text-amber-300"> · {{ ciudad.nombre }}</span>{% endif %}
+    </h1>
+    <p class="text-white/80 text-base md:text-lg mt-4 max-w-2xl">
+      {{ subtitulo }}
+    </p>
+    <div class="mt-7">
+      <a href="https://wa.me/{{ config.WA_PHONE }}?text={{ wa_message|urlencode }}"
+         target="_blank" rel="noopener"
+         onclick="arobeTrackLead('whatsapp_hero')"
+         class="inline-flex items-center gap-3 bg-emerald-500 hover:bg-emerald-400 text-white font-extrabold text-lg px-7 py-4 rounded-full shadow-xl transition">
+        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 3.5A11 11 0 0 0 3.6 17.3L2 22l4.8-1.6A11 11 0 0 0 20.5 3.5z"/></svg>
+        Cotizar por WhatsApp
+      </a>
+    </div>
+    <p class="text-white/60 text-xs mt-4">Respuesta en el día · sin formularios largos</p>
+  </div>
+</section>
+
+<!-- ============ BENEFICIOS (3-4 bullets, no 5) ============ -->
+<section class="bg-white py-14 border-b border-slate-100">
+  <div class="max-w-5xl mx-auto px-4">
+    <div class="grid md:grid-cols-{{ landing.beneficios[:4]|length }} gap-6">
+      {% for emoji, title, body in landing.beneficios[:4] %}
+      <div>
+        <div class="text-3xl mb-2">{{ emoji }}</div>
+        <div class="font-bold text-arobe-900 text-base">{{ title }}</div>
+        <div class="text-sm text-slate-600 mt-1">{{ body }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ============ SPECS CONDENSADAS + FICHA PDF ============ -->
+<section class="bg-slate-50 py-14 border-b border-slate-200">
+  <div class="max-w-5xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-center">
+    <div>
+      <p class="text-xs text-arobe-500 font-bold uppercase tracking-widest mb-2">Datos técnicos</p>
+      <h2 class="text-2xl md:text-3xl font-extrabold text-arobe-900 mb-5">{{ landing.nombre }}</h2>
+      <div class="bg-white border border-slate-200 rounded-xl divide-y divide-slate-100">
+        {% if producto and producto.specs %}
+          {% set specs_keys = ['tipo_orilla','tamano_panel','espesor','nrc','clasificacion_fuego','humedad_max','astm_e1264','astm_e84','color','garantia'] %}
+          {% for k in specs_keys %}
+            {% if producto.specs.get(k) %}
+            <div class="flex justify-between px-4 py-2.5 text-sm">
+              <span class="text-slate-500">{{ k.replace('_',' ').capitalize() }}</span>
+              <span class="font-semibold text-slate-900 text-right">{{ producto.specs[k] }}</span>
+            </div>
+            {% endif %}
+          {% endfor %}
+        {% else %}
+          <div class="px-4 py-3 text-sm text-slate-500">Ver ficha técnica para datos completos.</div>
+        {% endif %}
+      </div>
+      {% if landing.ficha_pdf %}
+      <a href="{{ url_for('static', filename='datasheets/' + landing.ficha_pdf) }}"
+         target="_blank" rel="noopener"
+         onclick="arobeTrackLead('ficha_pdf')"
+         class="inline-flex items-center gap-2 mt-5 text-arobe-700 hover:text-arobe-900 font-bold text-sm">
+        📄 Descargar ficha técnica (PDF)
+      </a>
+      {% endif %}
+    </div>
+
+    <!-- Prueba social + cobertura compactas -->
+    <div>
+      <div class="bg-white border border-slate-200 rounded-xl p-5 mb-5">
+        <p class="text-xs text-emerald-600 font-bold uppercase tracking-widest mb-2">Casos recientes</p>
+        <p class="text-slate-800 leading-relaxed">
+          Ya surtimos <b>obra industrial en Altamira</b>: nave de lámina con MBI R-10 Insulglass instalado por el contratista general. Entrega directa en obra, factura CFDI al mismo día.
+        </p>
+      </div>
+      <p class="text-xs text-arobe-500 font-bold uppercase tracking-widest mb-2">Cobertura · entrega directa en obra</p>
+      <div class="flex flex-wrap gap-1.5">
+        {% for chip in coverage_chips %}
+        <span class="text-xs bg-white border border-slate-200 text-slate-700 px-2.5 py-1 rounded-full">{{ chip }}</span>
+        {% endfor %}
+      </div>
+      <p class="text-xs text-slate-500 mt-3">Hasta 500 km desde Cd. Victoria, Tam. Fuera del radio se cotiza con flete separado.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONDICIONES COMERCIALES (una línea) ============ -->
+<section class="bg-arobe-900 text-white py-10">
+  <div class="max-w-5xl mx-auto px-4 grid md:grid-cols-3 gap-6 text-center md:text-left">
+    <div>
+      <p class="text-amber-300 text-xs font-bold uppercase tracking-widest">Pedido mínimo</p>
+      <p class="text-white font-extrabold text-lg mt-1">{{ landing.pedido_minimo }}</p>
+      <p class="text-white/60 text-xs mt-1">con flete incluido en obra</p>
+    </div>
+    <div>
+      <p class="text-amber-300 text-xs font-bold uppercase tracking-widest">Factura</p>
+      <p class="text-white font-extrabold text-lg mt-1">CFDI 4.0 · mismo día</p>
+      <p class="text-white/60 text-xs mt-1">Crédito a evaluación para clientes recurrentes</p>
+    </div>
+    <div>
+      <p class="text-amber-300 text-xs font-bold uppercase tracking-widest">Entrega</p>
+      <p class="text-white font-extrabold text-lg mt-1">2 a 5 días hábiles</p>
+      <p class="text-white/60 text-xs mt-1">Directo en obra, no en bodega</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA FINAL + FORM OPCIONAL ============ -->
+<section id="cotizar" class="bg-white py-14 border-b border-slate-100">
+  <div class="max-w-3xl mx-auto px-4 text-center">
+    <h2 class="text-2xl md:text-3xl font-extrabold text-arobe-900">¿Cotizamos tu obra?</h2>
+    <p class="text-slate-600 mt-2">Respuesta en el día. La mayoría de clientes nos escribe directo por WhatsApp.</p>
+    <a href="https://wa.me/{{ config.WA_PHONE }}?text={{ wa_message|urlencode }}"
+       target="_blank" rel="noopener"
+       onclick="arobeTrackLead('whatsapp_cta_final')"
+       class="inline-flex items-center gap-3 mt-6 bg-emerald-500 hover:bg-emerald-400 text-white font-extrabold text-lg px-7 py-4 rounded-full shadow-xl">
+      <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 3.5A11 11 0 0 0 3.6 17.3L2 22l4.8-1.6A11 11 0 0 0 20.5 3.5z"/></svg>
+      Cotizar por WhatsApp
+    </a>
+    <a href="tel:+52{{ config.WA_PHONE[2:] }}"
+       onclick="arobeTrackLead('phone')"
+       class="block text-sm text-arobe-700 hover:text-arobe-900 font-bold mt-4">
+      o llama al +52 {{ config.WA_PHONE[2:4] }} {{ config.WA_PHONE[4:8] }} {{ config.WA_PHONE[8:] }}
+    </a>
+
+    <!-- Form opcional (colapsado) -->
+    <details class="mt-10 text-left group">
+      <summary class="cursor-pointer text-sm text-slate-500 hover:text-arobe-900 font-semibold list-none text-center">
+        <span class="group-open:hidden">¿Prefieres formulario? Toca aquí +</span>
+        <span class="hidden group-open:inline">Ocultar formulario −</span>
+      </summary>
+      <form method="post" action="/obra/contacto" class="mt-5 bg-slate-50 border border-slate-200 rounded-xl p-5 space-y-3"
+            onsubmit="arobeTrackLead('form_submit')">
+        <input type="hidden" name="producto_key" value="{{ landing.path|replace('/','') }}">
+        <input type="hidden" name="ciudad"       value="{{ ciudad_slug }}">
+        <div class="grid sm:grid-cols-2 gap-3">
+          <input name="nombre"      required placeholder="Nombre *"
+                 class="w-full border border-slate-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-arobe-500 outline-none">
+          <input name="empresa"     placeholder="Empresa"
+                 class="w-full border border-slate-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-arobe-500 outline-none">
+        </div>
+        <div class="grid sm:grid-cols-2 gap-3">
+          <input name="ciudad_obra" placeholder="Ciudad de la obra" value="{{ ciudad.nombre }}"
+                 class="w-full border border-slate-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-arobe-500 outline-none">
+          <input name="m2_aprox"    placeholder="m² aproximados"
+                 class="w-full border border-slate-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-arobe-500 outline-none">
+        </div>
+        <input name="telefono"    type="tel" required placeholder="Teléfono *"
+               class="w-full border border-slate-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-arobe-500 outline-none">
+        <button type="submit" class="w-full bg-arobe-900 hover:bg-arobe-700 text-white font-bold px-4 py-3 rounded">
+          Enviar y continuar en WhatsApp →
+        </button>
+      </form>
+    </details>
+  </div>
+</section>
+
+<!-- ============ FAQ CORTO (4 preguntas) ============ -->
+<section class="bg-slate-50 py-14 border-b border-slate-200">
+  <div class="max-w-3xl mx-auto px-4">
+    <h2 class="text-xl md:text-2xl font-extrabold text-arobe-900 mb-6">Preguntas frecuentes</h2>
+    <div class="space-y-2">
+      {% for q, a in landing.faqs[:5] %}
+      <details class="bg-white border border-slate-200 rounded-xl">
+        <summary class="cursor-pointer px-5 py-3 font-semibold text-slate-900 list-none flex justify-between items-center">
+          <span>{{ q }}</span>
+          <span class="text-arobe-500 text-xl leading-none">+</span>
+        </summary>
+        <div class="px-5 pb-4 text-sm text-slate-600 leading-relaxed">{{ a }}</div>
+      </details>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Schema.org FAQPage -->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"FAQPage",
+  "mainEntity":[
+    {% for q, a in landing.faqs[:5] %}
+    {"@type":"Question","name":{{ q|tojson }},
+     "acceptedAnswer":{"@type":"Answer","text":{{ a|tojson }}}}{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ]
+}
+</script>
+
+<!-- ============ FOOTER MINIMAL ============ -->
+<footer class="bg-arobe-900 text-slate-400 text-xs">
+  <div class="max-w-5xl mx-auto px-4 py-6 flex flex-col md:flex-row items-center justify-between gap-3">
+    <div>&copy; {{ 2026 }} Distribuciones Arobe S.A.S. de C.V.  ·  Hecho en México</div>
+    <div class="flex gap-5">
+      <a href="/" class="hover:text-white">arobe.mx</a>
+      <a href="/distribuidores" class="hover:text-white">¿Eres distribuidor? →</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ WHATSAPP FLOTANTE ============ -->
+<a href="https://wa.me/{{ config.WA_PHONE }}?text={{ wa_message|urlencode }}"
+   target="_blank" rel="noopener"
+   onclick="arobeTrackLead('whatsapp_float')"
+   class="wa-float fixed bottom-5 right-5 bg-emerald-500 hover:bg-emerald-400 text-white w-14 h-14 rounded-full grid place-items-center z-40"
+   aria-label="Cotizar por WhatsApp">
+  <svg class="w-7 h-7 relative" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 3.5A11 11 0 0 0 3.6 17.3L2 22l4.8-1.6A11 11 0 0 0 20.5 3.5zm-8.5 17a9 9 0 0 1-4.6-1.3l-.3-.2-2.8 1 .9-2.9-.2-.3A9 9 0 1 1 12 20.5zm5-6.8c-.3-.2-1.6-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-1-.5-1.9-1.1-2.7-2.3-.2-.4.2-.4.6-1.3.1-.1 0-.3 0-.4 0-.1-.6-1.4-.8-2-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.3-.9.9-.9 2.1 0 1.2.9 2.4 1 2.6.1.1 1.7 2.7 4.2 3.8 1.6.7 2.2.7 3 .6.5-.1 1.6-.6 1.8-1.3.2-.6.2-1.2.1-1.3-.1-.1-.3-.2-.6-.3z"/></svg>
+</a>
+
+</body>
+</html>
