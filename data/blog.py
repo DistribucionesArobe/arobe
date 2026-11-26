@@ -814,7 +814,7 @@ sin perder la estética arquitectónica.</p>
 <ul>
   <li><strong>Baños, cocinas industriales, lavanderías, exteriores:</strong> ahí
       la humedad y los vapores son demasiado agresivos. Para esos casos usa un
-      <a href="/producto/glassbo">panel resistente al agua tipo GlassBo</a>.</li>
+      un panel resistente al agua específico para esos ambientes.</li>
   <li><strong>Naves industriales:</strong> para eso existe
       <a href="/marcas/insulglass/mbi">MBI</a>, que es un sistema distinto.</li>
   <li><strong>Espacios donde necesitas el sonido reflejado</strong> (salas de música,
@@ -911,14 +911,14 @@ tu CP para obtener mejor precio. <a href="/cotizador">Cotizador en línea aquí<
             },
             {
                 "q": "¿Resiste humedad?",
-                "a": "Hasta 95 % HR sostenido a 40°C, lo que incluye casi cualquier ambiente comercial o institucional. Para baños con regadera directa o cocinas con mucho vapor, mejor usar GlassBo (panel de fibra de vidrio resistente al agua)."
+                "a": "Hasta 95 % HR sostenido a 40°C, lo que incluye casi cualquier ambiente comercial o institucional. Para baños con regadera directa o cocinas con mucho vapor, mejor usar un panel resistente al agua específico (consúltanos opciones)."
             },
             {
                 "q": "¿Qué pasa si se moja?",
                 "a": "Si se moja superficialmente puede manchar o pandearse ligeramente. Si tienes gotera arriba del plafón y no la arreglas, eventualmente el panel se daña. Es importante arreglar la gotera, no cambiar el plafón."
             }
         ],
-        "related_products": ["acuspan", "glassbo"],
+        "related_products": ["acuspan"],
     },
 
     # ============================================================

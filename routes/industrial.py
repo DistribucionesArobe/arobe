@@ -226,7 +226,7 @@ LANDINGS = {
             ("❄️", "Para cámaras frigoríficas", "Estabilidad dimensional entre -20°C y 60°C sin craqueo ni delaminación."),
             ("🔥", "Autoextinguible",            "Clase A al fuego (ASTM E84). Apto para espacios con regulación institucional."),
         ],
-        "producto_slug":     "glassbo",
+        "producto_slug":     None,
         "ficha_pdf":         None,
         "pedido_minimo":     "[PEDIDO_MINIMO_TARIMAS_PVC] tarimas",
         "pedido_minimo_nota":"Pedidos menores se cotizan con flete por separado.",
